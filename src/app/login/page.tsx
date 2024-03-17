@@ -1,20 +1,22 @@
 'use client'
 
 import {SubmitHandler, useForm} from "react-hook-form";
-import {useState} from "react";
-import {UserService} from "@/services/userService";
+import {UserService} from "@/services/user.service";
 
-export default function Login() {
+export default function Login()
+{
   const {
     register,
     handleSubmit,
     formState: {errors},
   } = useForm<LoginForm>()
 
-  const [message, setMessage] = useState('');
-
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
-    await UserService.registerUser(data)
+    UserService.RegisterUser(data).then(res => {
+      console.log('submit finish', res.apiToken)}
+    ).catch(e => {
+      console.log('submit fail', e)
+    })
   }
 
   return (

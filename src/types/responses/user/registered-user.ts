@@ -1,0 +1,3 @@
+type RegisteredUser = {
+    apiToken: string
+}
