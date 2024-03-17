@@ -2,27 +2,30 @@
 
 import {SubmitHandler, useForm} from "react-hook-form";
 import {UserService} from "@/services/user.service";
-import Link from "next/link";
+import {useRouter} from "next/navigation";
 
-export default function Login()
+export default function Register()
 {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
-    formState: {errors, isValid},
-  } = useForm<LoginForm>()
+    getValues,
+    formState: {errors, isValid}
+  } = useForm<RegisterForm>()
 
-  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
     UserService.RegisterUser(data).then(res => {
-      console.log('submit finish', res.apiToken)}
-    ).catch(e => {
+      localStorage.setItem('apiToken', res.apiToken)
+      router.push('/')
+    }).catch(e => {
       console.log('submit fail', e)
     })
   }
 
   return (
     <main>
-      <h1>Connexion</h1>
+      <h1>Register</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
             placeholder="username"
@@ -41,9 +44,18 @@ export default function Login()
         />
         {errors.password && <span>This field is required</span>}
 
+        <input
+            placeholder="confirm password"
+            type="password"
+            {...register("passwordConfirm", {
+              required: true,
+              validate: value => value === getValues().password
+            })}
+        />
+        {errors.password && <span>This field is required</span>}
+
         <input type="submit" disabled={!isValid}/>
       </form>
-      <Link href={'/register'}>Register</Link>
     </main>
   );
 }
