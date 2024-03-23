@@ -3,6 +3,7 @@
 import {SubmitHandler, useForm} from "react-hook-form";
 import {UserService} from "@/services/user.service";
 import {useRouter} from "next/navigation";
+import {useState} from "react";
 
 export default function Register()
 {
@@ -13,13 +14,17 @@ export default function Register()
     getValues,
     formState: {errors, isValid}
   } = useForm<RegisterForm>()
+  const [loading, setLoading] = useState(false)
 
   const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
+    setLoading(true)
     UserService.RegisterUser(data).then(res => {
       localStorage.setItem('apiToken', res.apiToken)
-      router.push('/')
+      router.push('/login')
     }).catch(e => {
       console.log('submit fail', e)
+    }).finally(() => {
+      setLoading(false)
     })
   }
 
@@ -56,6 +61,9 @@ export default function Register()
 
         <input type="submit" disabled={!isValid}/>
       </form>
+      {loading &&
+        <p>loading...</p>
+      }
     </main>
   );
 }
