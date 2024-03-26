@@ -4,6 +4,11 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {UserService} from "@/services/user.service";
 import Link from "next/link";
 
+type LoginForm = {
+  username: string
+  password: string
+}
+
 export default function Login()
 {
   const {

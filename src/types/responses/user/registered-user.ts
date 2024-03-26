@@ -1,3 +1,0 @@
-type RegisteredUser = {
-    apiToken: string
-}
