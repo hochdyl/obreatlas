@@ -29,7 +29,7 @@ export const callApi = <T = any, T2 = any>(req: ApiRequest, res: (res: ApiRespon
                     message: 'Response error: Invalid JSend object'
                 })
             }
-            return res(data as ApiResponse<T>)
+            return res(data)
         } catch (error) {
             return res({
                 status: 'error',
