@@ -1,8 +1,8 @@
 'use client'
 import {FC, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {router} from "next/client";
-import {callApi, isSuccess} from "@/services/ApiService";
+import {callApi, isError, isFail} from "@/services/ApiService";
+import {useRouter} from "next/navigation";
 
 export type RegisterForm = {
     username: string
@@ -11,28 +11,29 @@ export type RegisterForm = {
 }
 
 const RegisterUserForm: FC = () => {
-    const [loading, setLoading] = useState(false)
-
     const {
         register,
         handleSubmit,
         getValues,
         formState: {errors, isValid}
     } = useForm<RegisterForm>()
+    const router = useRouter()
+    const [loading, setLoading] = useState(false)
     // const {user, setUser} = useAuthentication()
 
     const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
         setLoading(true)
-        callApi({
+        callApi<User>({
             endpoint: 'register',
             method: 'POST',
             body: data
         }, res => {
-            if (isSuccess(res)) {
-                router.push('/')
-            } else {
-                console.log(res)
+            if (isError(res)) {
+                return
+            } else if (isFail(res)) {
+                return
             }
+            router.push('/')
         })
     }
 

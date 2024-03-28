@@ -1,4 +1,15 @@
-export const callApi = (req: ApiRequest, res: (res: ApiResponse) => void): void => {
+/**
+ * Perform a call to the app's backend
+ *
+ * @param {ApiRequest} req Request parameters
+ * @param req.endpoint - Url to call
+ * @param req.method - Http method
+ * @param req.body - Data to send
+ * @param {(res) => ApiResponse} res Response callback
+ *
+ * @author HOCHET Dylan
+ */
+export const callApi = <T = any, T2 = any>(req: ApiRequest, res: (res: ApiResponse<T, T2>) => void): void => {
     const {endpoint, method, body} = req
 
     fetch(`${process.env.API_URL}/${endpoint}`, {
@@ -9,16 +20,16 @@ export const callApi = (req: ApiRequest, res: (res: ApiResponse) => void): void 
             'Authorization': ''
         },
         body: body ? JSON.stringify(body) : undefined,
-    }).then(async response => {
+    }).then(async r => {
         try {
-            const data = await response.json();
-            if (!isValid(data)) {
+            const data = await r.json();
+            if (!isValid<T, T2>(data)) {
                 return res({
                     status: 'error',
                     message: 'Response error: Invalid JSend object'
                 })
             }
-            return res(data)
+            return res(data as ApiResponse<T>)
         } catch (error) {
             return res({
                 status: 'error',
@@ -32,7 +43,10 @@ export const callApi = (req: ApiRequest, res: (res: ApiResponse) => void): void 
         })
     })
 }
-export const isSuccess = (res: any): res is SuccessApiResponse => {
+const isValid = <T, T2>(res: any): res is ApiResponse<T, T2> => {
+    return isSuccess<T>(res) || isFail<T2>(res) || isError(res)
+}
+export const isSuccess = <T = any>(res: any): res is SuccessApiResponse<T> => {
     return (
         typeof res === 'object' &&
         typeof res.status === 'string' &&
@@ -40,7 +54,7 @@ export const isSuccess = (res: any): res is SuccessApiResponse => {
         res.data !== undefined
     )
 }
-export const isFail = (res: any): res is FailApiResponse => {
+export const isFail = <T = any>(res: any): res is FailApiResponse<T> => {
     return (
         typeof res === 'object' &&
         typeof res.status === 'string' &&
@@ -55,7 +69,4 @@ export const isError = (res: any): res is ErrorApiResponse => {
         res.status === 'error' &&
         res.data !== undefined
     )
-}
-export const isValid = (res: any): res is ApiResponse => {
-    return isSuccess(res) || isFail(res) || isError(res)
 }

@@ -4,14 +4,14 @@ type ApiRequest = {
     body?: object
 }
 
-type SuccessApiResponse = {
+type SuccessApiResponse<T> = {
     status: 'success';
-    data: any
+    data: T
 }
 
-type FailApiResponse = {
+type FailApiResponse<T> = {
     status: 'fail';
-    data: any
+    data: T
 }
 
 type ErrorApiResponse = {
@@ -19,4 +19,4 @@ type ErrorApiResponse = {
     message: string
 }
 
-type ApiResponse = SuccessApiResponse | FailApiResponse | ErrorApiResponse;
+type ApiResponse<T, T2 = any> = SuccessApiResponse<T> | FailApiResponse<T2> | ErrorApiResponse;
