@@ -67,6 +67,6 @@ export const isError = (res: any): res is ErrorApiResponse => {
         typeof res === 'object' &&
         typeof res.status === 'string' &&
         res.status === 'error' &&
-        res.data !== undefined
+        res.message !== undefined
     )
 }
