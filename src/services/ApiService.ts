@@ -11,13 +11,14 @@
  */
 export const callApi = <T = any, T2 = any>(req: ApiRequest, res: (res: ApiResponse<T, T2>) => void): void => {
     const {endpoint, method, body} = req
+    const apiToken = localStorage.getItem('apiToken')
 
     fetch(`${process.env.API_URL}/${endpoint}`, {
         method,
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': ''
+            'Authorization': `Bearer ${apiToken}`
         },
         body: body ? JSON.stringify(body) : undefined,
     }).then(async r => {
