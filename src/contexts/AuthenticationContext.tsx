@@ -7,27 +7,38 @@ type AuthenticationContextType = {
     setUser: Dispatch<SetStateAction<User>>
 }
 
+export const anonymousUser: User = {
+    username: '',
+    apiToken: ''
+}
+
 export const AuthenticationContext = createContext<AuthenticationContextType | null>(null)
 
 export const AuthenticationProvider: FC<PropsWithChildren> = ({children}) => {
-    const [user, setUser] = useState<User | undefined | null>(null)
+    const [user, setUser] = useState<User>(anonymousUser)
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         callApi<User>({
-            endpoint: 'user',
-            method: 'POST',
+            endpoint: 'self',
+            method: 'GET',
         }, res => {
             if (isSuccess(res)) {
-                return setUser(res.data)
+                setUser(() => res.data)
             }
-            return setUser(undefined)
+            setLoading(false)
         })
     }, [])
 
-    return typeof user === null ? <p>App loading..</p> :
+    if (loading) {
+        return <p>App loading..</p>
+    }
+
+    return (
         <AuthenticationContext.Provider value={{user, setUser}}>
             {children}
         </AuthenticationContext.Provider>
+    )
 }
 
 export const useAuthentication = () => {

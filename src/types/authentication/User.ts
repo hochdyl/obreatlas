@@ -1,4 +1,4 @@
 type User = {
-    username: string
+    username: string,
     apiToken: string
 }

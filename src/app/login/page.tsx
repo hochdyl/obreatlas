@@ -1,7 +1,6 @@
 'use client'
 
 import {SubmitHandler, useForm} from "react-hook-form";
-import {UserService} from "@/services/user.service";
 import Link from "next/link";
 
 type LoginForm = {
@@ -18,11 +17,7 @@ export default function Login()
   } = useForm<LoginForm>()
 
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
-    UserService.RegisterUser(data).then(res => {
-      console.log('submit finish', res.apiToken)}
-    ).catch(e => {
-      console.log('submit fail', e)
-    })
+
   }
 
   return (

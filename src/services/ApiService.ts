@@ -1,3 +1,5 @@
+import {getSession} from "@/services/SessionService";
+
 /**
  * Perform a call to the app's backend
  *
@@ -11,18 +13,17 @@
  */
 export const callApi = <T = any, T2 = any>(req: ApiRequest, res: (res: ApiResponse<T, T2>) => void): void => {
     const {endpoint, method, body} = req
-    const apiToken = localStorage.getItem('apiToken')
 
-    fetch(`${process.env.API_URL}/${endpoint}`, {
-        method,
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${apiToken}`
-        },
-        body: body ? JSON.stringify(body) : undefined,
-    }).then(async r => {
-        try {
+    getSession().then(apiToken => {
+        fetch(`${process.env.API_URL}/${endpoint}`, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${apiToken}`
+            },
+            body: body ? JSON.stringify(body) : undefined,
+        }).then(async r => {
             const data = await r.json();
             if (!isValid<T, T2>(data)) {
                 return res({
@@ -31,16 +32,12 @@ export const callApi = <T = any, T2 = any>(req: ApiRequest, res: (res: ApiRespon
                 })
             }
             return res(data)
-        } catch (error) {
+
+        }).catch(() => {
             return res({
                 status: 'error',
-                message: 'Client error: Something went wrong'
+                message: 'Server error: Something went wrong'
             })
-        }
-    }).catch(() => {
-        return res({
-            status: 'error',
-            message: 'Server error: Something went wrong'
         })
     })
 }

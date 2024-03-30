@@ -3,6 +3,8 @@ import {FC, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {callApi, isError, isFail} from "@/services/ApiService";
 import {useRouter} from "next/navigation";
+import {setSession} from "@/services/SessionService";
+import {useAuthentication} from "@/contexts/AuthenticationContext";
 
 export type RegisterForm = {
     username: string
@@ -19,7 +21,7 @@ const RegisterUserForm: FC = () => {
     } = useForm<RegisterForm>()
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-    // const {user, setUser} = useAuthentication()
+    const {setUser} = useAuthentication()
 
     const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
         setLoading(true)
@@ -27,12 +29,14 @@ const RegisterUserForm: FC = () => {
             endpoint: 'register',
             method: 'POST',
             body: data
-        }, res => {
+        }, async res => {
             if (isError(res)) {
                 return
             } else if (isFail(res)) {
                 return
             }
+            await setSession(res.data.apiToken)
+            setUser(res.data)
             router.push('/')
         })
     }
