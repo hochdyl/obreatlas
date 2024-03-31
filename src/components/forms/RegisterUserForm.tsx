@@ -17,24 +17,32 @@ const RegisterUserForm: FC = () => {
         register,
         handleSubmit,
         getValues,
-        formState: {errors, isValid}
+        setError,
+        formState: {errors}
     } = useForm<RegisterForm>()
     const router = useRouter()
-    const [loading, setLoading] = useState(false)
     const {setUser} = useAuthentication()
+    const [loading, setLoading] = useState(false)
 
     const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
         setLoading(true)
-        callApi<User>({
+
+        callApi<User, Omit<RegisterForm, 'passwordConfirm'>>({
             endpoint: 'register',
             method: 'POST',
             body: data
         }, async res => {
+            setLoading(false)
+
             if (isError(res)) {
-                return
-            } else if (isFail(res)) {
-                return
+                return setError('root', {type: 'server', message: res.message})
             }
+            else if (isFail(res)) {
+                return Object.entries(res.data).forEach(([key, value]) => {
+                    setError(key as keyof RegisterForm, {type: 'server', message: value})
+                })
+            }
+
             await setSession(res.data.apiToken)
             setUser(res.data)
             router.push('/')
@@ -46,34 +54,46 @@ const RegisterUserForm: FC = () => {
             <input
                 placeholder="username"
                 {...register("username", {
-                    required: true
+                    required: {
+                        value: true,
+                        message: "Username is required"
+                    },
                 })}
             />
-            {errors.username && <span>This field is required</span>}
+            {errors.username && <span>{errors.username.message}</span>}
 
             <input
                 placeholder="password"
                 type="password"
                 {...register("password", {
-                    required: true
+                    required: {
+                        value: true,
+                        message: "Password is required"
+                    },
                 })}
             />
-            {errors.password && <span>This field is required</span>}
+            {errors.password && <span>{errors.password.message}</span>}
 
             <input
                 placeholder="confirm password"
                 type="password"
                 {...register("passwordConfirm", {
-                    required: true,
-                    validate: value => value === getValues().password
+                    required: {
+                        value: true,
+                        message: "Confirm your password"
+                    },
+                    validate: {
+                        value: value => value === getValues().password ||
+                        "Passwords don't match"
+                    }
                 })}
             />
-            {errors.password && <span>This field is required</span>}
+            {errors.passwordConfirm && <span>{errors.passwordConfirm.message}</span>}
 
-            <input type="submit" disabled={!isValid}/>
-            {loading &&
-                <p>loading...</p>
-            }
+            <input type="submit"/>
+            {errors.root && <span>{errors.root.message}</span>}
+
+            {loading && <p>loading...</p>}
         </form>
     )
 }
