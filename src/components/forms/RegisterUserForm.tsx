@@ -6,11 +6,12 @@ import {useRouter} from "next/navigation";
 import {setSession} from "@/services/SessionService";
 import {useAuthentication} from "@/contexts/AuthenticationContext";
 
-export type RegisterForm = {
+type RegisterForm = {
     username: string
     password: string
     passwordConfirm: string
 }
+type RegisterFormFail = Omit<RegisterForm, "passwordConfirm">
 
 const RegisterUserForm: FC = () => {
     const {
@@ -27,7 +28,7 @@ const RegisterUserForm: FC = () => {
     const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
         setLoading(true)
 
-        callApi<User, Omit<RegisterForm, 'passwordConfirm'>>({
+        callApi<User, RegisterFormFail>({
             endpoint: 'register',
             method: 'POST',
             body: data
@@ -39,7 +40,7 @@ const RegisterUserForm: FC = () => {
             }
             else if (isFail(res)) {
                 return Object.entries(res.data).forEach(([key, value]) => {
-                    setError(key as keyof RegisterForm, {type: 'server', message: value})
+                    setError(key as keyof RegisterFormFail, {type: 'server', message: value})
                 })
             }
 

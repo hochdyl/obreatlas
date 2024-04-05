@@ -41,9 +41,11 @@ export const callApi = <T = any, T2 = any>(req: ApiRequest, res: (res: ApiRespon
         })
     })
 }
+
 const isValid = <T, T2>(res: any): res is ApiResponse<T, T2> => {
     return isSuccess<T>(res) || isFail<T2>(res) || isError(res)
 }
+
 export const isSuccess = <T = any>(res: any): res is SuccessApiResponse<T> => {
     return (
         typeof res === 'object' &&
@@ -52,6 +54,7 @@ export const isSuccess = <T = any>(res: any): res is SuccessApiResponse<T> => {
         res.data !== undefined
     )
 }
+
 export const isFail = <T = any>(res: any): res is FailApiResponse<T> => {
     return (
         typeof res === 'object' &&
@@ -60,6 +63,7 @@ export const isFail = <T = any>(res: any): res is FailApiResponse<T> => {
         res.data !== undefined
     )
 }
+
 export const isError = (res: any): res is ErrorApiResponse => {
     return (
         typeof res === 'object' &&
