@@ -3,8 +3,9 @@ import {ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
 import callApi from "@/utils/axios";
-import {setSession} from "@/utils/session";
+import {SESSION_COOKIE_NAME, setSession} from "@/utils/session";
 import {isError, isFail} from "@/utils/apiResponse";
+import {setCookie} from "cookies-next";
 
 type LoginForm = {
     username: string
@@ -37,24 +38,7 @@ const LoginUserForm = (): ReactElement => {
                         setError(key as keyof LoginForm, {type: 'server', message: value})
                     })
             })
-            .finally(() => {
-                setLoading(false)
-            })
-
-
-        // callApi<User, LoginForm>({
-        //     endpoint: 'login',
-        //     method: 'POST',
-        //     body: data
-        // }, async res => {
-        //     setLoading(false)
-        //
-
-        //
-        //     await setSession(res.data.apiToken)
-        //     setUser(res.data)
-        //     router.push('/')
-        // })
+            .finally(() => setLoading(false))
     }
 
     return (

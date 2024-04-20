@@ -1,6 +1,6 @@
 import type {NextRequest} from 'next/server'
 import {NextResponse} from "next/server";
-import {getExpires, SESSION_COOKIE_NAME} from "@/utils/session";
+import {getExpires, getSession, SESSION_COOKIE_NAME} from "@/utils/session";
 
 /*
  * Match all request paths except for the ones starting with:
@@ -18,6 +18,7 @@ export const middleware = async (req: NextRequest) => {
     const isRegisterPage = req.url.endsWith('/register');
     const sessionCookie = req.cookies.get(SESSION_COOKIE_NAME)
 
+    console.log(sessionCookie)
     const redirectToLogin = () => {
         if (isLoginPage || isRegisterPage) return
 

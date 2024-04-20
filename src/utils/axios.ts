@@ -1,4 +1,3 @@
-'use client'
 import axios, {AxiosError, AxiosRequestConfig} from "axios";
 import {deleteSession, getSession} from "@/utils/session";
 
@@ -30,19 +29,16 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-export const callApi = <T = any>(config: AxiosRequestConfig) => {
-    return new Promise<T>((resolve, reject) => {
+export const callApi = <T = any>(config: AxiosRequestConfig) =>
+    new Promise<T>((resolve, reject) =>
         axiosInstance<SuccessApiResponse<T>>({...config})
-        .then(res => {
-            resolve(res.data.data)
-        })
-        .catch((err: AxiosError<ErrorApiResponse>) => {
-            if (err.isAxiosError && err.response) {
-                const response = err.response
-                reject({status: response.status, data: response.data})
-            }
-            reject(err)
-        })
-    });
-}
+            .then(res => resolve(res.data.data))
+            .catch((err: AxiosError<ErrorApiResponse>) => {
+                if (err.isAxiosError && err.response) {
+                    const response = err.response
+                    reject({status: response.status, data: response.data})
+                }
+                reject(err)
+            })
+    )
 export default callApi
