@@ -12,5 +12,3 @@ type ErrorApiResponse = {
     status: 'error';
     message: string
 }
-
-type ApiResponse<T, T2 = any> = SuccessApiResponse<T> | FailApiResponse<T2> | ErrorApiResponse;

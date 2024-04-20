@@ -1,6 +1,6 @@
-import type { NextRequest } from 'next/server'
+import type {NextRequest} from 'next/server'
 import {NextResponse} from "next/server";
-import {updateSession} from "@/services/SessionService";
+import {getExpires, SESSION_COOKIE_NAME} from "@/utils/session";
 
 /*
  * Match all request paths except for the ones starting with:
@@ -13,19 +13,46 @@ export const config = {
     matcher: '/((?!api|_next/static|_next/image|favicon.ico).*)'
 }
 
-export const middleware = async (request: NextRequest) => {
-    const session = await updateSession(request)
+export const middleware = async (req: NextRequest) => {
+    const isLoginPage = req.url.endsWith('/login');
+    const isRegisterPage = req.url.endsWith('/register');
+    const sessionCookie = req.cookies.get(SESSION_COOKIE_NAME)
 
-    const isLoginPage = request.url.endsWith('/login');
-    const isRegisterPage = request.url.endsWith('/register');
+    const redirectToLogin = () => {
+        if (isLoginPage || isRegisterPage) return
 
-    if (session && (isLoginPage || isRegisterPage)) {
-        return NextResponse.redirect(new URL('/', request.url));
-    }
-    if (!session && (!isLoginPage && !isRegisterPage)) {
-        return NextResponse.redirect(new URL('/login', request.url));
+        return NextResponse.redirect(new URL('/login', req.url))
     }
 
-    return session
+    if (!sessionCookie)
+        return redirectToLogin()
+
+    try {
+        // Check if session is valid
+        const sessionRequest = await fetch(new URL("/self", process.env.API_URL), {
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${sessionCookie.value}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!sessionRequest.ok)
+            return redirectToLogin()
+    } catch (e) {
+        return redirectToLogin()
+    }
+
+    // Redirect to app if session is okay
+    if (isLoginPage || isRegisterPage)
+        return NextResponse.redirect(new URL('/', req.url))
+
+    // Set a refreshed session cookie
+    const response = NextResponse.next()
+    response.cookies.set({
+        name: SESSION_COOKIE_NAME,
+        value: sessionCookie.value,
+        expires: getExpires()
+    });
+    return response
 }
-

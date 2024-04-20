@@ -1,7 +1,7 @@
 import RegisterUserForm from "@/components/forms/RegisterUserForm";
-import {FC} from "react";
+import {ReactElement} from "react";
 
-const Register: FC = () => {
+const Register= (): ReactElement => {
     return (
         <main>
             <h1>Register</h1>

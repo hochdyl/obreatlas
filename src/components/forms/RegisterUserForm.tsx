@@ -1,10 +1,7 @@
 'use client'
-import {FC, useState} from "react";
-import {SubmitHandler, useForm} from "react-hook-form";
-import {callApi, isError, isFail} from "@/services/ApiService";
+import {ReactElement, useState} from "react";
+import {useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
-import {setSession} from "@/services/SessionService";
-import {useAuthentication} from "@/contexts/AuthenticationContext";
 
 type RegisterForm = {
     username: string
@@ -13,7 +10,7 @@ type RegisterForm = {
 }
 type RegisterFormFail = Omit<RegisterForm, "passwordConfirm">
 
-const RegisterUserForm: FC = () => {
+const RegisterUserForm = (): ReactElement => {
     const {
         register,
         handleSubmit,
@@ -22,33 +19,33 @@ const RegisterUserForm: FC = () => {
         formState: {errors}
     } = useForm<RegisterForm>()
     const router = useRouter()
-    const {setUser} = useAuthentication()
+    // const {setUser} = useAuthentication()
     const [loading, setLoading] = useState(false)
 
-    const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
-        setLoading(true)
-
-        callApi<User, RegisterFormFail>({
-            endpoint: 'register',
-            method: 'POST',
-            body: data
-        }, async res => {
-            setLoading(false)
-
-            if (isError(res)) {
-                return setError('root', {type: 'server', message: res.message})
-            }
-            else if (isFail(res)) {
-                return Object.entries(res.data).forEach(([key, value]) => {
-                    setError(key as keyof RegisterFormFail, {type: 'server', message: value})
-                })
-            }
-
-            await setSession(res.data.apiToken)
-            setUser(res.data)
-            router.push('/')
-        })
-    }
+    // const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
+    //     setLoading(true)
+    //
+    //     callApi<User, RegisterFormFail>({
+    //         endpoint: 'register',
+    //         method: 'POST',
+    //         body: data
+    //     }, async res => {
+    //         setLoading(false)
+    //
+    //         if (isError(res)) {
+    //             return setError('root', {type: 'server', message: res.message})
+    //         }
+    //         else if (isFail(res)) {
+    //             return Object.entries(res.data).forEach(([key, value]) => {
+    //                 setError(key as keyof RegisterFormFail, {type: 'server', message: value})
+    //             })
+    //         }
+    //
+    //         await setSession(res.data.apiToken)
+    //         setUser(res.data)
+    //         router.push('/')
+    //     })
+    // }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -85,7 +82,7 @@ const RegisterUserForm: FC = () => {
                     },
                     validate: {
                         value: value => value === getValues().password ||
-                        "Passwords don't match"
+                            "Passwords don't match"
                     }
                 })}
             />

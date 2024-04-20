@@ -1,12 +1,13 @@
 import LoginUserForm from "@/components/forms/LoginUserForm";
-import {FC} from "react";
+import {ReactElement} from "react";
 
-const Login: FC = () => {
-  return (
-      <main>
-        <h1>Login</h1>
-        <LoginUserForm/>
-      </main>
-  );
+const Login = (): ReactElement => {
+
+    return (
+        <main>
+            <h1>Login</h1>
+            <LoginUserForm/>
+        </main>
+    );
 }
 export default Login

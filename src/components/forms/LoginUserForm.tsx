@@ -1,17 +1,16 @@
 'use client'
-import {FC, useState} from "react";
+import {ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {callApi, isError, isFail} from "@/services/ApiService";
 import {useRouter} from "next/navigation";
-import {setSession} from "@/services/SessionService";
-import {useAuthentication} from "@/contexts/AuthenticationContext";
+import callApi from "@/utils/axios";
+import {setSession} from "@/utils/session";
 
 type LoginForm = {
     username: string
     password: string
 }
 
-const LoginUserForm: FC = () => {
+const LoginUserForm = (): ReactElement => {
     const {
         register,
         handleSubmit,
@@ -19,38 +18,50 @@ const LoginUserForm: FC = () => {
         formState: {errors}
     } = useForm<LoginForm>()
     const router = useRouter()
-    const {setUser} = useAuthentication()
     const [loading, setLoading] = useState(false)
 
-    const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+    const onSubmit: SubmitHandler<LoginForm> = (data) => {
         setLoading(true)
 
-        callApi<User, LoginForm>({
-            endpoint: 'login',
-            method: 'POST',
-            body: data
-        }, async res => {
-            setLoading(false)
+        callApi<User>({url: "/login", method: "POST", data: data})
+            .then(res => {
+                setSession(res.apiToken)
+                router.push('/')
+            })
+            .catch(() => {
+            })
+            .finally(() => {
+                setLoading(false)
+            })
 
-            if (isError(res)) {
-                return setError('root', {type: 'server', message: res.message})
-            }
-            else if (isFail(res)) {
-                return Object.entries(res.data).forEach(([key, value]) => {
-                    setError(key as keyof LoginForm, {type: 'server', message: value})
-                })
-            }
 
-            await setSession(res.data.apiToken)
-            setUser(res.data)
-            router.push('/')
-        })
+        // callApi<User, LoginForm>({
+        //     endpoint: 'login',
+        //     method: 'POST',
+        //     body: data
+        // }, async res => {
+        //     setLoading(false)
+        //
+        //     if (isError(res)) {
+        //         return setError('root', {type: 'server', message: res.message})
+        //     }
+        //     else if (isFail(res)) {
+        //         return Object.entries(res.data).forEach(([key, value]) => {
+        //             setError(key as keyof LoginForm, {type: 'server', message: value})
+        //         })
+        //     }
+        //
+        //     await setSession(res.data.apiToken)
+        //     setUser(res.data)
+        //     router.push('/')
+        // })
     }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <input
                 placeholder="username"
+                autoComplete="username"
                 {...register("username", {
                     required: {
                         value: true,
@@ -63,6 +74,7 @@ const LoginUserForm: FC = () => {
             <input
                 placeholder="password"
                 type="password"
+                autoComplete="current-password"
                 {...register("password", {
                     required: {
                         value: true,
