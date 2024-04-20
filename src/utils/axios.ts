@@ -24,7 +24,6 @@ axiosInstance.interceptors.response.use(
             // Next middleware will redirect if no session is found
             if (response.status === 401) {
                 deleteSession()
-                window.location.reload()
             }
         }
         return Promise.reject(err);
