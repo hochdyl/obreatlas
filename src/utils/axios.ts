@@ -17,14 +17,10 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(
     res => res,
     err => {
-        if (err.isAxiosError && err.response) {
-            const response = err.response
-
+        if (err.isAxiosError && err.request.status === 401)
             // Next middleware will redirect if no session is found
-            if (response.status === 401) {
-                deleteSession()
-            }
-        }
+            deleteSession()
+
         return Promise.reject(err);
     }
 );
@@ -36,7 +32,7 @@ export const callApi = <T = any>(config: AxiosRequestConfig) =>
             .catch((err: AxiosError<ErrorApiResponse>) => {
                 if (err.isAxiosError && err.response) {
                     const response = err.response
-                    reject({status: response.status, data: response.data})
+                    reject(response.data)
                 }
                 reject(err)
             })

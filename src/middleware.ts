@@ -18,7 +18,6 @@ export const middleware = async (req: NextRequest) => {
     const isRegisterPage = req.url.endsWith('/register');
     const sessionCookie = req.cookies.get(SESSION_COOKIE_NAME)
 
-    console.log(sessionCookie)
     const redirectToLogin = () => {
         if (isLoginPage || isRegisterPage) return
 
