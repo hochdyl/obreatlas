@@ -3,8 +3,7 @@ import {ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
 import callApi from "@/utils/axios";
-import {isError, isFail} from "@/utils/apiResponse";
-import SessionService from "@/services/sessionService";
+import SessionService from "@/services/SessionService";
 
 type RegisterForm = {
     username: string
@@ -33,9 +32,10 @@ const RegisterUserForm = (): ReactElement => {
                 router.push('/')
             })
             .catch(e => {
-                if (isError(e))
+                if (ApiResponseService.isError(e))
                     setError('root', {type: 'server', message: e.message})
-                else if (isFail<RegisterFormFail>(e))
+
+                else if (ApiResponseService.isFail<RegisterFormFail>(e))
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof RegisterFormFail, {type: 'server', message: value})
                     })

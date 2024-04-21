@@ -1,6 +1,6 @@
 import type {NextRequest} from 'next/server'
 import {NextResponse} from "next/server";
-import SessionService from "@/services/sessionService";
+import SessionService from "@/services/SessionService";
 
 /*
  * Match all request paths except for the ones starting with:
