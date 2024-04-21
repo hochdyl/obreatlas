@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosError, HttpStatusCode} from "axios";
 import SessionService from "@/services/SessionService";
 
 const axiosInstance = axios.create({
@@ -6,7 +6,9 @@ const axiosInstance = axios.create({
     headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
-    }
+    },
+    timeout: 3000,
+    timeoutErrorMessage: "Server took too long to respond"
 })
 
 axiosInstance.interceptors.request.use(config => {
@@ -17,10 +19,16 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(
     res => res,
     err => {
-        if (err.isAxiosError && err.request.status === 401)
-            // Next middleware will redirect if no session is found
-            SessionService.closeSession()
+        if (err.isAxiosError) {
+            if (err.request.status === HttpStatusCode.Unauthorized)
+                // Next middleware will redirect if no session is found
+                SessionService.closeSession()
 
+            if (err.code === AxiosError.ECONNABORTED) {
+                const errorResponse = {status: "error", message: err.message} as ErrorResponse
+                return Promise.reject(errorResponse)
+            }
+        }
         return Promise.reject(err);
     }
 );
