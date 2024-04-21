@@ -1,12 +1,12 @@
 'use client'
 import {SWRConfig} from 'swr'
 import {PropsWithChildren, ReactElement} from "react"
-import callApi from "@/utils/axios";
+import ApiService from "@/services/ApiService";
 
 export const SwrProvider = ({children}: Readonly<PropsWithChildren>): ReactElement =>
     <SWRConfig
         value={{
-            fetcher: (url: string) => callApi({url}).then(r => r.data),
+            fetcher: (url: string) => ApiService.fetch({url}).then(r => r.data),
             onErrorRetry: (error, key, config, revalidate, {retryCount}) => {
                 // Never retry on 401 nor 404
                 if (error.status === 401 || 404) return

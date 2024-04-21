@@ -2,8 +2,8 @@
 import {ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
-import callApi from "@/utils/axios";
 import SessionService from "@/services/SessionService";
+import ApiService from "@/services/ApiService";
 
 type LoginForm = {
     username: string
@@ -23,16 +23,16 @@ const LoginUserForm = (): ReactElement => {
     const onSubmit: SubmitHandler<LoginForm> = (data) => {
         setLoading(true)
 
-        callApi<User>({url: "/login", method: "POST", data: data})
+        ApiService.fetch<User>({url: "/login", method: "POST", data: data})
             .then(res => {
                 SessionService.openSession(res.apiToken)
                 router.push('/')
             })
             .catch(e => {
-                if (ApiResponseService.isError(e))
+                if (ApiService.isError(e))
                     setError('root', {type: 'server', message: e.message})
 
-                else if (ApiResponseService.isFail<LoginForm>(e))
+                else if (ApiService.isFail<LoginForm>(e))
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof LoginForm, {type: 'server', message: value})
                     })

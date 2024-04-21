@@ -15,4 +15,5 @@ abstract class SessionService {
         return new Date(expires)
     }
 }
+
 export default SessionService

@@ -2,8 +2,8 @@
 import {ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
-import callApi from "@/utils/axios";
 import SessionService from "@/services/SessionService";
+import ApiService from "@/services/ApiService";
 
 type RegisterForm = {
     username: string
@@ -26,16 +26,16 @@ const RegisterUserForm = (): ReactElement => {
     const onSubmit: SubmitHandler<RegisterForm> = (data) => {
         setLoading(true)
 
-        callApi<User>({url: "/register", method: "POST", data: data})
+        ApiService.fetch<User>({url: "/register", method: "POST", data: data})
             .then(res => {
                 SessionService.openSession(res.apiToken)
                 router.push('/')
             })
             .catch(e => {
-                if (ApiResponseService.isError(e))
+                if (ApiService.isError(e))
                     setError('root', {type: 'server', message: e.message})
 
-                else if (ApiResponseService.isFail<RegisterFormFail>(e))
+                else if (ApiService.isFail<RegisterFormFail>(e))
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof RegisterFormFail, {type: 'server', message: value})
                     })

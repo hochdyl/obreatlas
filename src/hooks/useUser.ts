@@ -3,7 +3,7 @@ import useSWR from "swr";
 
 // Todo: Delete this
 const useUser = () => {
-    const {data, error, isLoading} = useSWR<SuccessApiResponse<User>>('/self')
+    const {data, error, isLoading} = useSWR<SuccessResponse<User>>('/self')
 
     return {
         user: data,
