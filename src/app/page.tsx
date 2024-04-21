@@ -2,7 +2,7 @@
 import Link from "next/link";
 import {ReactElement} from "react";
 import useUser from "@/hooks/useUser";
-import SessionService from "@/services/sessionService";
+import SessionService from "@/services/SessionService";
 
 const Home = (): ReactElement => {
     const {user} = useUser()

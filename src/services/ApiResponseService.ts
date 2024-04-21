@@ -1,3 +1,18 @@
+type SuccessApiResponse<T> = {
+    status: 'success';
+    data: T
+}
+
+type FailApiResponse<T> = {
+    status: 'fail';
+    data: T
+}
+
+type ErrorApiResponse = {
+    status: 'error';
+    message: string
+}
+
 abstract class ApiResponseService {
     static isSuccess = <T = any>(res: any): res is SuccessApiResponse<T> => (
         typeof res === 'object' &&
