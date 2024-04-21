@@ -1,5 +1,5 @@
 import axios, {AxiosError, AxiosRequestConfig} from "axios";
-import SessionService from "@/services/sessionService";
+import SessionService from "@/services/SessionService";
 
 const axiosInstance = axios.create({
     baseURL: process.env.API_URL,
