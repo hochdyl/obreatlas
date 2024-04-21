@@ -1,7 +1,10 @@
 'use client'
 import {ReactElement, useState} from "react";
-import {useForm} from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
+import callApi from "@/utils/axios";
+import {isError, isFail} from "@/utils/apiResponse";
+import SessionService from "@/services/sessionService";
 
 type RegisterForm = {
     username: string
@@ -19,36 +22,30 @@ const RegisterUserForm = (): ReactElement => {
         formState: {errors}
     } = useForm<RegisterForm>()
     const router = useRouter()
-    // const {setUser} = useAuthentication()
     const [loading, setLoading] = useState(false)
 
-    // const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
-    //     setLoading(true)
-    //
-    //     callApi<User, RegisterFormFail>({
-    //         endpoint: 'register',
-    //         method: 'POST',
-    //         body: data
-    //     }, async res => {
-    //         setLoading(false)
-    //
-    //         if (isError(res)) {
-    //             return setError('root', {type: 'server', message: res.message})
-    //         }
-    //         else if (isFail(res)) {
-    //             return Object.entries(res.data).forEach(([key, value]) => {
-    //                 setError(key as keyof RegisterFormFail, {type: 'server', message: value})
-    //             })
-    //         }
-    //
-    //         await setSession(res.data.apiToken)
-    //         setUser(res.data)
-    //         router.push('/')
-    //     })
-    // }
+    const onSubmit: SubmitHandler<RegisterForm> = (data) => {
+        setLoading(true)
+
+        callApi<User>({url: "/register", method: "POST", data: data})
+            .then(res => {
+                SessionService.openSession(res.apiToken)
+                router.push('/')
+            })
+            .catch(e => {
+                if (isError(e))
+                    setError('root', {type: 'server', message: e.message})
+                else if (isFail<RegisterFormFail>(e))
+                    Object.entries(e.data).forEach(([key, value]) => {
+                        setError(key as keyof RegisterFormFail, {type: 'server', message: value})
+                    })
+            })
+            .finally(() => setLoading(false))
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            <button onClick={() => router.push('/login')}>login</button>
             <input
                 placeholder="username"
                 {...register("username", {

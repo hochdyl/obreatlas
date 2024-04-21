@@ -1,6 +1,6 @@
 import type {NextRequest} from 'next/server'
 import {NextResponse} from "next/server";
-import {getExpires, getSession, SESSION_COOKIE_NAME} from "@/utils/session";
+import SessionService from "@/services/sessionService";
 
 /*
  * Match all request paths except for the ones starting with:
@@ -16,7 +16,7 @@ export const config = {
 export const middleware = async (req: NextRequest) => {
     const isLoginPage = req.url.endsWith('/login');
     const isRegisterPage = req.url.endsWith('/register');
-    const sessionCookie = req.cookies.get(SESSION_COOKIE_NAME)
+    const sessionCookie = req.cookies.get(SessionService.COOKIE_NAME)
 
     const redirectToLogin = () => {
         if (isLoginPage || isRegisterPage) return
@@ -50,9 +50,9 @@ export const middleware = async (req: NextRequest) => {
     // Set a refreshed session cookie
     const response = NextResponse.next()
     response.cookies.set({
-        name: SESSION_COOKIE_NAME,
+        name: SessionService.COOKIE_NAME,
         value: sessionCookie.value,
-        expires: getExpires()
+        expires: SessionService.getExpires()
     });
     return response
 }

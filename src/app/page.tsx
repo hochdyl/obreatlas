@@ -2,15 +2,18 @@
 import Link from "next/link";
 import {ReactElement} from "react";
 import useUser from "@/hooks/useUser";
+import SessionService from "@/services/sessionService";
 
 const Home = (): ReactElement => {
     const {user} = useUser()
+
+    const handleLogout = () => SessionService.closeSession()
 
     return (
         <main>
             <Link href={'/register'}>Register</Link>
             <Link href={'/login'}>Login</Link>
-            <button>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
             Fiche perso
         </main>
     );

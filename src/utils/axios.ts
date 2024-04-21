@@ -1,5 +1,5 @@
 import axios, {AxiosError, AxiosRequestConfig} from "axios";
-import {deleteSession, getSession} from "@/utils/session";
+import SessionService from "@/services/sessionService";
 
 const axiosInstance = axios.create({
     baseURL: process.env.API_URL,
@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use(config => {
-    config.headers.Authorization = `Bearer ${getSession()}`
+    config.headers.Authorization = `Bearer ${SessionService.COOKIE_NAME}`
     return config
 })
 
@@ -19,7 +19,7 @@ axiosInstance.interceptors.response.use(
     err => {
         if (err.isAxiosError && err.request.status === 401)
             // Next middleware will redirect if no session is found
-            deleteSession()
+            SessionService.closeSession()
 
         return Promise.reject(err);
     }

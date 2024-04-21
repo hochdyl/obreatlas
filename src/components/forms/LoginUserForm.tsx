@@ -3,9 +3,8 @@ import {ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
 import callApi from "@/utils/axios";
-import {SESSION_COOKIE_NAME, setSession} from "@/utils/session";
 import {isError, isFail} from "@/utils/apiResponse";
-import {setCookie} from "cookies-next";
+import SessionService from "@/services/sessionService";
 
 type LoginForm = {
     username: string
@@ -27,7 +26,7 @@ const LoginUserForm = (): ReactElement => {
 
         callApi<User>({url: "/login", method: "POST", data: data})
             .then(res => {
-                setSession(res.apiToken)
+                SessionService.openSession(res.apiToken)
                 router.push('/')
             })
             .catch(e => {
@@ -43,6 +42,7 @@ const LoginUserForm = (): ReactElement => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            <button onClick={() => router.push('/register')}>register</button>
             <input
                 placeholder="username"
                 autoComplete="username"
