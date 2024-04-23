@@ -1,5 +1,5 @@
 import {AxiosError, AxiosRequestConfig} from "axios";
-import axiosInstance from "@/utils/axios";
+import axiosInstance from "@/lib/axios";
 
 abstract class ApiService {
     static fetch = <T = any>(config: AxiosRequestConfig) =>

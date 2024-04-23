@@ -3,12 +3,12 @@ import useSWR from "swr";
 
 // Todo: Delete this
 const useUser = () => {
-    const {data, error, isLoading} = useSWR<SuccessResponse<User>>('/self')
+    const {data: user, error, isLoading} = useSWR<SuccessResponse<User>>('/self')
 
     return {
-        user: data,
+        user,
         isLoading,
-        isError: error
+        error
     }
 }
 export default useUser

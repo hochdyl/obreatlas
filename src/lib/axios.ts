@@ -19,9 +19,12 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(
     res => res,
     err => {
+        console.log('test')
+
         if (err.isAxiosError) {
+            console.log('test2', err.request.status)
+
             if (err.request.status === HttpStatusCode.Unauthorized)
-                // Next middleware will redirect if no session is found
                 SessionService.closeSession()
 
             if (err.code === AxiosError.ECONNABORTED) {

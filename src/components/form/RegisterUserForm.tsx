@@ -5,12 +5,12 @@ import {useRouter} from "next/navigation";
 import SessionService from "@/services/SessionService";
 import ApiService from "@/services/ApiService";
 
-type RegisterForm = {
+type RegisterUserForm = {
     username: string
     password: string
     passwordConfirm: string
 }
-type RegisterFormFail = Omit<RegisterForm, "passwordConfirm">
+type RegisterUserFormFail = Omit<RegisterUserForm, "passwordConfirm">
 
 const RegisterUserForm = (): ReactElement => {
     const {
@@ -19,28 +19,29 @@ const RegisterUserForm = (): ReactElement => {
         getValues,
         setError,
         formState: {errors}
-    } = useForm<RegisterForm>()
+    } = useForm<RegisterUserForm>()
     const router = useRouter()
     const [loading, setLoading] = useState(false)
 
-    const onSubmit: SubmitHandler<RegisterForm> = (data) => {
+    const onSubmit: SubmitHandler<RegisterUserForm> = (data) => {
         setLoading(true)
 
-        ApiService.fetch<User>({url: "/register", method: "POST", data: data})
+        ApiService.fetch<User>({url: "/authentication/register", method: "POST", data: data})
             .then(res => {
                 SessionService.openSession(res.apiToken)
                 router.push('/')
             })
             .catch(e => {
+                setLoading(false)
+
                 if (ApiService.isError(e))
                     setError('root', {type: 'server', message: e.message})
 
-                else if (ApiService.isFail<RegisterFormFail>(e))
+                else if (ApiService.isFail<RegisterUserFormFail>(e))
                     Object.entries(e.data).forEach(([key, value]) => {
-                        setError(key as keyof RegisterFormFail, {type: 'server', message: value})
+                        setError(key as keyof RegisterUserFormFail, {type: 'server', message: value})
                     })
             })
-            .finally(() => setLoading(false))
     }
 
     return (

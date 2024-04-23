@@ -1,4 +1,4 @@
-import RegisterUserForm from "@/components/forms/RegisterUserForm";
+import RegisterUserForm from "@/components/form/RegisterUserForm";
 import {ReactElement} from "react";
 
 const Register= (): ReactElement => {

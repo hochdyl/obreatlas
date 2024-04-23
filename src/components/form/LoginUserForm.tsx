@@ -5,7 +5,7 @@ import {useRouter} from "next/navigation";
 import SessionService from "@/services/SessionService";
 import ApiService from "@/services/ApiService";
 
-type LoginForm = {
+type LoginUserForm = {
     username: string
     password: string
 }
@@ -16,28 +16,29 @@ const LoginUserForm = (): ReactElement => {
         handleSubmit,
         setError,
         formState: {errors}
-    } = useForm<LoginForm>()
+    } = useForm<LoginUserForm>()
     const router = useRouter()
     const [loading, setLoading] = useState(false)
 
-    const onSubmit: SubmitHandler<LoginForm> = (data) => {
+    const onSubmit: SubmitHandler<LoginUserForm> = (data) => {
         setLoading(true)
 
-        ApiService.fetch<User>({url: "/login", method: "POST", data: data})
+        ApiService.fetch<User>({url: "/authentication/login", method: "POST", data: data})
             .then(res => {
                 SessionService.openSession(res.apiToken)
                 router.push('/')
             })
             .catch(e => {
+                setLoading(false)
+                
                 if (ApiService.isError(e))
                     setError('root', {type: 'server', message: e.message})
 
-                else if (ApiService.isFail<LoginForm>(e))
+                else if (ApiService.isFail<LoginUserForm>(e))
                     Object.entries(e.data).forEach(([key, value]) => {
-                        setError(key as keyof LoginForm, {type: 'server', message: value})
+                        setError(key as keyof LoginUserForm, {type: 'server', message: value})
                     })
             })
-            .finally(() => setLoading(false))
     }
 
     return (
