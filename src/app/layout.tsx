@@ -2,7 +2,7 @@ import type {Metadata} from "next"
 import {Inter} from "next/font/google"
 import "./globals.scss"
 import React, {PropsWithChildren, ReactElement} from "react"
-import {SwrProvider} from "@/swr/SwrProvider"
+import {SwrProvider} from "@/providers/SwrProvider";
 
 const inter = Inter({subsets: ["latin"]})
 

@@ -1,5 +1,5 @@
-import RegisterUserForm from "@/components/form/RegisterUserForm";
 import {ReactElement} from "react";
+import RegisterUserForm from "@/features/authentication/RegisterUserForm";
 
 const Register= (): ReactElement => {
     return (

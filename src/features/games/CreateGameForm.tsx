@@ -2,6 +2,7 @@
 import {ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
+import {useSWRConfig} from "swr";
 
 type CreateGameForm = {
     title: string,
@@ -19,13 +20,14 @@ const CreateGameForm = (): ReactElement => {
         formState: {errors}
     } = useForm<CreateGameForm>()
     const [loading, setLoading] = useState(false)
+    const {mutate} = useSWRConfig()
 
     const onSubmit: SubmitHandler<CreateGameForm> = (data) => {
         setLoading(true)
 
-        ApiService.fetch<User>({url: "/games", method: "POST", data: data})
-            .then(() => {
-                // Todo: Optimistic ui.
+        ApiService.fetch<Game>({url: "/games", method: "POST", data: data})
+            .then(game => {
+                void mutate('/games', game)
             })
             .catch(e => {
                 if (ApiService.isError(e))
@@ -48,14 +50,16 @@ const CreateGameForm = (): ReactElement => {
                     required: {
                         value: true,
                         message: "Title is required"
-                    },
+                    }
                 })}
             />
             {errors.title && <span>{errors.title.message}</span>}
 
             <input
                 type="date"
-                {...register("startedAt")}
+                {...register("startedAt", {
+                    setValueAs: value => value || undefined,
+                })}
             />
             {errors.startedAt && <span>{errors.startedAt.message}</span>}
 

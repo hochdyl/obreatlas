@@ -1,5 +1,5 @@
-import LoginUserForm from "@/components/form/LoginUserForm";
 import {ReactElement} from "react";
+import LoginUserForm from "@/features/authentication/LoginUserForm";
 
 const Login = (): ReactElement => {
 
