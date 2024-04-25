@@ -4,11 +4,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
 import SessionService from "@/services/SessionService";
 import ApiService from "@/services/ApiService";
-
-type LoginUserForm = {
-    username: string
-    password: string
-}
+import {loginUser} from "@/api/authentication/AuthenticationApi";
 
 const LoginUserForm = (): ReactElement => {
     const {
@@ -23,7 +19,7 @@ const LoginUserForm = (): ReactElement => {
     const onSubmit: SubmitHandler<LoginUserForm> = (data) => {
         setLoading(true)
 
-        ApiService.fetch<User>({url: "/authentication/login", method: "POST", data: data})
+        loginUser(data)
             .then(res => {
                 SessionService.openSession(res.apiToken)
                 router.push('/')

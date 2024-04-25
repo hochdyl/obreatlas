@@ -6,7 +6,7 @@ import ApiService from "@/services/ApiService";
 export const SwrProvider = ({children}: Readonly<PropsWithChildren>): ReactElement =>
     <SWRConfig
         value={{
-            fetcher: (url: string) => ApiService.fetch({url}).then(r => r.data),
+            fetcher: (url: string) => ApiService.fetch({url}).then(r => r),
             onErrorRetry: (error, key, config, revalidate, {retryCount}) => {
                 // Never retry on 401 nor 404
                 if (error.status === 401 || 404) return

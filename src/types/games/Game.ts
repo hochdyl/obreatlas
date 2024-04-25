@@ -1,7 +1,8 @@
 type Game = {
     id: number
-    owner: Omit<User, 'apiToken'>
     title: string,
+    startedAt: Date
+    owner: Owner
     createdAt: string,
     updatedAt: string,
 }

@@ -1,0 +1,1 @@
+type Owner = Omit<User, 'apiToken'>

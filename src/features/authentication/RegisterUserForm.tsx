@@ -4,13 +4,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
 import SessionService from "@/services/SessionService";
 import ApiService from "@/services/ApiService";
-
-type RegisterUserForm = {
-    username: string
-    password: string
-    passwordConfirm: string
-}
-type RegisterUserFormFail = Omit<RegisterUserForm, "passwordConfirm">
+import {registerUser} from "@/api/authentication/AuthenticationApi";
 
 const RegisterUserForm = (): ReactElement => {
     const {
@@ -26,7 +20,7 @@ const RegisterUserForm = (): ReactElement => {
     const onSubmit: SubmitHandler<RegisterUserForm> = (data) => {
         setLoading(true)
 
-        ApiService.fetch<User>({url: "/authentication/register", method: "POST", data: data})
+        registerUser(data)
             .then(res => {
                 SessionService.openSession(res.apiToken)
                 router.push('/')

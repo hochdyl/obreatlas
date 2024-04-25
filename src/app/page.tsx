@@ -8,9 +8,6 @@ import GamesList from "@/features/games/GamesList";
 const Home = (): ReactElement => {
     const handleLogout = () => SessionService.closeSession()
 
-    // if (isLoading) return <p>loading</p>
-    // if (error || !user) return <p>error</p>
-
     return (
         <main>
             <Link href={'/register'}>Register</Link>

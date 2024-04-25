@@ -19,11 +19,7 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(
     res => res,
     err => {
-        console.log('test')
-
         if (err.isAxiosError) {
-            console.log('test2', err.request.status)
-
             if (err.request.status === HttpStatusCode.Unauthorized)
                 SessionService.closeSession()
 

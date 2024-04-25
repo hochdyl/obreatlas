@@ -1,16 +1,9 @@
 'use client'
-import {ReactElement, useState} from "react";
+import {ReactElement} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
-import {useSWRConfig} from "swr";
-
-type CreateGameForm = {
-    title: string,
-    startedAt: Date
-}
-type RegisterFormFail = {
-    [K in keyof CreateGameForm]: string
-}
+import useGames from "@/hooks/games/useGames";
+import {createGameMutation, createGameOptions} from "@/helpers/games/gamesMutations";
 
 const CreateGameForm = (): ReactElement => {
     const {
@@ -18,27 +11,27 @@ const CreateGameForm = (): ReactElement => {
         handleSubmit,
         setError,
         formState: {errors}
-    } = useForm<CreateGameForm>()
-    const [loading, setLoading] = useState(false)
-    const {mutate} = useSWRConfig()
+    } = useForm<CreateGameFormData>()
+    const {games, mutate} = useGames()
 
-    const onSubmit: SubmitHandler<CreateGameForm> = (data) => {
-        setLoading(true)
+    if (!games) return <p>Loading...</p>
 
-        ApiService.fetch<Game>({url: "/games", method: "POST", data: data})
-            .then(game => {
-                void mutate('/games', game)
-            })
+    const onSubmit: SubmitHandler<CreateGameFormData> = newGame => {
+        mutate(
+            createGameMutation(games, newGame),
+            createGameOptions(games, newGame)
+        )
+            .then(() => console.log('TODO: PTIT TOAST LA'))
             .catch(e => {
+                console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e))
                     setError('root', {type: 'server', message: e.message})
 
-                else if (ApiService.isFail<RegisterFormFail>(e))
+                else if (ApiService.isFail<CreateGameFormFail>(e))
                     Object.entries(e.data).forEach(([key, value]) => {
-                        setError(key as keyof RegisterFormFail, {type: 'server', message: value})
+                        setError(key as keyof CreateGameFormFail, {type: 'server', message: value})
                     })
             })
-            .finally(() => setLoading(false))
     }
 
     return (
@@ -65,8 +58,6 @@ const CreateGameForm = (): ReactElement => {
 
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
-
-            {loading && <p>loading...</p>}
         </form>
     )
 }
