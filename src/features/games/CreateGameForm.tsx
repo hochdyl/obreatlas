@@ -11,7 +11,11 @@ const CreateGameForm = (): ReactElement => {
         handleSubmit,
         setError,
         formState: {errors}
-    } = useForm<CreateGameFormData>()
+    } = useForm<CreateGameFormData>({
+        defaultValues: {
+            startedAt: new Date().toISOString().substring(0, 10)
+        }
+    })
     const {games, mutate} = useGames()
 
     if (!games) return <p>Loading...</p>
@@ -51,7 +55,10 @@ const CreateGameForm = (): ReactElement => {
             <input
                 type="date"
                 {...register("startedAt", {
-                    setValueAs: value => value || undefined,
+                    required: {
+                        value: true,
+                        message: "Start date is required"
+                    }
                 })}
             />
             {errors.startedAt && <span>{errors.startedAt.message}</span>}

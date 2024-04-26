@@ -1,11 +1,11 @@
 import {deleteCookie, getCookie, setCookie} from "cookies-next";
 
 abstract class SessionService {
-    static COOKIE_NAME = 'session'
+    static COOKIE_NAME = 'sessionToken'
 
     static getSession = () => getCookie(this.COOKIE_NAME)
 
-    static openSession = (data: string) => setCookie(this.COOKIE_NAME, data, {expires: this.getExpires()})
+    static startSession = (data: string) => setCookie(this.COOKIE_NAME, data, {expires: this.getExpires()})
 
     static closeSession = () => deleteCookie(this.COOKIE_NAME)
 

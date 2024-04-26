@@ -1,7 +1,7 @@
 type Game = {
     id: number
     title: string,
-    startedAt: Date
+    startedAt: string
     owner: Owner
     createdAt: string,
     updatedAt: string,

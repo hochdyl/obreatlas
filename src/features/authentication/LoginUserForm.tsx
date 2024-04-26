@@ -21,7 +21,7 @@ const LoginUserForm = (): ReactElement => {
 
         loginUser(data)
             .then(res => {
-                SessionService.openSession(res.apiToken)
+                SessionService.startSession(res.sessionToken)
                 router.push('/')
             })
             .catch(e => {

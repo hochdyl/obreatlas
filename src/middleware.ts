@@ -29,12 +29,12 @@ export const middleware = async (req: NextRequest) => {
 
     try {
         // Check if session is valid
-        const sessionRequest = await fetch(new URL("/authentication", process.env.API_URL), {
+        const sessionRequest = await fetch(new URL("/users", process.env.API_URL), {
             headers: {
                 Accept: "application/json",
                 Authorization: `Bearer ${sessionCookie.value}`,
                 "Content-Type": "application/json",
-            },
+            }
         });
 
         if (!sessionRequest.ok)

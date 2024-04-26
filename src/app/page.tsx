@@ -4,9 +4,15 @@ import {ReactElement} from "react";
 import SessionService from "@/services/SessionService";
 import CreateGameForm from "@/features/games/CreateGameForm";
 import GamesList from "@/features/games/GamesList";
+import useUser from "@/hooks/users/useUser";
+import {useRouter} from "next/navigation";
 
 const Home = (): ReactElement => {
-    const handleLogout = () => SessionService.closeSession()
+    const router = useRouter()
+    const handleLogout = () => {
+        SessionService.closeSession()
+        router.refresh()
+    }
 
     return (
         <main>

@@ -1,1 +1,1 @@
-type Owner = Omit<User, 'apiToken'>
+type Owner = Omit<User, 'sessionToken'>
