@@ -12,7 +12,12 @@ const LoginUserForm = (): ReactElement => {
         handleSubmit,
         setError,
         formState: {errors}
-    } = useForm<LoginUserForm>()
+    } = useForm<LoginUserForm>({
+        defaultValues: {
+            username: "admin",
+            password: "admin"
+        }
+    })
     const router = useRouter()
     const [loading, setLoading] = useState(false)
 

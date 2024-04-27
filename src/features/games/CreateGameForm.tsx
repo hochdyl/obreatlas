@@ -4,6 +4,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import useGames from "@/hooks/games/useGames";
 import {createGameMutation, createGameOptions} from "@/helpers/games/gamesMutations";
+import moment from "moment";
 
 const CreateGameForm = (): ReactElement => {
     const {
@@ -13,7 +14,7 @@ const CreateGameForm = (): ReactElement => {
         formState: {errors}
     } = useForm<CreateGameFormData>({
         defaultValues: {
-            startedAt: new Date().toISOString().substring(0, 10)
+            startedAt: moment().format('YYYY-MM-DD')
         }
     })
     const {games, mutate} = useGames()

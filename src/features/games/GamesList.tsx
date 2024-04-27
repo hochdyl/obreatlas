@@ -3,7 +3,7 @@ import {ReactElement} from "react";
 import useGames from "@/hooks/games/useGames";
 
 const GamesList = (): ReactElement => {
-    const {games, isLoading, error} = useGames()
+    const {games, error, isLoading} = useGames()
 
     if (isLoading && !games) return <p>Loading..</p>
     if (error) return <p>Error..</p>

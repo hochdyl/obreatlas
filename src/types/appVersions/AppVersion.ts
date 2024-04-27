@@ -1,0 +1,7 @@
+type AppVersion = {
+    name: string
+    number: string
+    features: string | null
+    bugfix: string | null
+    createdAt: string
+}

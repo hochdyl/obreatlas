@@ -1,4 +1,5 @@
 import {deleteCookie, getCookie, setCookie} from "cookies-next";
+import moment from "moment";
 
 abstract class SessionService {
     static COOKIE_NAME = 'sessionToken'
@@ -11,8 +12,7 @@ abstract class SessionService {
 
     static getExpires = () => {
         const days = parseInt(process.env.SESSION_COOKIE_DAYS ?? '0')
-        const expires = Date.now() + days * 24 * 60 * 60 * 1000
-        return new Date(expires)
+        return moment().add(days, 'days').toDate()
     }
 }
 
