@@ -4,8 +4,8 @@ import SessionService from "@/services/SessionService";
 import CreateGameForm from "@/features/games/CreateGameForm";
 import GamesList from "@/features/games/GamesList";
 import {useRouter} from "next/navigation";
-import AppVersion from "@/components/ui/AppVersion";
 import {useSWRConfig} from "swr";
+import AppVersion from "@/features/appVersions/AppVersion";
 
 const Home = (): ReactElement => {
     const router = useRouter()

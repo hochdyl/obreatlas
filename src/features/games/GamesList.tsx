@@ -1,6 +1,7 @@
 'use client'
 import {ReactElement} from "react";
 import useGames from "@/hooks/games/useGames";
+import Link from "next/link";
 
 const GamesList = (): ReactElement => {
     const {games, error, isLoading} = useGames()
@@ -11,11 +12,12 @@ const GamesList = (): ReactElement => {
     return (
         <>
             <h1>Games</h1>
-            {games?.map((game, index) => {
-                return <p key={index}>
-                    {game.title}
-                </p>
-            })}
+            {games?.map((game, index) =>
+                <div key={index}>
+                    {game.title} {game.slug}
+                    {game.slug && <Link href={game.slug}>Access</Link>}
+                </div>
+            )}
         </>
     )
 }

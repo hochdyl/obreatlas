@@ -48,6 +48,10 @@ const CreateGameForm = (): ReactElement => {
                     required: {
                         value: true,
                         message: "Title is required"
+                    },
+                    pattern: {
+                        value: /^[a-zA-Z0-9\- ]+$/,
+                        message: "Title contains wrong characters"
                     }
                 })}
             />
