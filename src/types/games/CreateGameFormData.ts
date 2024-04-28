@@ -1,4 +1,5 @@
 type CreateGameFormData = {
-    title: string,
+    title: string
+    slug: string
     startedAt: string
 }

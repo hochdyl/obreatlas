@@ -6,13 +6,7 @@ abstract class ApiService {
         new Promise<T>((resolve, reject) =>
             axiosInstance<SuccessResponse<T>>({...config})
                 .then(res => resolve(res.data.data))
-                .catch((err: AxiosError<ErrorResponse>) => {
-                    if (err.isAxiosError && err.response) {
-                        const response = err.response
-                        reject(response.data)
-                    }
-                    reject(err)
-                })
+                .catch((err: AxiosError<ErrorResponse>) => reject(err))
         )
 
     static isSuccess = <T = any>(res: any): res is SuccessResponse<T> => (

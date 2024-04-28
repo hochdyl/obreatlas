@@ -1,16 +1,19 @@
 'use client'
-import {ReactElement} from "react";
+import {BaseSyntheticEvent, ReactElement} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import useGames from "@/hooks/games/useGames";
 import {createGameMutation, createGameOptions} from "@/helpers/games/gamesMutations";
 import moment from "moment";
+import slugify from "@/utils/slugify";
 
 const CreateGameForm = (): ReactElement => {
     const {
         register,
         handleSubmit,
+        setValue,
         setError,
+        trigger,
         formState: {errors}
     } = useForm<CreateGameFormData>({
         defaultValues: {
@@ -20,6 +23,13 @@ const CreateGameForm = (): ReactElement => {
     const {games, mutate} = useGames()
 
     if (!games) return <p>Loading...</p>
+
+    const handleTitleChange = (e: BaseSyntheticEvent) => {
+        trigger('title').then(() => {
+            const slug = slugify(e.target.value)
+            setValue('slug', slug)
+        })
+    }
 
     const onSubmit: SubmitHandler<CreateGameFormData> = newGame => {
         mutate(
@@ -52,10 +62,23 @@ const CreateGameForm = (): ReactElement => {
                     pattern: {
                         value: /^[a-zA-Z0-9\- ]+$/,
                         message: "Title contains wrong characters"
-                    }
+                    },
+                    onChange: e => handleTitleChange(e)
                 })}
             />
             {errors.title && <span>{errors.title.message}</span>}
+
+            <input
+                placeholder="slug"
+                disabled
+                {...register("slug", {
+                    required: {
+                        value: true,
+                        message: "Start date is required"
+                    }
+                })}
+            />
+            {errors.slug && <span>{errors.slug.message}</span>}
 
             <input
                 type="date"
