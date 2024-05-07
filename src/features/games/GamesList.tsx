@@ -15,7 +15,7 @@ const GamesList = (): ReactElement => {
             {games?.map((game, index) =>
                 <div key={index}>
                     {game.title} {game.slug}
-                    {game.slug && <Link href={game.slug}>Access</Link>}
+                    <Link href={game.slug}>Access</Link>
                 </div>
             )}
         </>

@@ -6,6 +6,8 @@ import SessionService from "@/services/SessionService";
 import ApiService from "@/services/ApiService";
 import {registerUser} from "@/api/authentication/AuthenticationApi";
 
+type RegisterUserFormFail = Omit<RegisterUserForm, "passwordConfirm">
+
 const RegisterUserForm = (): ReactElement => {
     const {
         register,

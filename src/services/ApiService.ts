@@ -5,8 +5,11 @@ abstract class ApiService {
     static fetch = <T = any>(config: AxiosRequestConfig) =>
         new Promise<T>((resolve, reject) =>
             axiosInstance<SuccessResponse<T>>({...config})
-                .then(res => resolve(res.data.data))
-                .catch((err: AxiosError<ErrorResponse>) => reject(err))
+                .then(({data: res}) => resolve(res.data))
+                .catch((err: AxiosError<ErrorResponse>) => {
+                    console.log(err)
+                    reject(err)
+                })
         )
 
     static isSuccess = <T = any>(res: any): res is SuccessResponse<T> => (
