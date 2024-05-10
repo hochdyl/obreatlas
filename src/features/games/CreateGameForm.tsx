@@ -1,5 +1,5 @@
 'use client'
-import {BaseSyntheticEvent, ReactElement} from "react";
+import {BaseSyntheticEvent, ChangeEvent, ReactElement} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import useGames from "@/hooks/games/useGames";
@@ -24,7 +24,7 @@ const CreateGameForm = (): ReactElement => {
 
     if (!games) return <p>Loading...</p>
 
-    const handleTitleChange = (e: BaseSyntheticEvent) => {
+    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('title').then(() => {
             const slug = slugify(e.target.value)
             setValue('slug', slug)
@@ -74,7 +74,7 @@ const CreateGameForm = (): ReactElement => {
                 {...register("slug", {
                     required: {
                         value: true,
-                        message: "Start date is required"
+                        message: "Slug is required"
                     }
                 })}
             />
