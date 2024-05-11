@@ -31,23 +31,21 @@ const CreateGameForm = (): ReactElement => {
         })
     }
 
-    const onSubmit: SubmitHandler<CreateGameFormData> = newGame => {
-        mutate(
-            createGameMutation(games, newGame),
-            createGameOptions(games, newGame)
-        )
-            .then(() => console.log('TODO: PTIT TOAST LA'))
-            .catch(e => {
-                console.log('TODO: PTIT TOAST LA')
-                if (ApiService.isError(e))
-                    setError('root', {type: 'server', message: e.message})
+    const onSubmit: SubmitHandler<CreateGameFormData> = newGame => mutate(
+        createGameMutation(games, newGame),
+        createGameOptions(games, newGame)
+    )
+        .then(() => console.log('TODO: PTIT TOAST LA'))
+        .catch(e => {
+            console.log('TODO: PTIT TOAST LA')
+            if (ApiService.isError(e))
+                setError('root', {type: 'server', message: e.message})
 
-                else if (ApiService.isFail<BaseFormFail<CreateGameFormData>>(e))
-                    Object.entries(e.data).forEach(([key, value]) => {
-                        setError(key as keyof BaseFormFail<CreateGameFormData>, {type: 'server', message: value})
-                    })
-            })
-    }
+            else if (ApiService.isFail<BaseFormFail<CreateGameFormData>>(e))
+                Object.entries(e.data).forEach(([key, value]) => {
+                    setError(key as keyof BaseFormFail<CreateGameFormData>, {type: 'server', message: value})
+                })
+        })
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>

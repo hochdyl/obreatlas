@@ -8,5 +8,5 @@ export const createGameMutation = async (games: SWRGame[], newGame: CreateGameFo
 
 export const createGameOptions = (games: SWRGame[], newGame: CreateGameFormData): MutatorOptions<SWRGame[], CreateGameFormData> => ({
     optimisticData: [newGame, ...games],
-    rollbackOnError: true,
+    rollbackOnError: true
 })
