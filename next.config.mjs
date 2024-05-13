@@ -13,6 +13,7 @@ const nextConfig = {
                 protocol: "http",
                 hostname: process.env.API_HOSTNAME,
                 port: process.env.API_PORT,
+                pathname: '/uploads/*'
             }
         ]
     }
