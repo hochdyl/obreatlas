@@ -2,9 +2,20 @@
 const nextConfig = {
     env: {
         API_URL: process.env.API_URL,
+        API_HOSTNAME: process.env.API_HOSTNAME,
+        API_PORT: process.env.API_PORT,
         SESSION_COOKIE_DAYS: process.env.SESSION_COOKIE_DAYS
     },
-    reactStrictMode: false
+    reactStrictMode: false,
+    images: {
+        remotePatterns: [
+            {
+                protocol: "http",
+                hostname: process.env.API_HOSTNAME,
+                port: process.env.API_PORT,
+            }
+        ]
+    }
 };
 
 export default nextConfig;

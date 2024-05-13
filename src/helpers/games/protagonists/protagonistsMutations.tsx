@@ -6,7 +6,9 @@ export const createProtagonistMutation = async (gameSlug: string, protagonists: 
     return [addedProtagonist, ...protagonists]
 }
 
-export const createProtagonistOptions = (protagonists: SWRProtagonist[], newProtagonist: CreateProtagonistFormData): MutatorOptions<SWRProtagonist[], CreateProtagonistFormData> => ({
-    optimisticData: [newProtagonist, ...protagonists],
-    rollbackOnError: true
-})
+export const createProtagonistOptions = (protagonists: SWRProtagonist[], newProtagonist: CreateProtagonistFormData): MutatorOptions<SWRProtagonist[], CreateProtagonistFormData> => {
+    return {
+        optimisticData: [{...newProtagonist, portrait: {fileName: 'default.jpg'}}, ...protagonists],
+        rollbackOnError: true
+    }
+}

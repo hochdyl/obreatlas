@@ -2,5 +2,5 @@ type CreateProtagonistFormData = {
     name: string
     slug: string
     story: string
-    portrait: string
+    portrait: File | Upload
 }

@@ -5,5 +5,5 @@ type Protagonist = {
     story: string
     owner: Owner
     game: Game
-    portrait: string
+    portrait: Upload
 }

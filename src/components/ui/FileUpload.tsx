@@ -9,15 +9,20 @@ type FileUploadProps = {
 
 const FileUpload = ({inputName}: FileUploadProps): ReactElement => {
     const [filePreview, setFilePreview] = useState<string | undefined>(undefined)
-    const {register} = useFormContext();
+    const {register, setValue} = useFormContext();
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
 
-        if (file && file.type.includes('image')) {
-            const urlImage = URL.createObjectURL(file)
-            setFilePreview(urlImage)
+        if (file) {
+            setValue(inputName, file)
+
+            if(file.type.includes('image')) {
+                const urlImage = URL.createObjectURL(file)
+                return setFilePreview(urlImage)
+            }
         }
+        return setFilePreview(undefined)
     }
 
     return (
@@ -30,8 +35,9 @@ const FileUpload = ({inputName}: FileUploadProps): ReactElement => {
                     height="50"
                 />
             }
+            <input type="file" onChange={handleFileChange}/>
             <input
-                type="file"
+                hidden
                 {...register(inputName, {
                     onChange: handleFileChange
                 })}

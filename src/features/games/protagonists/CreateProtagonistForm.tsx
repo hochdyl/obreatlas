@@ -6,7 +6,6 @@ import slugify from "@/utils/slugify";
 import useProtagonists from "@/hooks/games/protagonists/useProtagonists";
 import {useParams} from "next/navigation";
 import {createProtagonistMutation, createProtagonistOptions} from "@/helpers/games/protagonists/protagonistsMutations";
-import getFormData from "@/utils/getFormData";
 import FileUpload from "@/components/ui/FileUpload";
 
 const CreateProtagonistForm = (): ReactElement => {
@@ -31,22 +30,23 @@ const CreateProtagonistForm = (): ReactElement => {
         })
     }
 
-    const onSubmit: SubmitHandler<CreateProtagonistFormData> = async newProtagonist =>
-    mutate(
-        createProtagonistMutation(params.gameSlug, protagonists, newProtagonist),
-        createProtagonistOptions(protagonists, newProtagonist)
-    )
-        .then(() => console.log('TODO: PTIT TOAST LA'))
-        .catch(e => {
-            console.log('TODO: PTIT TOAST LA')
-            if (ApiService.isError(e))
-                setError('root', {type: 'server', message: e.message})
+    const onSubmit: SubmitHandler<CreateProtagonistFormData> = async newProtagonist => {
+        mutate(
+            createProtagonistMutation(params.gameSlug, protagonists, newProtagonist),
+            createProtagonistOptions(protagonists, newProtagonist)
+        )
+            .then(() => console.log('TODO: PTIT TOAST LA'))
+            .catch(e => {
+                console.log('TODO: PTIT TOAST LA')
+                if (ApiService.isError(e))
+                    setError('root', {type: 'server', message: e.message})
 
-            else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e))
-                Object.entries(e.data).forEach(([key, value]) => {
-                    setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
-                })
-        })
+                else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e))
+                    Object.entries(e.data).forEach(([key, value]) => {
+                        setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
+                    })
+            })
+    }
 
     return (
         <FormProvider {...methods}>
