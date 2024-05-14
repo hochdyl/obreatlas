@@ -1,11 +1,11 @@
 'use client'
-import {BaseSyntheticEvent, ChangeEvent, ReactElement} from "react";
+import {ChangeEvent, ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import useGames from "@/hooks/games/useGames";
-import {createGameMutation, createGameOptions} from "@/helpers/games/gamesMutations";
 import moment from "moment";
 import slugify from "@/utils/slugify";
+import {createGame} from "@/api/games/GameApi";
 
 const CreateGameForm = (): ReactElement => {
     const {
@@ -21,6 +21,7 @@ const CreateGameForm = (): ReactElement => {
         }
     })
     const {games, mutate} = useGames()
+    const [formLoading, setFormLoading] = useState<boolean>(false)
 
     if (!games) return <p>Loading...</p>
 
@@ -31,21 +32,24 @@ const CreateGameForm = (): ReactElement => {
         })
     }
 
-    const onSubmit: SubmitHandler<CreateGameFormData> = newGame => mutate(
-        createGameMutation(games, newGame),
-        createGameOptions(games, newGame)
-    )
-        .then(() => console.log('TODO: PTIT TOAST LA'))
-        .catch(e => {
-            console.log('TODO: PTIT TOAST LA')
-            if (ApiService.isError(e))
-                setError('root', {type: 'server', message: e.message})
+    const onSubmit: SubmitHandler<CreateGameFormData> = async newGame => {
+        setFormLoading(true)
+        const addedGame = await createGame(newGame)
 
-            else if (ApiService.isFail<BaseFormFail<CreateGameFormData>>(e))
-                Object.entries(e.data).forEach(([key, value]) => {
-                    setError(key as keyof BaseFormFail<CreateGameFormData>, {type: 'server', message: value})
-                })
-        })
+        mutate([addedGame, ...games])
+            .then(() => console.log('TODO: PTIT TOAST LA'))
+            .catch(e => {
+                console.log('TODO: PTIT TOAST LA')
+                if (ApiService.isError(e))
+                    setError('root', {type: 'server', message: e.message})
+
+                else if (ApiService.isFail<BaseFormFail<CreateGameFormData>>(e))
+                    Object.entries(e.data).forEach(([key, value]) => {
+                        setError(key as keyof BaseFormFail<CreateGameFormData>, {type: 'server', message: value})
+                    })
+            })
+            .finally(() => setFormLoading(false))
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,6 +95,7 @@ const CreateGameForm = (): ReactElement => {
 
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
+            {formLoading && <span>Loading form...</span>}
         </form>
     )
 }

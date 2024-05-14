@@ -2,7 +2,7 @@
 import useSWR from "swr";
 
 const useGames = () => {
-    const {data: games, error, isLoading, mutate} = useSWR<SWRGame[]>('/games')
+    const {data: games, error, isLoading, mutate} = useSWR<Game[]>('/games')
 
     return {games, error, isLoading, mutate}
 }

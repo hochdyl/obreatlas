@@ -4,15 +4,17 @@ import Link from "next/link";
 import useProtagonists from "@/hooks/games/protagonists/useProtagonists";
 import {useParams} from "next/navigation";
 import Image from "next/image";
+import useUser from "@/hooks/authentication/useUser";
 
 const ProtagonistsList = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
     const {protagonists, error, isLoading} = useProtagonists(params.gameSlug)
+    const {user} = useUser()
 
-    if (isLoading && !protagonists) return <p>Loading..</p>
+    if (isLoading && !protagonists || !user) return <p>Loading..</p>
     if (error) return <p>Error..</p>
 
-    const handlePortrait = (protagonist: SWRProtagonist) => {
+    const handlePortrait = (protagonist: Protagonist) => {
         const path = `${process.env.API_URL}/uploads`
 
         if (protagonist.portrait) {
@@ -20,6 +22,10 @@ const ProtagonistsList = (): ReactElement => {
         }
 
         return `${path}/default.jpg`
+    }
+
+    const handlePlayProtagonist = (protagonistId: number) => {
+
     }
 
     return (
@@ -36,9 +42,13 @@ const ProtagonistsList = (): ReactElement => {
                             width="50"
                         />
                     }
-
                     {protagonist.name} {protagonist.slug}
-                    <Link href={`${params.gameSlug}/${protagonist.slug}`}>Dashboard</Link>
+                    {protagonist.id &&
+                        <button onClick={() => handlePlayProtagonist(protagonist.id)}>Play this protagonist</button>
+                    }
+                    {protagonist.owner && protagonist.owner.id === user.id &&
+                        <Link href={`${params.gameSlug}/${protagonist.slug}`}>Dashboard</Link>
+                    }
                 </div>
             )}
         </>

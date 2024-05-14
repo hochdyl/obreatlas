@@ -1,12 +1,12 @@
 'use client'
-import {ChangeEvent, ReactElement} from "react";
+import {ChangeEvent, ReactElement, useState} from "react";
 import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import slugify from "@/utils/slugify";
 import useProtagonists from "@/hooks/games/protagonists/useProtagonists";
 import {useParams} from "next/navigation";
-import {createProtagonistMutation, createProtagonistOptions} from "@/helpers/games/protagonists/protagonistsMutations";
 import FileUpload from "@/components/ui/FileUpload";
+import {createProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 
 const CreateProtagonistForm = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
@@ -20,6 +20,7 @@ const CreateProtagonistForm = (): ReactElement => {
         formState: {errors}
     } = methods
     const {protagonists, mutate} = useProtagonists(params.gameSlug)
+    const [formLoading, setFormLoading] = useState<boolean>(false)
 
     if (!protagonists) return <p>Loading...</p>
 
@@ -31,10 +32,10 @@ const CreateProtagonistForm = (): ReactElement => {
     }
 
     const onSubmit: SubmitHandler<CreateProtagonistFormData> = async newProtagonist => {
-        mutate(
-            createProtagonistMutation(params.gameSlug, protagonists, newProtagonist),
-            createProtagonistOptions(protagonists, newProtagonist)
-        )
+        setFormLoading(true)
+        const addedProtagonist = await createProtagonist(params.gameSlug, newProtagonist)
+
+        mutate([addedProtagonist, ...protagonists])
             .then(() => console.log('TODO: PTIT TOAST LA'))
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
@@ -46,6 +47,7 @@ const CreateProtagonistForm = (): ReactElement => {
                         setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
                     })
             })
+            .finally(() => setFormLoading(false))
     }
 
     return (
@@ -91,6 +93,7 @@ const CreateProtagonistForm = (): ReactElement => {
 
                 <input type="submit"/>
                 {errors.root && <span>{errors.root.message}</span>}
+                {formLoading && <span>Loading form...</span>}
             </form>
         </FormProvider>
     )
