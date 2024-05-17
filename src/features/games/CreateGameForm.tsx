@@ -34,9 +34,8 @@ const CreateGameForm = (): ReactElement => {
 
     const onSubmit: SubmitHandler<CreateGameFormData> = async newGame => {
         setFormLoading(true)
-        const addedGame = await createGame(newGame)
 
-        mutate([addedGame, ...games])
+        await createGame(newGame)
             .then(() => console.log('TODO: PTIT TOAST LA'))
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
@@ -48,7 +47,9 @@ const CreateGameForm = (): ReactElement => {
                         setError(key as keyof BaseFormFail<CreateGameFormData>, {type: 'server', message: value})
                     })
             })
-            .finally(() => setFormLoading(false))
+
+        mutate()
+            .then(() => setFormLoading(false))
     }
 
     return (

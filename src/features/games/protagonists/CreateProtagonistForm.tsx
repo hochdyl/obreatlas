@@ -10,7 +10,11 @@ import {createProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 
 const CreateProtagonistForm = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-    const methods = useForm<CreateProtagonistFormData>()
+    const methods = useForm<CreateProtagonistFormData>({
+        defaultValues: {
+            story: undefined
+        }
+    })
     const {
         register,
         handleSubmit,
@@ -33,9 +37,8 @@ const CreateProtagonistForm = (): ReactElement => {
 
     const onSubmit: SubmitHandler<CreateProtagonistFormData> = async newProtagonist => {
         setFormLoading(true)
-        const addedProtagonist = await createProtagonist(params.gameSlug, newProtagonist)
 
-        mutate([addedProtagonist, ...protagonists])
+        await createProtagonist(params.gameSlug, newProtagonist)
             .then(() => console.log('TODO: PTIT TOAST LA'))
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
@@ -47,12 +50,14 @@ const CreateProtagonistForm = (): ReactElement => {
                         setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
                     })
             })
-            .finally(() => setFormLoading(false))
+
+        mutate()
+            .then(() => setFormLoading(false))
     }
 
     return (
         <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <h1>Create protagonist</h1>
                 <input
                     placeholder="name"

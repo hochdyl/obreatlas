@@ -6,4 +6,6 @@ type Protagonist = {
     owner: Owner
     game: Game
     portrait: Upload
+    createdAt: string
+    updatedAt: string
 }

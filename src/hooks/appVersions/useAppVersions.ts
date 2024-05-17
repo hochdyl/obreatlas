@@ -17,7 +17,6 @@ const useAppVersions = () => {
         oldVersionsData.current = versions
     }, [versions]);
 
-
     return {versions, currentVersion, isUpdateAvailable, error, isLoading}
 }
 export default useAppVersions

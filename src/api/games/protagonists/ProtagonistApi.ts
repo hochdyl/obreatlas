@@ -5,8 +5,14 @@ const ROUTE_URL = 'protagonists'
 
 export const createProtagonist = (gameSlug: string, data: CreateProtagonistFormData) => {
     return ApiService.fetch<Protagonist>({
-        url: `${gameSlug}/${ROUTE_URL}`,
+        url: `${ROUTE_URL}/${gameSlug}`,
         method: "POST",
         data: getFormData(data)
+    })
+}
+
+export const chooseProtagonist = (protagonistId: number) => {
+    return ApiService.fetch<Protagonist>({
+        url: `${ROUTE_URL}/choose/${protagonistId}`
     })
 }

@@ -5,10 +5,11 @@ import useProtagonists from "@/hooks/games/protagonists/useProtagonists";
 import {useParams} from "next/navigation";
 import Image from "next/image";
 import useUser from "@/hooks/authentication/useUser";
+import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 
 const ProtagonistsList = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-    const {protagonists, error, isLoading} = useProtagonists(params.gameSlug)
+    const {protagonists, error, isLoading, mutate} = useProtagonists(params.gameSlug)
     const {user} = useUser()
 
     if (isLoading && !protagonists || !user) return <p>Loading..</p>
@@ -21,11 +22,13 @@ const ProtagonistsList = (): ReactElement => {
             return `${path}/${protagonist.portrait.fileName}`
         }
 
-        return `${path}/default.jpg`
+        return '/images/default.jpg'
     }
 
-    const handlePlayProtagonist = (protagonistId: number) => {
+    const handlePlayProtagonist = async (protagonistId: number) => {
+        await chooseProtagonist(protagonistId)
 
+        void mutate()
     }
 
     return (
@@ -33,17 +36,14 @@ const ProtagonistsList = (): ReactElement => {
             <h1>Protagonists</h1>
             {protagonists?.map((protagonist, index) =>
                 <div key={index}>
-                    {!protagonist.id ?
-                        <p>Loading portrait..</p> :
-                        <Image
-                            src={handlePortrait(protagonist)}
-                            alt="protagonist portrait"
-                            height="50"
-                            width="50"
-                        />
-                    }
+                    <Image
+                        src={handlePortrait(protagonist)}
+                        alt="protagonist portrait"
+                        height="50"
+                        width="50"
+                    />
                     {protagonist.name} {protagonist.slug}
-                    {protagonist.id &&
+                    {!protagonist.owner &&
                         <button onClick={() => handlePlayProtagonist(protagonist.id)}>Play this protagonist</button>
                     }
                     {protagonist.owner && protagonist.owner.id === user.id &&
