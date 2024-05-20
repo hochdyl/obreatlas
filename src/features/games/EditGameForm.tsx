@@ -45,7 +45,7 @@ const EditGameForm = (): ReactElement => {
     const onSubmit: SubmitHandler<EditGameFormData> = game => {
         setFormLoading(true)
 
-        editGame(game)
+        editGame(params.gameSlug, game)
             .then(() => console.log('TODO: PTIT TOAST LA'))
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
