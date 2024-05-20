@@ -21,7 +21,7 @@ const LoginUserForm = (): ReactElement => {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
 
-    const onSubmit: SubmitHandler<LoginUserForm> = (data) => {
+    const onSubmit: SubmitHandler<LoginUserForm> = data => {
         setLoading(true)
 
         loginUser(data)
@@ -32,13 +32,15 @@ const LoginUserForm = (): ReactElement => {
             .catch(e => {
                 setLoading(false)
                 
-                if (ApiService.isError(e))
+                if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
+                }
 
-                else if (ApiService.isFail<BaseFormFail<LoginUserForm>>(e))
+                else if (ApiService.isFail<BaseFormFail<LoginUserForm>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof BaseFormFail<LoginUserForm>, {type: 'server', message: value})
                     })
+                }
             })
     }
 

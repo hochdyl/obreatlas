@@ -1,14 +1,16 @@
 'use client'
-import {ChangeEvent, ReactElement, useState} from "react";
+import {ChangeEvent, ReactElement, useEffect, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
-import useGames from "@/hooks/games/useGames";
-import moment from "moment";
 import slugify from "@/utils/slugify";
-import {createGame} from "@/api/games/GameApi";
+import {editGame} from "@/api/games/GameApi";
+import {useParams} from "next/navigation";
+import useGame from "@/hooks/games/useGame";
+import moment from "moment";
 
-const CreateGameForm = (): ReactElement => {
-    const {games, mutate} = useGames()
+const EditGameForm = (): ReactElement => {
+    const params = useParams<{gameSlug: string}>()
+    const {game, mutate} = useGame(params.gameSlug)
     const [formLoading, setFormLoading] = useState<boolean>(false)
 
     const {
@@ -17,14 +19,21 @@ const CreateGameForm = (): ReactElement => {
         setValue,
         setError,
         trigger,
+        reset,
         formState: {errors}
-    } = useForm<CreateGameFormData>({
-        defaultValues: {
-            startedAt: moment().format('YYYY-MM-DD')
-        }
-    })
+    } = useForm<EditGameFormData>()
 
-    if (!games) return <p>Loading...</p>
+    useEffect(() => {
+        if (game) {
+            const formattedGame: Game = {
+                ...game,
+                startedAt: moment(game.startedAt).format('YYYY-MM-DD HH:MM:SS')
+            }
+            reset(formattedGame)
+        }
+    }, [game])
+
+    if (!game) return <p>Loading...</p>
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('title').then(() => {
@@ -33,19 +42,19 @@ const CreateGameForm = (): ReactElement => {
         })
     }
 
-    const onSubmit: SubmitHandler<CreateGameFormData> = newGame => {
+    const onSubmit: SubmitHandler<EditGameFormData> = game => {
         setFormLoading(true)
 
-        createGame(newGame)
+        editGame(game)
             .then(() => console.log('TODO: PTIT TOAST LA'))
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
                 }
-                else if (ApiService.isFail<BaseFormFail<CreateGameFormData>>(e)) {
+                else if (ApiService.isFail<BaseFormFail<EditGameFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
-                        setError(key as keyof BaseFormFail<CreateGameFormData>, {type: 'server', message: value})
+                        setError(key as keyof BaseFormFail<EditGameFormData>, {type: 'server', message: value})
                     })
                 }
             })
@@ -56,7 +65,7 @@ const CreateGameForm = (): ReactElement => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <h1>Create game</h1>
+            <h1>Edit game</h1>
             <input
                 placeholder="title"
                 {...register("title", {
@@ -86,7 +95,7 @@ const CreateGameForm = (): ReactElement => {
             {errors.slug && <span>{errors.slug.message}</span>}
 
             <input
-                type="date"
+                type="datetime-local"
                 {...register("startedAt", {
                     required: {
                         value: true,
@@ -96,10 +105,16 @@ const CreateGameForm = (): ReactElement => {
             />
             {errors.startedAt && <span>{errors.startedAt.message}</span>}
 
+            <input
+                type="checkbox"
+                {...register("closed")}
+            />
+            {errors.closed && <span>{errors.closed.message}</span>}
+
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
             {formLoading && <span>Loading form...</span>}
         </form>
     )
 }
-export default CreateGameForm
+export default EditGameForm

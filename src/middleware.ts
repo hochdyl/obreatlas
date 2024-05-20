@@ -24,8 +24,9 @@ export const middleware = async (req: NextRequest) => {
         return NextResponse.redirect(new URL('/login', req.url))
     }
 
-    if (!sessionCookie)
+    if (!sessionCookie) {
         return redirectToLogin()
+    }
 
     try {
         // Check if session is valid
@@ -37,15 +38,17 @@ export const middleware = async (req: NextRequest) => {
             }
         });
 
-        if (!sessionRequest.ok)
+        if (!sessionRequest.ok) {
             return redirectToLogin()
+        }
     } catch (e) {
         return redirectToLogin()
     }
 
     // Redirect to app if session is okay
-    if (isLoginPage || isRegisterPage)
+    if (isLoginPage || isRegisterPage) {
         return NextResponse.redirect(new URL('/', req.url))
+    }
 
     // Set a refreshed session cookie
     const response = NextResponse.next()

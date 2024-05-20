@@ -1,7 +1,7 @@
 'use client'
 import {ReactElement} from "react";
 import useGames from "@/hooks/games/useGames";
-import Link from "next/link";
+import GameCard from "@/features/games/GameCard";
 
 const GamesList = (): ReactElement => {
     const {games, error, isLoading} = useGames()
@@ -13,10 +13,7 @@ const GamesList = (): ReactElement => {
         <>
             <h1>Games</h1>
             {games?.map((game, index) =>
-                <div key={index}>
-                    {game.title} {game.slug}
-                    <Link href={game.slug}>Access</Link>
-                </div>
+                <GameCard game={game} key={index}/>
             )}
         </>
     )

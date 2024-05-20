@@ -33,5 +33,4 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(err);
     }
 );
-
 export default axiosInstance

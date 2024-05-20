@@ -2,15 +2,16 @@ import {AxiosError, AxiosRequestConfig} from "axios";
 import axiosInstance from "@/lib/axios";
 
 abstract class ApiService {
-    static fetch = <T = any>(config: AxiosRequestConfig) =>
-        new Promise<T>((resolve, reject) =>
+    static fetch = <T = any>(config: AxiosRequestConfig) => {
+        return new Promise<T>((resolve, reject) => {
             axiosInstance<SuccessResponse<T>>({...config})
                 .then(({data: res}) => resolve(res.data))
                 .catch((err: AxiosError<ErrorResponse>) => {
                     console.log(err)
                     reject(err)
                 })
-        )
+        })
+    }
 
     static isSuccess = <T = any>(res: any): res is SuccessResponse<T> => (
         typeof res === 'object' &&

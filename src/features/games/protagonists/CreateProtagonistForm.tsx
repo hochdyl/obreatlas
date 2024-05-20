@@ -10,6 +10,9 @@ import {createProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 
 const CreateProtagonistForm = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
+    const {protagonists, mutate} = useProtagonists(params.gameSlug)
+    const [formLoading, setFormLoading] = useState<boolean>(false)
+
     const methods = useForm<CreateProtagonistFormData>({
         defaultValues: {
             story: undefined
@@ -23,8 +26,6 @@ const CreateProtagonistForm = (): ReactElement => {
         trigger,
         formState: {errors}
     } = methods
-    const {protagonists, mutate} = useProtagonists(params.gameSlug)
-    const [formLoading, setFormLoading] = useState<boolean>(false)
 
     if (!protagonists) return <p>Loading...</p>
 
@@ -35,24 +36,26 @@ const CreateProtagonistForm = (): ReactElement => {
         })
     }
 
-    const onSubmit: SubmitHandler<CreateProtagonistFormData> = async newProtagonist => {
+    const onSubmit: SubmitHandler<CreateProtagonistFormData> = newProtagonist => {
         setFormLoading(true)
 
-        await createProtagonist(params.gameSlug, newProtagonist)
+        createProtagonist(params.gameSlug, newProtagonist)
             .then(() => console.log('TODO: PTIT TOAST LA'))
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
-                if (ApiService.isError(e))
+                if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
+                }
 
-                else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e))
+                else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
                     })
+                }
             })
-
-        mutate()
-            .then(() => setFormLoading(false))
+            .finally(() => {
+                mutate().then(() => setFormLoading(false))
+            })
     }
 
     return (

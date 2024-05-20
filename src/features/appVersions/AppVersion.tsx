@@ -1,7 +1,5 @@
 import {ReactElement} from "react";
 import useAppVersions from "@/hooks/appVersions/useAppVersions";
-import {useRouter} from "next/navigation";
-import SessionService from "@/services/SessionService";
 import {useSWRConfig} from "swr";
 
 const AppVersion = (): ReactElement => {
@@ -12,8 +10,7 @@ const AppVersion = (): ReactElement => {
         error,
         isLoading
     } = useAppVersions()
-    const router = useRouter()
-    const { mutate } = useSWRConfig()
+    const {mutate} = useSWRConfig()
 
     const handleUpdate = () => {
         mutate(

@@ -6,6 +6,7 @@ import {useParams} from "next/navigation";
 import Image from "next/image";
 import useUser from "@/hooks/authentication/useUser";
 import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
+import ProtagonistCard from "@/features/games/protagonists/ProtagonistCard";
 
 const ProtagonistsList = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
@@ -15,18 +16,8 @@ const ProtagonistsList = (): ReactElement => {
     if (isLoading && !protagonists || !user) return <p>Loading..</p>
     if (error) return <p>Error..</p>
 
-    const handlePortrait = (protagonist: Protagonist) => {
-        const path = `${process.env.API_URL}/uploads`
-
-        if (protagonist.portrait) {
-            return `${path}/${protagonist.portrait.fileName}`
-        }
-
-        return '/images/default.jpg'
-    }
-
-    const handlePlayProtagonist = async (protagonistId: number) => {
-        await chooseProtagonist(protagonistId)
+    const handleChooseProtagonist = async (protagonist: Protagonist) => {
+        await chooseProtagonist(protagonist.id)
 
         void mutate()
     }
@@ -35,21 +26,11 @@ const ProtagonistsList = (): ReactElement => {
         <>
             <h1>Protagonists</h1>
             {protagonists?.map((protagonist, index) =>
-                <div key={index}>
-                    <Image
-                        src={handlePortrait(protagonist)}
-                        alt="protagonist portrait"
-                        height="50"
-                        width="50"
-                    />
-                    {protagonist.name} {protagonist.slug}
-                    {!protagonist.owner &&
-                        <button onClick={() => handlePlayProtagonist(protagonist.id)}>Play this protagonist</button>
-                    }
-                    {protagonist.owner && protagonist.owner.id === user.id &&
-                        <Link href={`${params.gameSlug}/${protagonist.slug}`}>Dashboard</Link>
-                    }
-                </div>
+                <ProtagonistCard
+                    protagonist={protagonist}
+                    onChoose={(protagonist) => handleChooseProtagonist(protagonist)}
+                    key={index}
+                />
             )}
         </>
     )

@@ -38,12 +38,9 @@ const FileUpload = ({inputName}: FileUploadProps): ReactElement => {
             <input type="file" onChange={handleFileChange}/>
             <input
                 hidden
-                {...register(inputName, {
-                    onChange: handleFileChange
-                })}
+                {...register(inputName)}
             />
         </>
-
     )
 }
 export default FileUpload

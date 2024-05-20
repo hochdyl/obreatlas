@@ -19,7 +19,7 @@ const RegisterUserForm = (): ReactElement => {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
 
-    const onSubmit: SubmitHandler<RegisterUserForm> = (data) => {
+    const onSubmit: SubmitHandler<RegisterUserForm> = data => {
         setLoading(true)
 
         registerUser(data)
@@ -30,13 +30,15 @@ const RegisterUserForm = (): ReactElement => {
             .catch(e => {
                 setLoading(false)
 
-                if (ApiService.isError(e))
+                if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
+                }
 
-                else if (ApiService.isFail<RegisterUserFormFail>(e))
+                else if (ApiService.isFail<RegisterUserFormFail>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof RegisterUserFormFail, {type: 'server', message: value})
                     })
+                }
             })
     }
 
