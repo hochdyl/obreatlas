@@ -11,8 +11,12 @@ const useAppVersions = () => {
 
     useEffect(() => {
         if (versions) {
-            if (!currentVersion) setCurrentVersion(versions[0])
-            if (oldVersionsData.current) setUpdateAvailable(true)
+            if (!currentVersion) {
+                setCurrentVersion(versions[0])
+            }
+            if (oldVersionsData.current && versions[0].id !== oldVersionsData.current[0].id) {
+                setUpdateAvailable(true)
+            }
         }
         oldVersionsData.current = versions
     }, [versions]);

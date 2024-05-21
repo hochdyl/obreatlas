@@ -4,14 +4,17 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import slugify from "@/utils/slugify";
 import {editGame} from "@/api/games/GameApi";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import useGame from "@/hooks/games/useGame";
 import moment from "moment";
+import useUser from "@/hooks/authentication/useUser";
 
 const EditGameForm = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
     const {game, mutate} = useGame(params.gameSlug)
     const [formLoading, setFormLoading] = useState<boolean>(false)
+    const {user, logout} = useUser()
+    const router = useRouter()
 
     const {
         register,
@@ -33,7 +36,8 @@ const EditGameForm = (): ReactElement => {
         }
     }, [game])
 
-    if (!game) return <p>Loading...</p>
+    if (!game || !user) return <p>Loading...</p>
+    if (user.id !== game.owner.id) return <button onClick={() => router.push('/')}>You don't have rights</button>
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('title').then(() => {
@@ -65,6 +69,7 @@ const EditGameForm = (): ReactElement => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            <button onClick={() => router.push(`/${params.gameSlug}`)}>Back to home</button>
             <h1>Edit game</h1>
             <input
                 placeholder="title"

@@ -86,7 +86,6 @@ const RegisterUserForm = (): ReactElement => {
 
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
-
             {loading && <p>loading...</p>}
         </form>
     )

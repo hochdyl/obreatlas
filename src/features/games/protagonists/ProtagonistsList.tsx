@@ -7,13 +7,13 @@ import Image from "next/image";
 import useUser from "@/hooks/authentication/useUser";
 import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import ProtagonistCard from "@/features/games/protagonists/ProtagonistCard";
+import useGame from "@/hooks/games/useGame";
 
 const ProtagonistsList = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
     const {protagonists, error, isLoading, mutate} = useProtagonists(params.gameSlug)
-    const {user} = useUser()
 
-    if (isLoading && !protagonists || !user) return <p>Loading..</p>
+    if (isLoading || !protagonists) return <p>Loading..</p>
     if (error) return <p>Error..</p>
 
     const handleChooseProtagonist = async (protagonist: Protagonist) => {
@@ -25,7 +25,7 @@ const ProtagonistsList = (): ReactElement => {
     return (
         <>
             <h1>Protagonists</h1>
-            {protagonists?.map((protagonist, index) =>
+            {protagonists.map((protagonist, index) =>
                 <ProtagonistCard
                     protagonist={protagonist}
                     onChoose={(protagonist) => handleChooseProtagonist(protagonist)}
