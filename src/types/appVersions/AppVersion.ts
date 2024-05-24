@@ -4,5 +4,4 @@ type AppVersion = {
     number: string
     features: string | null
     bugfix: string | null
-    createdAt: string
 }

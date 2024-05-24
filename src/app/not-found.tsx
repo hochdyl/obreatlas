@@ -1,9 +1,13 @@
 'use client'
 import {ReactElement} from "react";
+import Link from "next/link";
 
-const Home = (): ReactElement =>
-    <main>
-        <p>404 woupsi</p>
-    </main>
-
-export default Home
+const NotFound = (): ReactElement => {
+    return (
+        <main>
+            <p>404 woupsi</p>
+            <Link href={'/'}>Back to games</Link>
+        </main>
+    )
+}
+export default NotFound

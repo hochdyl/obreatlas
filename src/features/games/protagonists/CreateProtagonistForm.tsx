@@ -3,14 +3,16 @@ import {ChangeEvent, ReactElement, useState} from "react";
 import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import slugify from "@/utils/slugify";
-import useProtagonists from "@/hooks/games/protagonists/useProtagonists";
 import {useParams} from "next/navigation";
 import FileUpload from "@/components/ui/FileUpload";
 import {createProtagonist} from "@/api/games/protagonists/ProtagonistApi";
+import useGameDetails from "@/hooks/games/useGame";
 
 const CreateProtagonistForm = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-    const {protagonists, mutate} = useProtagonists(params.gameSlug)
+
+    const {mutate} = useGameDetails(params.gameSlug)
+
     const [formLoading, setFormLoading] = useState<boolean>(false)
 
     const methods = useForm<CreateProtagonistFormData>({
@@ -26,8 +28,6 @@ const CreateProtagonistForm = (): ReactElement => {
         trigger,
         formState: {errors}
     } = methods
-
-    if (!protagonists) return <p>Loading...</p>
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('name').then(() => {
@@ -70,8 +70,8 @@ const CreateProtagonistForm = (): ReactElement => {
                             message: "Name is required"
                         },
                         pattern: {
-                            value: /^[a-zA-Z0-9\- ]+$/,
-                            message: "Name contains wrong characters"
+                            value: /^(?!edit$)[a-zA-Z0-9\- ]+$/,
+                            message: "Name is invalid"
                         },
                         onChange: e => handleNameChange(e)
                     })}
@@ -85,6 +85,10 @@ const CreateProtagonistForm = (): ReactElement => {
                         required: {
                             value: true,
                             message: "Slug is required"
+                        },
+                        pattern: {
+                            value: /^(?!edit$)[a-zA-Z0-9\- ]+$/,
+                            message: "Slug is invalid"
                         }
                     })}
                 />

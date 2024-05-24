@@ -14,14 +14,13 @@ export const config = {
 }
 
 export const middleware = async (req: NextRequest) => {
-    const isLoginPage = req.url.endsWith('/login');
-    const isRegisterPage = req.url.endsWith('/register');
+    const isAuthPage = req.url.endsWith(`${req.headers.get('host')}/`);
     const sessionCookie = req.cookies.get(SessionService.COOKIE_NAME)
 
     const redirectToLogin = () => {
-        if (isLoginPage || isRegisterPage) return
+        if (isAuthPage) return
 
-        return NextResponse.redirect(new URL('/login', req.url))
+        return NextResponse.redirect(new URL('/', req.url))
     }
 
     if (!sessionCookie) {
@@ -46,8 +45,8 @@ export const middleware = async (req: NextRequest) => {
     }
 
     // Redirect to app if session is okay
-    if (isLoginPage || isRegisterPage) {
-        return NextResponse.redirect(new URL('/', req.url))
+    if (isAuthPage) {
+        return NextResponse.redirect(new URL('/games', req.url))
     }
 
     // Set a refreshed session cookie

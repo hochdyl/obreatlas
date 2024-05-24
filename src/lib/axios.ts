@@ -19,8 +19,10 @@ axiosInstance.interceptors.response.use(
     res => res,
     err => {
         if (err.isAxiosError) {
-            if (err.request.status === HttpStatusCode.Unauthorized)
+            if (err.request.status === HttpStatusCode.Unauthorized) {
                 SessionService.closeSession()
+                window.location.reload()
+            }
 
             if (err.code === AxiosError.ECONNABORTED) {
                 const errorResponse = {status: "error", message: err.message} as ErrorResponse
@@ -32,5 +34,5 @@ axiosInstance.interceptors.response.use(
         }
         return Promise.reject(err);
     }
-);
+)
 export default axiosInstance

@@ -3,14 +3,11 @@ import useAppVersions from "@/hooks/appVersions/useAppVersions";
 import {useSWRConfig} from "swr";
 
 const AppVersion = (): ReactElement => {
-    const {
-        versions,
-        currentVersion,
-        isUpdateAvailable,
-        error,
-        isLoading
-    } = useAppVersions()
     const {mutate} = useSWRConfig()
+    const {
+        currentVersion,
+        isUpdateAvailable
+    } = useAppVersions()
 
     const handleUpdate = () => {
         mutate(
@@ -20,12 +17,9 @@ const AppVersion = (): ReactElement => {
         ).then(() => location.reload())
     }
 
-    if (isLoading) return <></>
-    if (error) return <p>Error..</p>
-
     return (
         <>
-            <p>Version {currentVersion?.name} {currentVersion?.number}</p>
+            <p>Version {currentVersion ? `${currentVersion.name} ${currentVersion.number}` : "SKELETON"}</p>
             {isUpdateAvailable &&
                 <button onClick={() => handleUpdate()}>Update available</button>
             }

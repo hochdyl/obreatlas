@@ -1,21 +1,15 @@
 'use client'
 import {ReactElement} from "react";
-import CreateGameForm from "@/features/games/CreateGameForm";
-import GamesList from "@/features/games/GamesList";
-import AppVersion from "@/features/appVersions/AppVersion";
-import useUser from "@/hooks/authentication/useUser";
+import LoginUserForm from "@/features/authentication/LoginUserForm";
+import RegisterUserForm from "@/features/authentication/RegisterUserForm";
 
-const Home = (): ReactElement => {
-    const {logout} = useUser()
-
+const Authentication = (): ReactElement => {
     return (
         <main>
-            <AppVersion/>
-            <button onClick={logout}>Logout</button>
-            <CreateGameForm/>
-            <GamesList/>
+            Obreatlas
+            <LoginUserForm/>
+            <RegisterUserForm/>
         </main>
     );
 }
-
-export default Home
+export default Authentication

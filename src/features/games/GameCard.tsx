@@ -1,6 +1,7 @@
 'use client'
 import {ReactElement} from "react";
 import Link from "next/link";
+import moment from "moment";
 
 type GameCardProps = {
     game: Game
@@ -25,7 +26,7 @@ const GameCard = ({game}: GameCardProps): ReactElement => {
                 </tr>
                 <tr>
                     <td>Started at:</td>
-                    <td>{game.startedAt}</td>
+                    <td>{moment(game.startedAt).format("YYYY-MM-DD")}</td>
                 </tr>
                 <tr>
                     <td>Closed:</td>

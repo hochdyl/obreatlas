@@ -1,10 +1,10 @@
 'use client'
-
 import useSWR from "swr";
 import {useEffect, useRef, useState} from "react";
 
 const useAppVersions = () => {
-    const {data: versions, error, isLoading} = useSWR<AppVersion[]>('/app-versions')
+    const {data: versions} = useSWR<AppVersion[]>('/app-versions')
+
     const [currentVersion, setCurrentVersion] = useState<AppVersion | undefined>(undefined)
     const [isUpdateAvailable, setUpdateAvailable] = useState<boolean>(false)
     const oldVersionsData = useRef(versions)
@@ -19,8 +19,8 @@ const useAppVersions = () => {
             }
         }
         oldVersionsData.current = versions
-    }, [versions]);
+    }, [versions])
 
-    return {versions, currentVersion, isUpdateAvailable, error, isLoading}
+    return {versions, currentVersion, isUpdateAvailable}
 }
 export default useAppVersions

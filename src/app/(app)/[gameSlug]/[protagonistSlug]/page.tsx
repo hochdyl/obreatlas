@@ -1,26 +1,32 @@
 'use client'
 import {ReactElement} from "react";
-import Link from "next/link";
-import Image from "next/image";
-import useUser from "@/hooks/authentication/useUser";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import useGame from "@/hooks/games/useGame";
+import useProtagonist from "@/hooks/games/protagonists/useProtagonist";
+import Image from "next/image";
 import getImage from "@/utils/getImage";
+import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
+import PageLoading from "@/components/ui/PageLoading";
 
-type ProtagonistCardProps = {
-    protagonist: Protagonist
-}
+const Protagonist = (): ReactElement => {
+    const router = useRouter()
+    const params = useParams<{gameSlug: string, protagonistSlug: string}>()
 
-const ProtagonistCard = ({protagonist}: ProtagonistCardProps): ReactElement => {
-    const params = useParams<{gameSlug: string}>()
-    
+    const {protagonist, isLoading, error} = useProtagonist(params.gameSlug, params.protagonistSlug)
     const {game} = useGame(params.gameSlug)
-    const {user} = useUser()
 
-    if (!user || !game) return <></>
+    if (error) throw new Error(error.message)
+    if (isLoading || !protagonist) return <PageLoading/>
+
+    const handleChooseProtagonist = async (protagonist: Protagonist) => {
+        await chooseProtagonist(protagonist.id)
+
+        void mutate()
+    }
 
     return (
-        <div>
+        <main>
+            <button onClick={() => router.push(`/${params.gameSlug}`)}>Back to game</button>
             <table>
                 <tbody>
                 <tr>
@@ -53,16 +59,7 @@ const ProtagonistCard = ({protagonist}: ProtagonistCardProps): ReactElement => {
                 }
                 </tbody>
             </table>
-            {(
-                !protagonist.owner || // No owner
-                (protagonist.owner && protagonist.owner.id === user.id) || // User is owner
-                game.owner.id === user.id // User is game owner
-            ) &&
-                <Link href={`${params.gameSlug}/${protagonist.slug}`}>View</Link>
-            }
-            <br/>
-            <br/>
-        </div>
+        </main>
     )
 }
-export default ProtagonistCard
+export default Protagonist

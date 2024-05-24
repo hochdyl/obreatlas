@@ -5,6 +5,4 @@ type Protagonist = {
     story?: string
     owner?: Owner
     portrait?: Upload
-    createdAt: string
-    updatedAt: string
 }

@@ -9,6 +9,9 @@ import {registerUser} from "@/api/authentication/AuthenticationApi";
 type RegisterUserFormFail = Omit<RegisterUserForm, "passwordConfirm">
 
 const RegisterUserForm = (): ReactElement => {
+    const router = useRouter()
+    const [loading, setLoading] = useState(false)
+
     const {
         register,
         handleSubmit,
@@ -16,15 +19,13 @@ const RegisterUserForm = (): ReactElement => {
         setError,
         formState: {errors}
     } = useForm<RegisterUserForm>()
-    const router = useRouter()
-    const [loading, setLoading] = useState(false)
 
     const onSubmit: SubmitHandler<RegisterUserForm> = data => {
         setLoading(true)
 
         registerUser(data)
-            .then(res => {
-                SessionService.startSession(res.sessionToken)
+            .then(user => {
+                SessionService.startSession(user.sessionToken)
                 router.push('/')
             })
             .catch(e => {
@@ -44,7 +45,6 @@ const RegisterUserForm = (): ReactElement => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <button onClick={() => router.push('/login')}>login</button>
             <input
                 placeholder="username"
                 {...register("username", {
@@ -86,7 +86,7 @@ const RegisterUserForm = (): ReactElement => {
 
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
-            {loading && <p>loading...</p>}
+            {loading && <p>loading form...</p>}
         </form>
     )
 }

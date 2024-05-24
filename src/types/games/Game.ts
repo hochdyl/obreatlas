@@ -5,6 +5,4 @@ type Game = {
     startedAt: string
     owner: Owner
     closed: boolean
-    createdAt: string
-    updatedAt: string
 }

@@ -6,9 +6,9 @@ import SessionService from "@/services/SessionService";
 import {useRouter} from "next/navigation";
 
 const useUser = () => {
-    const { mutate: configMutate } = useSWRConfig()
     const router = useRouter()
-    const {data: user, error, isLoading, mutate} = useSWRImmutable<User>('/users/self')
+    const {mutate: configMutate} = useSWRConfig()
+    const {data: user, isLoading, error, mutate} = useSWRImmutable<User>('/users/self')
 
     const logout = useCallback(async () => {
         SessionService.closeSession()
@@ -16,9 +16,9 @@ const useUser = () => {
             () => true,
             undefined,
             {revalidate: false}
-        ).then(() => router.refresh())
+        ).then(() => router.replace('/'))
     }, []);
 
-    return {user, error, isLoading, mutate, logout}
+    return {user, isLoading, error, mutate, logout}
 }
 export default useUser

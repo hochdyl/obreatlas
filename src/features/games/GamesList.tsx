@@ -1,18 +1,16 @@
 'use client'
 import {ReactElement} from "react";
-import useGames from "@/hooks/games/useGames";
 import GameCard from "@/features/games/GameCard";
 
-const GamesList = (): ReactElement => {
-    const {games, error, isLoading} = useGames()
+type GamesListProps = {
+    games: Game[]
+}
 
-    if (isLoading && !games) return <p>Loading..</p>
-    if (error) return <p>Error..</p>
-
+const GamesList = ({games}: GamesListProps): ReactElement => {
     return (
         <>
             <h1>Games</h1>
-            {games?.map((game, index) =>
+            {games.map((game, index) =>
                 <GameCard game={game} key={index}/>
             )}
         </>

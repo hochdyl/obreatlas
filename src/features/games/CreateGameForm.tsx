@@ -8,7 +8,7 @@ import slugify from "@/utils/slugify";
 import {createGame} from "@/api/games/GameApi";
 
 const CreateGameForm = (): ReactElement => {
-    const {games, mutate} = useGames()
+    const {mutate} = useGames()
     const [formLoading, setFormLoading] = useState<boolean>(false)
 
     const {
@@ -23,8 +23,6 @@ const CreateGameForm = (): ReactElement => {
             startedAt: moment().format('YYYY-MM-DD')
         }
     })
-
-    if (!games) return <p>Loading...</p>
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('title').then(() => {
@@ -65,8 +63,8 @@ const CreateGameForm = (): ReactElement => {
                         message: "Title is required"
                     },
                     pattern: {
-                        value: /^[a-zA-Z0-9\- ]+$/,
-                        message: "Title contains wrong characters"
+                        value: /^(?!games$)[a-zA-Z0-9\- ]+$/,
+                        message: "Title is invalid"
                     },
                     onChange: e => handleTitleChange(e)
                 })}
@@ -80,6 +78,10 @@ const CreateGameForm = (): ReactElement => {
                     required: {
                         value: true,
                         message: "Slug is required"
+                    },
+                    pattern: {
+                        value: /^(?!games$)[a-zA-Z0-9\- ]+$/,
+                        message: "Slug is invalid"
                     }
                 })}
             />
@@ -98,6 +100,7 @@ const CreateGameForm = (): ReactElement => {
 
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
+
             {formLoading && <span>Loading form...</span>}
         </form>
     )
