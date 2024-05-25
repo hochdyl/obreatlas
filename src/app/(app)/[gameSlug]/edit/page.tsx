@@ -1,14 +1,13 @@
 'use client'
 import {ReactElement, useEffect} from "react";
 import EditGameForm from "@/features/games/EditGameForm";
-import {useParams, useRouter} from "next/navigation";
-import useGame from "@/hooks/games/useGame";
+import {useParams} from "next/navigation";
+import useGame from "@/hooks/games/useGameDashboard";
 import useUser from "@/hooks/authentication/useUser";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
 
 const EditGame = (): ReactElement => {
-    const router = useRouter()
     const params = useParams<{gameSlug: string}>()
     const {game, isLoading, error} = useGame(params.gameSlug)
     const {user} = useUser()

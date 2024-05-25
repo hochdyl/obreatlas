@@ -10,7 +10,7 @@ type RegisterUserFormFail = Omit<RegisterUserForm, "passwordConfirm">
 
 const RegisterUserForm = (): ReactElement => {
     const router = useRouter()
-    const [loading, setLoading] = useState(false)
+    const [formLoading, setFormLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -19,16 +19,16 @@ const RegisterUserForm = (): ReactElement => {
         formState: {errors}
     } = useForm<RegisterUserForm>()
 
-    const onSubmit: SubmitHandler<RegisterUserForm> = data => {
-        setLoading(true)
+    const onSubmit: SubmitHandler<RegisterUserForm> = registerFormData => {
+        setFormLoading(true)
 
-        registerUser(data)
+        registerUser(registerFormData)
             .then(user => {
                 SessionService.startSession(user.sessionToken)
                 router.push('/')
             })
             .catch(e => {
-                setLoading(false)
+                setFormLoading(false)
 
                 if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
@@ -85,7 +85,7 @@ const RegisterUserForm = (): ReactElement => {
 
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
-            {loading && <p>loading form...</p>}
+            {formLoading && <p>loading form...</p>}
         </form>
     )
 }

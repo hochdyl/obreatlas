@@ -2,13 +2,13 @@
 import {ChangeEvent, ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
-import useGames from "@/hooks/games/useGames";
 import moment from "moment";
 import slugify from "@/utils/slugify";
 import {createGame} from "@/api/games/GameApi";
+import {useRouter} from "next/navigation";
 
 const CreateGameForm = (): ReactElement => {
-    const {mutate} = useGames()
+    const router = useRouter()
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const {
         register,
@@ -16,6 +16,7 @@ const CreateGameForm = (): ReactElement => {
         setValue,
         setError,
         trigger,
+        getValues,
         formState: {errors}
     } = useForm<CreateGameFormData>({
         defaultValues: {
@@ -30,11 +31,14 @@ const CreateGameForm = (): ReactElement => {
         })
     }
 
-    const onSubmit: SubmitHandler<CreateGameFormData> = newGame => {
+    const onSubmit: SubmitHandler<CreateGameFormData> = newGameFormData => {
         setFormLoading(true)
 
-        createGame(newGame)
-            .then(() => console.log('TODO: PTIT TOAST LA'))
+        createGame(newGameFormData)
+            .then(() => {
+                router.push(`/${getValues('slug')}`)
+                console.log('TODO: PTIT TOAST LA')
+            })
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
@@ -45,9 +49,7 @@ const CreateGameForm = (): ReactElement => {
                         setError(key as keyof BaseFormFail<CreateGameFormData>, {type: 'server', message: value})
                     })
                 }
-            })
-            .finally(() => {
-                mutate().then(() => setFormLoading(false))
+                setFormLoading(false)
             })
     }
 

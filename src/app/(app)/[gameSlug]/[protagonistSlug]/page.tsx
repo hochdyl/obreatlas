@@ -1,34 +1,42 @@
 'use client'
 import {ReactElement, useState} from "react";
-import {useParams, useRouter} from "next/navigation";
+import {useParams} from "next/navigation";
 import useProtagonist from "@/hooks/games/protagonists/useProtagonist";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
 import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
+import useUser from "@/hooks/authentication/useUser";
 
 const Protagonist = (): ReactElement => {
-    const router = useRouter()
     const params = useParams<{gameSlug: string, protagonistSlug: string}>()
     const {protagonist, isLoading, error, mutate} = useProtagonist(params.gameSlug, params.protagonistSlug)
-    const [loading, setLoading] = useState(false)
+    const {user} = useUser()
+    const [chooseLoading, setChooseLoading] = useState(false)
 
     if (error) throw new Error(error.message)
-    if (isLoading || !protagonist) return <PageLoading/>
+    if (isLoading || !protagonist || !user) return <PageLoading/>
 
     const handleChooseProtagonist = () => {
-        setLoading(true)
+        setChooseLoading(true)
 
         chooseProtagonist(protagonist.id)
             .then(() => mutate())
             .catch(() => console.log('ptit toast'))
-            .finally(() => setLoading(false))
+            .finally(() => setChooseLoading(false))
     }
 
     return (
         <main>
             <Link href={`/${params.gameSlug}`}>Back to game</Link>
+            {(
+                (!protagonist.owner && protagonist.creator.id === user.id) || // No owner and user is creator
+                (protagonist.owner && protagonist.owner.id === user.id) || // User is owner
+                protagonist.game.owner.id === user.id // User is game owner
+            ) &&
+                <Link href={`/${params.gameSlug}/${params.protagonistSlug}/edit`}>Edit {protagonist.name}</Link>
+            }
             <table>
                 <tbody>
                 <tr>
@@ -64,7 +72,7 @@ const Protagonist = (): ReactElement => {
             {!protagonist.owner &&
                 <button onClick={handleChooseProtagonist}>Choose this protagonist</button>
             }
-            {loading && <p>loading form...</p>}
+            {chooseLoading && <p>loading choose...</p>}
         </main>
     )
 }

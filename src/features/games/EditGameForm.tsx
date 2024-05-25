@@ -4,21 +4,16 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import slugify from "@/utils/slugify";
 import {editGame} from "@/api/games/GameApi";
-import {useParams} from "next/navigation";
-import useGame from "@/hooks/games/useGame";
+import {useRouter} from "next/navigation";
 import moment from "moment";
-import useUser from "@/hooks/authentication/useUser";
 
 type EditGameFormProps = {
     game: Game
 }
 
 const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
-    const params = useParams<{gameSlug: string}>()
-    const {mutate} = useGame(params.gameSlug)
-    const {user} = useUser()
+    const router = useRouter()
     const [formLoading, setFormLoading] = useState<boolean>(false)
-
     const {
         register,
         handleSubmit,
@@ -26,6 +21,7 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
         setError,
         trigger,
         reset,
+        getValues,
         formState: {errors}
     } = useForm<EditGameFormData>()
 
@@ -39,8 +35,6 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
         }
     }, [game])
 
-    if (!user) return <></>
-
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('title').then(() => {
             const slug = slugify(e.target.value)
@@ -48,11 +42,14 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
         })
     }
 
-    const onSubmit: SubmitHandler<EditGameFormData> = game => {
+    const onSubmit: SubmitHandler<EditGameFormData> = gameFormData => {
         setFormLoading(true)
 
-        editGame(params.gameSlug, game)
-            .then(() => console.log('TODO: PTIT TOAST LA'))
+        editGame(game.id, gameFormData)
+            .then(() => {
+                router.push(`/${getValues('slug')}/edit`)
+                console.log('TODO: PTIT TOAST LA')
+            })
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
@@ -63,9 +60,7 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
                         setError(key as keyof BaseFormFail<EditGameFormData>, {type: 'server', message: value})
                     })
                 }
-            })
-            .finally(() => {
-                mutate().then(() => setFormLoading(false))
+                setFormLoading(false)
             })
     }
 

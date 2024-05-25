@@ -1,6 +1,5 @@
 'use client'
 import {useSWRConfig} from "swr";
-import {useRouter} from "next/navigation";
 import Link from "next/link";
 
 type ErrorProps = {
@@ -9,7 +8,6 @@ type ErrorProps = {
 }
 
 const Error = ({error, reset}: ErrorProps) => {
-    const router = useRouter()
     const {mutate} = useSWRConfig()
 
     const handleReset = () => {

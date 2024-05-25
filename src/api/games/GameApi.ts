@@ -10,9 +10,9 @@ export const createGame = (data: CreateGameFormData) => {
     })
 }
 
-export const editGame = (gameSlug: string, data: EditGameFormData) => {
+export const editGame = (gameId: number, data: EditGameFormData) => {
     return ApiService.fetch<Game>({
-        url: `${ROUTE_URL}/${gameSlug}`,
+        url: `${ROUTE_URL}/${gameId}`,
         method: "PUT",
         data
     })

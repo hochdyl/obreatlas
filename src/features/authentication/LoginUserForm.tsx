@@ -8,7 +8,7 @@ import {loginUser} from "@/api/authentication/AuthenticationApi";
 
 const LoginUserForm = (): ReactElement => {
     const router = useRouter()
-    const [loading, setLoading] = useState(false)
+    const [formLoading, setFormLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -21,16 +21,16 @@ const LoginUserForm = (): ReactElement => {
         }
     })
 
-    const onSubmit: SubmitHandler<LoginUserForm> = data => {
-        setLoading(true)
+    const onSubmit: SubmitHandler<LoginUserForm> = loginFormData => {
+        setFormLoading(true)
 
-        loginUser(data)
+        loginUser(loginFormData)
             .then(user => {
                 SessionService.startSession(user.sessionToken)
                 router.push('/games')
             })
             .catch(e => {
-                setLoading(false)
+                setFormLoading(false)
                 
                 if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
@@ -74,7 +74,7 @@ const LoginUserForm = (): ReactElement => {
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
 
-            {loading && <p>loading form...</p>}
+            {formLoading && <p>loading form...</p>}
         </form>
     )
 }

@@ -5,12 +5,12 @@ import ProtagonistsList from "@/features/games/protagonists/ProtagonistsList";
 import {useParams} from "next/navigation";
 import Link from "next/link";
 import PageLoading from "@/components/ui/PageLoading";
-import useGameDetails from "@/hooks/games/useGame";
 import useUser from "@/hooks/authentication/useUser";
+import useGameDashboard from "@/hooks/games/useGameDashboard";
 
 const Game = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-    const {game, error, isLoading} = useGameDetails(params.gameSlug)
+    const {game, error, isLoading} = useGameDashboard(params.gameSlug)
     const {user} = useUser()
 
     if (error) throw new Error(error.message)

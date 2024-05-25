@@ -2,9 +2,7 @@
 import {ReactElement} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import useUser from "@/hooks/authentication/useUser";
 import {useParams} from "next/navigation";
-import useGame from "@/hooks/games/useGame";
 import getImage from "@/utils/getImage";
 
 type ProtagonistCardProps = {
@@ -13,10 +11,6 @@ type ProtagonistCardProps = {
 
 const ProtagonistCard = ({protagonist}: ProtagonistCardProps): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-    const {game} = useGame(params.gameSlug)
-    const {user} = useUser()
-
-    if (!user || !game) return <></>
 
     return (
         <div>
@@ -52,13 +46,7 @@ const ProtagonistCard = ({protagonist}: ProtagonistCardProps): ReactElement => {
                 }
                 </tbody>
             </table>
-            {(
-                !protagonist.owner || // No owner
-                (protagonist.owner && protagonist.owner.id === user.id) || // User is owner
-                game.owner.id === user.id // User is game owner
-            ) &&
-                <Link href={`${params.gameSlug}/${protagonist.slug}`}>View</Link>
-            }
+            <Link href={`${params.gameSlug}/${protagonist.slug}`}>View</Link>
             <br/>
             <br/>
         </div>

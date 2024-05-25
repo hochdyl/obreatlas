@@ -16,3 +16,11 @@ export const chooseProtagonist = (protagonistId: number) => {
         url: `${ROUTE_URL}/choose/${protagonistId}`
     })
 }
+
+export const editProtagonist = (protagonistId: number, data: CreateProtagonistFormData) => {
+    return ApiService.fetch<Protagonist>({
+        url: `${ROUTE_URL}/${protagonistId}`,
+        method: "PUT",
+        data
+    })
+}
