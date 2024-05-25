@@ -1,7 +1,6 @@
 'use client'
-import {ReactElement} from "react";
+import {ReactElement, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
-import useGame from "@/hooks/games/useGame";
 import useProtagonist from "@/hooks/games/protagonists/useProtagonist";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
@@ -11,17 +10,19 @@ import PageLoading from "@/components/ui/PageLoading";
 const Protagonist = (): ReactElement => {
     const router = useRouter()
     const params = useParams<{gameSlug: string, protagonistSlug: string}>()
-
-    const {protagonist, isLoading, error} = useProtagonist(params.gameSlug, params.protagonistSlug)
-    const {game} = useGame(params.gameSlug)
+    const {protagonist, isLoading, error, mutate} = useProtagonist(params.gameSlug, params.protagonistSlug)
+    const [loading, setLoading] = useState(false)
 
     if (error) throw new Error(error.message)
     if (isLoading || !protagonist) return <PageLoading/>
 
-    const handleChooseProtagonist = async (protagonist: Protagonist) => {
-        await chooseProtagonist(protagonist.id)
+    const handleChooseProtagonist = () => {
+        setLoading(true)
 
-        void mutate()
+        chooseProtagonist(protagonist.id)
+            .then(() => mutate())
+            .catch(() => console.log('ptit toast'))
+            .finally(() => setLoading(false))
     }
 
     return (
@@ -59,6 +60,10 @@ const Protagonist = (): ReactElement => {
                 }
                 </tbody>
             </table>
+            {!protagonist.owner &&
+                <button onClick={handleChooseProtagonist}>Choose this protagonist</button>
+            }
+            {loading && <p>loading form...</p>}
         </main>
     )
 }

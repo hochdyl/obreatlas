@@ -11,7 +11,6 @@ type RegisterUserFormFail = Omit<RegisterUserForm, "passwordConfirm">
 const RegisterUserForm = (): ReactElement => {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-
     const {
         register,
         handleSubmit,

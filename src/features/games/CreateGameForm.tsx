@@ -10,7 +10,6 @@ import {createGame} from "@/api/games/GameApi";
 const CreateGameForm = (): ReactElement => {
     const {mutate} = useGames()
     const [formLoading, setFormLoading] = useState<boolean>(false)
-
     const {
         register,
         handleSubmit,

@@ -10,11 +10,8 @@ import useGameDetails from "@/hooks/games/useGame";
 
 const CreateProtagonistForm = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-
     const {mutate} = useGameDetails(params.gameSlug)
-
     const [formLoading, setFormLoading] = useState<boolean>(false)
-
     const methods = useForm<CreateProtagonistFormData>({
         defaultValues: {
             story: undefined

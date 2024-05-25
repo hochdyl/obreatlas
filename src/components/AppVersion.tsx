@@ -4,10 +4,7 @@ import {useSWRConfig} from "swr";
 
 const AppVersion = (): ReactElement => {
     const {mutate} = useSWRConfig()
-    const {
-        currentVersion,
-        isUpdateAvailable
-    } = useAppVersions()
+    const {currentVersion, isUpdateAvailable} = useAppVersions()
 
     const handleUpdate = () => {
         mutate(

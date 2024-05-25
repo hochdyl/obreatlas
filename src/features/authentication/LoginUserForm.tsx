@@ -9,7 +9,6 @@ import {loginUser} from "@/api/authentication/AuthenticationApi";
 const LoginUserForm = (): ReactElement => {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-
     const {
         register,
         handleSubmit,

@@ -8,8 +8,8 @@ type FileUploadProps = {
 }
 
 const FileUpload = ({inputName}: FileUploadProps): ReactElement => {
-    const [filePreview, setFilePreview] = useState<string | undefined>(undefined)
     const {register, setValue} = useFormContext();
+    const [filePreview, setFilePreview] = useState<string | undefined>(undefined)
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]

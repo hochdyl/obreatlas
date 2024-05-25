@@ -9,12 +9,14 @@ import useGame from "@/hooks/games/useGame";
 import moment from "moment";
 import useUser from "@/hooks/authentication/useUser";
 
-const EditGameForm = (): ReactElement => {
+type EditGameFormProps = {
+    game: Game
+}
+
+const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-
-    const {game, mutate} = useGame(params.gameSlug)
+    const {mutate} = useGame(params.gameSlug)
     const {user} = useUser()
-
     const [formLoading, setFormLoading] = useState<boolean>(false)
 
     const {
@@ -37,7 +39,7 @@ const EditGameForm = (): ReactElement => {
         }
     }, [game])
 
-    if (!game || !user) return <p>Loading...</p>
+    if (!user) return <></>
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('title').then(() => {

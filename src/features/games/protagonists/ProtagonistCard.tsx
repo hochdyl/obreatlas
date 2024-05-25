@@ -13,7 +13,6 @@ type ProtagonistCardProps = {
 
 const ProtagonistCard = ({protagonist}: ProtagonistCardProps): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-    
     const {game} = useGame(params.gameSlug)
     const {user} = useUser()
 

@@ -11,12 +11,6 @@ export const SwrProvider = ({children}: Readonly<PropsWithChildren>): ReactEleme
         <SWRConfig
             value={{
                 fetcher: (url: string) => ApiService.fetch({url}).then(r => r),
-                onError: (error, key) => {
-                    if (error.isAxiosError && error.response && error.response.status === 401) {
-                        console.log('ptit toast la aussi pour le redirect')
-                        router.refresh()
-                    }
-                },
                 onErrorRetry: (error, key, config, revalidate, {retryCount}) => {
                     // Never retry on 401 nor 404
                     if (error.status === 401 || 404) return

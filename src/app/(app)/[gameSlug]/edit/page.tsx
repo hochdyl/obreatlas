@@ -9,14 +9,12 @@ import PageLoading from "@/components/ui/PageLoading";
 const EditGame = (): ReactElement => {
     const router = useRouter()
     const params = useParams<{gameSlug: string}>()
-
     const {game, isLoading, error} = useGame(params.gameSlug)
     const {user} = useUser()
 
     useEffect(() => {
         if (user && game && user.id !== game.owner.id) {
-            console.log('ptit toast ici')
-            router.push(`/${game.slug}`)
+            throw new Error("You can't edit this game")
         }
     }, [game, user])
 
@@ -27,7 +25,7 @@ const EditGame = (): ReactElement => {
         <>
             <button onClick={() => router.push(`/${params.gameSlug}`)}>Back to game</button>
 
-            <EditGameForm/>
+            <EditGameForm game={game}/>
         </>
     )
 }
