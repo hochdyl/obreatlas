@@ -6,18 +6,22 @@ import {useParams} from "next/navigation";
 import Link from "next/link";
 import PageLoading from "@/components/ui/PageLoading";
 import useGameDetails from "@/hooks/games/useGame";
+import useUser from "@/hooks/authentication/useUser";
 
 const Game = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
-
     const {game, error, isLoading} = useGameDetails(params.gameSlug)
+    const {user} = useUser()
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game) return <PageLoading/>
+    if (isLoading || !game || !user) return <PageLoading/>
 
     return (
         <>
-            <Link href={`${params.gameSlug}/edit`}>Edit {game.title}</Link>
+            <Link href={'/games'}>Back to games</Link>
+            {game.owner.id === user.id &&
+                <Link href={`${params.gameSlug}/edit`}>Edit {game.title}</Link>
+            }
             <CreateProtagonistForm/>
             <ProtagonistsList protagonists={game.protagonists}/>
         </>

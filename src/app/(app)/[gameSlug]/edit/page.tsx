@@ -5,6 +5,7 @@ import {useParams, useRouter} from "next/navigation";
 import useGame from "@/hooks/games/useGame";
 import useUser from "@/hooks/authentication/useUser";
 import PageLoading from "@/components/ui/PageLoading";
+import Link from "next/link";
 
 const EditGame = (): ReactElement => {
     const router = useRouter()
@@ -23,7 +24,7 @@ const EditGame = (): ReactElement => {
 
     return (
         <>
-            <button onClick={() => router.push(`/${params.gameSlug}`)}>Back to game</button>
+            <Link href={`/${params.gameSlug}`}>Back to game</Link>
 
             <EditGameForm game={game}/>
         </>

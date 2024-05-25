@@ -6,6 +6,7 @@ import Image from "next/image";
 import getImage from "@/utils/getImage";
 import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import PageLoading from "@/components/ui/PageLoading";
+import Link from "next/link";
 
 const Protagonist = (): ReactElement => {
     const router = useRouter()
@@ -27,7 +28,7 @@ const Protagonist = (): ReactElement => {
 
     return (
         <main>
-            <button onClick={() => router.push(`/${params.gameSlug}`)}>Back to game</button>
+            <Link href={`/${params.gameSlug}`}>Back to game</Link>
             <table>
                 <tbody>
                 <tr>

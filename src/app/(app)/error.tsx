@@ -1,6 +1,7 @@
 'use client'
 import {useSWRConfig} from "swr";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
 
 type ErrorProps = {
     error: Error & {digest?: string}
@@ -23,7 +24,8 @@ const Error = ({error, reset}: ErrorProps) => {
         <div>
             <h2>Something went wrong!</h2>
             <p>{error.message}</p>
-            <button onClick={() => router.push('/')}>Back to home</button>
+            <Link href={'/'}>Back to home</Link>
+
             <button onClick={handleReset}>Try again</button>
         </div>
     )
