@@ -7,6 +7,7 @@ import Link from "next/link";
 import PageLoading from "@/components/ui/PageLoading";
 import useUser from "@/hooks/authentication/useUser";
 import useGameDashboard from "@/hooks/games/useGameDashboard";
+import PermissionService from "@/services/PermissionService";
 
 const Game = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
@@ -19,7 +20,7 @@ const Game = (): ReactElement => {
     return (
         <>
             <Link href={'/games'}>Back to games</Link>
-            {game.owner.id === user.id &&
+            {PermissionService.editGame(user, game) &&
                 <Link href={`${params.gameSlug}/edit`}>Edit {game.title}</Link>
             }
             <CreateProtagonistForm/>

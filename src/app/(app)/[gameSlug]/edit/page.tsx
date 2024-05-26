@@ -6,6 +6,7 @@ import useGame from "@/hooks/games/useGameDashboard";
 import useUser from "@/hooks/authentication/useUser";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
+import PermissionService from "@/services/PermissionService";
 
 const EditGame = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
@@ -13,7 +14,7 @@ const EditGame = (): ReactElement => {
     const {user} = useUser()
 
     useEffect(() => {
-        if (user && game && user.id !== game.owner.id) {
+        if (user && game && !PermissionService.editGame(user, game)) {
             throw new Error("You can't edit this game")
         }
     }, [game, user])

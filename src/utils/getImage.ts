@@ -1,8 +1,8 @@
-const getImage = (upload: Upload | undefined, fallback: string) => {
-    const path = `${process.env.API_URL}/uploads`
+const getImage = (file: Upload | undefined, fallback: string) => {
+    if (!file) return fallback
 
-    if (upload) return `${path}/${upload.fileName}`
+    const path = `${process.env.API_URL}${process.env.UPLOAD_PATH}`
 
-    return fallback
+    return `${path}/${file.fileName}`
 }
 export default getImage

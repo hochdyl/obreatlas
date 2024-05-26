@@ -98,7 +98,7 @@ const CreateProtagonistForm = (): ReactElement => {
                 />
                 {errors.slug && <span>{errors.story?.message}</span>}
 
-                <FileUpload inputName="portrait" />
+                <FileUpload inputName="portrait" preview="/images/default.jpg"/>
                 {errors.slug && <span>{errors.portrait?.message}</span>}
 
                 <input type="submit"/>

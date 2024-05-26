@@ -3,18 +3,19 @@ import {ChangeEvent, ReactElement, useEffect, useState} from "react";
 import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import slugify from "@/utils/slugify";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import useGame from "@/hooks/games/useGameDashboard";
 import {editProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import FileUpload from "@/components/ui/FileUpload";
-import moment from "moment/moment";
+import getImage from "@/utils/getImage";
 
 type EditProtagonistFormProps = {
     protagonist: Protagonist
 }
 
 const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElement => {
-    const params = useParams<{gameSlug: string}>()
+    const router = useRouter()
+    const params = useParams<{gameSlug: string, protagonistSlug: string}>()
     const {mutate} = useGame(params.gameSlug)
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<CreateProtagonistFormData>()
@@ -24,18 +25,16 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
         setValue,
         setError,
         trigger,
+        reset,
+        getValues,
         formState: {errors}
     } = methods
 
     useEffect(() => {
-        if (game) {
-            const formattedGame: Game = {
-                ...game,
-                startedAt: moment(game.startedAt).format('YYYY-MM-DD HH:MM:SS')
-            }
-            reset(formattedGame)
+        if (protagonist) {
+            reset(protagonist)
         }
-    }, [game])
+    }, [protagonist])
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('name').then(() => {
@@ -44,11 +43,14 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
         })
     }
 
-    const onSubmit: SubmitHandler<CreateProtagonistFormData> = gameFormData => {
+    const onSubmit: SubmitHandler<CreateProtagonistFormData> = protagonistFormData => {
         setFormLoading(true)
 
-        editProtagonist(protagonist.id, gameFormData)
-            .then(() => console.log('TODO: PTIT TOAST LA'))
+        editProtagonist(protagonist.id, protagonistFormData)
+            .then(() => {
+                router.push(`/${params.gameSlug}/${getValues('slug')}/edit`)
+                console.log('TODO: PTIT TOAST LA')
+            })
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
@@ -107,7 +109,7 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
                 />
                 {errors.slug && <span>{errors.story?.message}</span>}
 
-                <FileUpload inputName="portrait" />
+                <FileUpload inputName="portrait" preview={getImage(protagonist.portrait, '/images/default.jpg')}/>
                 {errors.slug && <span>{errors.portrait?.message}</span>}
 
                 <input type="submit"/>

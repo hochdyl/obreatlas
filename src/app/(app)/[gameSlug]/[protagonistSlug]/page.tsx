@@ -1,17 +1,18 @@
 'use client'
 import {ReactElement, useState} from "react";
 import {useParams} from "next/navigation";
-import useProtagonist from "@/hooks/games/protagonists/useProtagonist";
+import useProtagonistDashboard from "@/hooks/games/protagonists/useProtagonistDashboard";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
 import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
 import useUser from "@/hooks/authentication/useUser";
+import PermissionService from "@/services/PermissionService";
 
 const Protagonist = (): ReactElement => {
     const params = useParams<{gameSlug: string, protagonistSlug: string}>()
-    const {protagonist, isLoading, error, mutate} = useProtagonist(params.gameSlug, params.protagonistSlug)
+    const {protagonist, isLoading, error, mutate} = useProtagonistDashboard(params.gameSlug, params.protagonistSlug)
     const {user} = useUser()
     const [chooseLoading, setChooseLoading] = useState(false)
 
@@ -30,11 +31,7 @@ const Protagonist = (): ReactElement => {
     return (
         <main>
             <Link href={`/${params.gameSlug}`}>Back to game</Link>
-            {(
-                (!protagonist.owner && protagonist.creator.id === user.id) || // No owner and user is creator
-                (protagonist.owner && protagonist.owner.id === user.id) || // User is owner
-                protagonist.game.owner.id === user.id // User is game owner
-            ) &&
+            {PermissionService.editProtagonist(user, protagonist) &&
                 <Link href={`/${params.gameSlug}/${params.protagonistSlug}/edit`}>Edit {protagonist.name}</Link>
             }
             <table>

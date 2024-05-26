@@ -4,12 +4,13 @@ import Image from "next/image";
 import {useFormContext} from "react-hook-form";
 
 type FileUploadProps = {
-    inputName: string
+    inputName: string,
+    preview?: string | undefined
 }
 
-const FileUpload = ({inputName}: FileUploadProps): ReactElement => {
+const FileUpload = ({inputName, preview = undefined}: FileUploadProps): ReactElement => {
     const {register, setValue} = useFormContext();
-    const [filePreview, setFilePreview] = useState<string | undefined>(undefined)
+    const [filePreview, setFilePreview] = useState<string | undefined>(preview)
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]

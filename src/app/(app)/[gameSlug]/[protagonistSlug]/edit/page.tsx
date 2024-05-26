@@ -1,20 +1,20 @@
 'use client'
 import {ReactElement, useEffect} from "react";
-import {useParams, useRouter} from "next/navigation";
-import useGame from "@/hooks/games/useGameDashboard";
+import {useParams} from "next/navigation";
 import useUser from "@/hooks/authentication/useUser";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
 import EditProtagonistForm from "@/features/games/protagonists/EditProtagonistForm";
-import useProtagonist from "@/hooks/games/protagonists/useProtagonist";
+import useProtagonistDashboard from "@/hooks/games/protagonists/useProtagonistDashboard";
+import PermissionService from "@/services/PermissionService";
 
 const EditProtagonist = (): ReactElement => {
     const params = useParams<{gameSlug: string, protagonistSlug: string}>()
-    const {protagonist, isLoading, error, mutate} = useProtagonist(params.gameSlug, params.protagonistSlug)
+    const {protagonist, isLoading, error} = useProtagonistDashboard(params.gameSlug, params.protagonistSlug)
     const {user} = useUser()
 
     useEffect(() => {
-        if (user && protagonist && user.id !== game.owner.id) {
+        if (user && protagonist && !PermissionService.editProtagonist(user, protagonist)) {
             throw new Error("You can't edit this protagonist")
         }
     }, [protagonist, user])
@@ -26,7 +26,7 @@ const EditProtagonist = (): ReactElement => {
         <>
             <Link href={`/${params.gameSlug}`}>Back to game</Link>
 
-            <EditProtagonistForm protagonist={game}/>
+            <EditProtagonistForm protagonist={protagonist}/>
         </>
     )
 }
