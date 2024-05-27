@@ -4,7 +4,6 @@ import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import slugify from "@/utils/slugify";
 import {useParams, useRouter} from "next/navigation";
-import useGame from "@/hooks/games/useGameDashboard";
 import {editProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import FileUpload from "@/components/ui/FileUpload";
 import getImage from "@/utils/getImage";
@@ -16,7 +15,6 @@ type EditProtagonistFormProps = {
 const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElement => {
     const router = useRouter()
     const params = useParams<{gameSlug: string, protagonistSlug: string}>()
-    const {mutate} = useGame(params.gameSlug)
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<EditProtagonistFormData>()
     const {
@@ -62,9 +60,7 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
                     })
                 }
             })
-            .finally(() => {
-                mutate().then(() => setFormLoading(false))
-            })
+            .finally(() => setFormLoading(false))
     }
 
     return (

@@ -60,8 +60,8 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
                         setError(key as keyof BaseFormFail<EditGameFormData>, {type: 'server', message: value})
                     })
                 }
-                setFormLoading(false)
             })
+            .finally(() => setFormLoading(false))
     }
 
     return (
