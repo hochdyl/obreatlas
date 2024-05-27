@@ -18,7 +18,7 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
     const params = useParams<{gameSlug: string, protagonistSlug: string}>()
     const {mutate} = useGame(params.gameSlug)
     const [formLoading, setFormLoading] = useState<boolean>(false)
-    const methods = useForm<CreateProtagonistFormData>()
+    const methods = useForm<EditProtagonistFormData>()
     const {
         register,
         handleSubmit,
@@ -43,7 +43,7 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
         })
     }
 
-    const onSubmit: SubmitHandler<CreateProtagonistFormData> = protagonistFormData => {
+    const onSubmit: SubmitHandler<EditProtagonistFormData> = protagonistFormData => {
         setFormLoading(true)
 
         editProtagonist(protagonist.id, protagonistFormData)
@@ -108,6 +108,22 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
                     {...register("story")}
                 />
                 {errors.slug && <span>{errors.story?.message}</span>}
+
+                <input
+                    type="number"
+                    placeholder="level"
+                    {...register("level", {
+                        required: {
+                            value: true,
+                            message: "Level is required"
+                        },
+                        min: {
+                            value: 1,
+                            message: "Minimum level is 1"
+                        }
+                    })}
+                />
+                {errors.level && <span>{errors.level?.message}</span>}
 
                 <FileUpload inputName="portrait" preview={getImage(protagonist.portrait, '/images/default.jpg')}/>
                 {errors.slug && <span>{errors.portrait?.message}</span>}

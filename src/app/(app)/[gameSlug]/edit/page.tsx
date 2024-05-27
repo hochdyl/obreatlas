@@ -14,7 +14,7 @@ const EditGame = (): ReactElement => {
     const {user} = useUser()
 
     useEffect(() => {
-        if (user && game && !PermissionService.editGame(user, game)) {
+        if (user && game && !PermissionService.isGameOwner(user, game)) {
             throw new Error("You can't edit this game")
         }
     }, [game, user])

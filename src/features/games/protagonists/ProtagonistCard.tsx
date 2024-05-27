@@ -38,6 +38,10 @@ const ProtagonistCard = ({protagonist}: ProtagonistCardProps): ReactElement => {
                     <td>Story:</td>
                     <td>{protagonist.story}</td>
                 </tr>
+                <tr>
+                    <td>Level:</td>
+                    <td>{protagonist.level}</td>
+                </tr>
                 {protagonist.owner &&
                     <tr>
                         <td>Owner:</td>

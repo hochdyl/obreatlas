@@ -17,7 +17,7 @@ export const chooseProtagonist = (protagonistId: number) => {
     })
 }
 
-export const editProtagonist = (protagonistId: number, data: CreateProtagonistFormData) => {
+export const editProtagonist = (protagonistId: number, data: EditProtagonistFormData) => {
     return ApiService.fetch<Protagonist>({
         url: `${ROUTE_URL}/${protagonistId}/edit`,
         method: "POST",

@@ -31,7 +31,7 @@ const Protagonist = (): ReactElement => {
     return (
         <main>
             <Link href={`/${params.gameSlug}`}>Back to game</Link>
-            {PermissionService.editProtagonist(user, protagonist) &&
+            {PermissionService.isGameOwner(user, protagonist.game) &&
                 <Link href={`/${params.gameSlug}/${params.protagonistSlug}/edit`}>Edit {protagonist.name}</Link>
             }
             <table>
@@ -57,6 +57,10 @@ const Protagonist = (): ReactElement => {
                 <tr>
                     <td>Story:</td>
                     <td>{protagonist.story}</td>
+                </tr>
+                <tr>
+                    <td>Level:</td>
+                    <td>{protagonist.level}</td>
                 </tr>
                 {protagonist.owner &&
                     <tr>

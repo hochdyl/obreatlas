@@ -14,7 +14,7 @@ const EditProtagonist = (): ReactElement => {
     const {user} = useUser()
 
     useEffect(() => {
-        if (user && protagonist && !PermissionService.editProtagonist(user, protagonist)) {
+        if (user && protagonist && !PermissionService.isGameOwner(user, protagonist.game)) {
             throw new Error("You can't edit this protagonist")
         }
     }, [protagonist, user])

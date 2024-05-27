@@ -20,7 +20,7 @@ const Game = (): ReactElement => {
     return (
         <>
             <Link href={'/games'}>Back to games</Link>
-            {PermissionService.editGame(user, game) &&
+            {PermissionService.isGameOwner(user, game) &&
                 <Link href={`${params.gameSlug}/edit`}>Edit {game.title}</Link>
             }
             <CreateProtagonistForm/>
