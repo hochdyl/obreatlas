@@ -8,7 +8,7 @@ import {useRouter} from "next/navigation";
 const useUser = () => {
     const router = useRouter()
     const {mutate: configMutate} = useSWRConfig()
-    const {data: user, isLoading, error, mutate} = useSWRImmutable<User>('/users/self')
+    const {data: user, isLoading, error, mutate} = useSWRImmutable<AuthenticatedUser>('/users/self')
 
     const logout = useCallback(async () => {
         SessionService.closeSession()

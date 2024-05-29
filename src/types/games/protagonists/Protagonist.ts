@@ -4,6 +4,6 @@ type Protagonist = {
     slug: string
     story?: string
     level: number
-    owner?: Owner
+    owner?: User
     portrait?: Upload
 }

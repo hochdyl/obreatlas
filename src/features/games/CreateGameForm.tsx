@@ -64,7 +64,7 @@ const CreateGameForm = (): ReactElement => {
                         message: "Title is required"
                     },
                     pattern: {
-                        value: /^(?!games$)[a-zA-Z0-9\- ]+$/,
+                        value: /^(?!login$|register$)[a-zA-Z0-9\- ]+$/,
                         message: "Title is invalid"
                     },
                     onChange: e => handleTitleChange(e)
@@ -81,9 +81,9 @@ const CreateGameForm = (): ReactElement => {
                         message: "Slug is required"
                     },
                     pattern: {
-                        value: /^(?!games$)[a-zA-Z0-9\- ]+$/,
+                        value: /^(?!login$|register$)[a-zA-Z0-9\- ]+$/,
                         message: "Slug is invalid"
-                    }
+                    },
                 })}
             />
             {errors.slug && <span>{errors.slug.message}</span>}

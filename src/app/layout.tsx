@@ -3,6 +3,8 @@ import {Inter} from "next/font/google"
 import "./globals.scss"
 import React, {PropsWithChildren, ReactElement} from "react"
 import {SwrProvider} from "@/providers/SwrProvider";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 const inter = Inter({subsets: ["latin"]})
 
@@ -14,11 +16,15 @@ export const metadata: Metadata = {
 const RootLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     return (
         <html lang="fr">
-            <body className={inter.className}>
-                <SwrProvider>
-                    {children}
-                </SwrProvider>
-            </body>
+        <body className={inter.className}>
+        <SwrProvider>
+            <Header/>
+            <main>
+                {children}
+            </main>
+            <Footer/>
+        </SwrProvider>
+        </body>
         </html>
     );
 }

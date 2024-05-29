@@ -4,39 +4,44 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
 import SessionService from "@/services/SessionService";
 import ApiService from "@/services/ApiService";
-import {registerUser} from "@/api/authentication/AuthenticationApi";
+import {loginUser} from "@/api/authentication/AuthenticationApi";
+import {useSWRConfig} from "swr";
 
-type RegisterUserFormFail = Omit<RegisterUserForm, "passwordConfirm">
-
-const RegisterUserForm = (): ReactElement => {
+const LoginUserForm = (): ReactElement => {
     const router = useRouter()
+    const {mutate} = useSWRConfig()
     const [formLoading, setFormLoading] = useState(false)
     const {
         register,
         handleSubmit,
-        getValues,
         setError,
         formState: {errors}
-    } = useForm<RegisterUserForm>()
+    } = useForm<LoginUserForm>({
+        defaultValues: {
+            username: "admin",
+            password: "admin"
+        }
+    })
 
-    const onSubmit: SubmitHandler<RegisterUserForm> = registerFormData => {
+    const onSubmit: SubmitHandler<LoginUserForm> = loginFormData => {
         setFormLoading(true)
 
-        registerUser(registerFormData)
+        loginUser(loginFormData)
             .then(user => {
                 SessionService.startSession(user.sessionToken)
-                router.push('/')
+                mutate(() => true)
+                    .then(() => router.push('/'))
             })
             .catch(e => {
                 setFormLoading(false)
-
+                
                 if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
                 }
 
-                else if (ApiService.isFail<RegisterUserFormFail>(e)) {
+                else if (ApiService.isFail<BaseFormFail<LoginUserForm>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
-                        setError(key as keyof RegisterUserFormFail, {type: 'server', message: value})
+                        setError(key as keyof BaseFormFail<LoginUserForm>, {type: 'server', message: value})
                     })
                 }
             })
@@ -46,6 +51,7 @@ const RegisterUserForm = (): ReactElement => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <input
                 placeholder="username"
+                autoComplete="username"
                 {...register("username", {
                     required: {
                         value: true,
@@ -58,6 +64,7 @@ const RegisterUserForm = (): ReactElement => {
             <input
                 placeholder="password"
                 type="password"
+                autoComplete="current-password"
                 {...register("password", {
                     required: {
                         value: true,
@@ -67,26 +74,11 @@ const RegisterUserForm = (): ReactElement => {
             />
             {errors.password && <span>{errors.password.message}</span>}
 
-            <input
-                placeholder="confirm password"
-                type="password"
-                {...register("passwordConfirm", {
-                    required: {
-                        value: true,
-                        message: "Confirm your password"
-                    },
-                    validate: {
-                        value: value => value === getValues().password ||
-                            "Passwords don't match"
-                    }
-                })}
-            />
-            {errors.passwordConfirm && <span>{errors.passwordConfirm.message}</span>}
-
             <input type="submit"/>
             {errors.root && <span>{errors.root.message}</span>}
+
             {formLoading && <p>loading form...</p>}
         </form>
     )
 }
-export default RegisterUserForm
+export default LoginUserForm

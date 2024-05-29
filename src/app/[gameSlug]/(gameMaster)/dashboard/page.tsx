@@ -1,33 +1,26 @@
 'use client'
-import {ReactElement, useEffect} from "react";
+import {ReactElement} from "react";
 import EditGameForm from "@/features/games/EditGameForm";
 import {useParams} from "next/navigation";
-import useGame from "@/hooks/games/useGameDashboard";
+import useGame from "@/hooks/games/useGameLobby";
 import useUser from "@/hooks/authentication/useUser";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
-import PermissionService from "@/services/PermissionService";
 
-const EditGame = (): ReactElement => {
+const GameDashboard = (): ReactElement => {
     const params = useParams<{gameSlug: string}>()
     const {game, isLoading, error} = useGame(params.gameSlug)
     const {user} = useUser()
-
-    useEffect(() => {
-        if (user && game && !PermissionService.isGameOwner(user, game)) {
-            throw new Error("You can't edit this game")
-        }
-    }, [game, user])
 
     if (error) throw new Error(error.message)
     if (isLoading || !game || !user) return <PageLoading/>
 
     return (
         <>
-            <Link href={`/${params.gameSlug}`}>Back to game</Link>
+            <Link href={`/${game.slug}`}>Back to game lobby</Link>
 
-            <EditGameForm game={game}/>
+            Game master dashboard
         </>
     )
 }
-export default EditGame
+export default GameDashboard

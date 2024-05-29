@@ -14,7 +14,7 @@ const EditProtagonist = (): ReactElement => {
     const {user} = useUser()
 
     useEffect(() => {
-        if (user && protagonist && !PermissionService.isGameOwner(user, protagonist.game)) {
+        if (user && protagonist && !PermissionService.isGameMaster(user, protagonist.game)) {
             throw new Error("You can't edit this protagonist")
         }
     }, [protagonist, user])
@@ -24,7 +24,7 @@ const EditProtagonist = (): ReactElement => {
 
     return (
         <>
-            <Link href={`/${params.gameSlug}`}>Back to game</Link>
+            <Link href={`/${protagonist.game.slug}/play/${protagonist.slug}`}>Back to protagonist</Link>
 
             <EditProtagonistForm protagonist={protagonist}/>
         </>

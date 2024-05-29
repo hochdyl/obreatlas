@@ -1,3 +1,3 @@
-type GameDashboard = Game & {
+type GameLobby = Game & {
     protagonists: Protagonist[]
 }

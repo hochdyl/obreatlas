@@ -1,15 +1,25 @@
 'use client'
 import {ReactElement} from "react";
-import LoginUserForm from "@/features/authentication/LoginUserForm";
-import RegisterUserForm from "@/features/authentication/RegisterUserForm";
+import Link from "next/link";
+import useUser from "@/hooks/authentication/useUser";
+import PageLoading from "@/components/ui/PageLoading";
+import GamesList from "@/features/games/GamesList";
 
-const Authentication = (): ReactElement => {
+const HomePage = (): ReactElement => {
+    const {user, isLoading} = useUser()
+
+    if (isLoading) return <PageLoading/>
+
     return (
-        <main>
-            Obreatlas
-            <LoginUserForm/>
-            <RegisterUserForm/>
-        </main>
+        <>
+            Obreatlas homepage
+            {user ? <GamesList/> :
+                <>
+                    <Link href={'/login'}>Login</Link>
+                    <Link href={'/register'}>Register</Link>
+                </>
+            }
+        </>
     );
 }
-export default Authentication
+export default HomePage

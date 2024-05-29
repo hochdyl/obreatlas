@@ -1,1 +1,0 @@
-type Owner = Omit<User, 'sessionToken'>

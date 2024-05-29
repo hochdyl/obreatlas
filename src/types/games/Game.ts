@@ -3,6 +3,6 @@ type Game = {
     title: string
     slug: string
     startedAt: string
-    owner: Owner
+    gameMaster: User
     closed: boolean
 }

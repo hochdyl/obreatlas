@@ -6,9 +6,11 @@ import slugify from "@/utils/slugify";
 import {useParams, useRouter} from "next/navigation";
 import FileUpload from "@/components/ui/FileUpload";
 import {createProtagonist} from "@/api/games/protagonists/ProtagonistApi";
+import {useSWRConfig} from "swr";
 
 const CreateProtagonistForm = (): ReactElement => {
     const router = useRouter()
+    const {mutate} = useSWRConfig()
     const params = useParams<{gameSlug: string}>()
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<CreateProtagonistFormData>({
@@ -38,8 +40,9 @@ const CreateProtagonistForm = (): ReactElement => {
 
         createProtagonist(params.gameSlug, newProtagonistFormData)
             .then(() => {
-                router.push(`${params.gameSlug}/${getValues('slug')}`)
                 console.log('TODO: PTIT TOAST LA')
+                mutate(() => true)
+                    .then(() => router.push(`/${params.gameSlug}/play/${getValues('slug')}`))
             })
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
@@ -67,10 +70,6 @@ const CreateProtagonistForm = (): ReactElement => {
                             value: true,
                             message: "Name is required"
                         },
-                        pattern: {
-                            value: /^(?!edit$)[a-zA-Z0-9\- ]+$/,
-                            message: "Name is invalid"
-                        },
                         onChange: e => handleNameChange(e)
                     })}
                 />
@@ -83,10 +82,6 @@ const CreateProtagonistForm = (): ReactElement => {
                         required: {
                             value: true,
                             message: "Slug is required"
-                        },
-                        pattern: {
-                            value: /^(?!edit$)[a-zA-Z0-9\- ]+$/,
-                            message: "Slug is invalid"
                         }
                     })}
                 />

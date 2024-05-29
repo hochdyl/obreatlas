@@ -21,7 +21,6 @@ axiosInstance.interceptors.response.use(
         if (err.isAxiosError) {
             if (err.request.status === HttpStatusCode.Unauthorized) {
                 SessionService.closeSession()
-                window.location.reload()
             }
 
             if (err.code === AxiosError.ECONNABORTED) {
@@ -29,8 +28,9 @@ axiosInstance.interceptors.response.use(
                 return Promise.reject(errorResponse)
             }
 
-            if (err.response)
+            if (err.response) {
                 return Promise.reject(err.response.data)
+            }
         }
         return Promise.reject(err);
     }

@@ -1,16 +1,23 @@
 'use client'
-import {ReactElement} from "react";
+import React, {ReactElement} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {useParams} from "next/navigation";
 import getImage from "@/utils/getImage";
+import PermissionService from "@/services/PermissionService";
+import useUser from "@/hooks/authentication/useUser";
+import PageLoading from "@/components/ui/PageLoading";
 
 type ProtagonistCardProps = {
+    game: Game
     protagonist: Protagonist
 }
 
-const ProtagonistCard = ({protagonist}: ProtagonistCardProps): ReactElement => {
+const ProtagonistCard = ({game, protagonist}: ProtagonistCardProps): ReactElement => {
     const params = useParams<{gameSlug: string}>()
+    const {user} = useUser()
+
+    if (!user) return <PageLoading/>
 
     return (
         <div>
@@ -50,7 +57,10 @@ const ProtagonistCard = ({protagonist}: ProtagonistCardProps): ReactElement => {
                 }
                 </tbody>
             </table>
-            <Link href={`${params.gameSlug}/${protagonist.slug}`}>View</Link>
+            <Link href={`/${params.gameSlug}/play/${protagonist.slug}`}>View</Link>
+            {PermissionService.isGameMaster(user, game) &&
+                <Link href={`/${params.gameSlug}/play/${protagonist.slug}/edit`}>Edit {protagonist.name}</Link>
+            }
             <br/>
             <br/>
         </div>

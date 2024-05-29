@@ -14,17 +14,24 @@ export const config = {
 }
 
 export const middleware = async (req: NextRequest) => {
-    const isAuthPage = req.url.endsWith(`${req.headers.get('host')}/`);
+    const url = req.nextUrl
+    const pathname = new URL(url).pathname
+
+    const isAuthPage = pathname === '/login' || pathname === '/register'
+    const isHomePage = pathname === '/'
+    const isPublicPage = isHomePage || isAuthPage
+
     const sessionCookie = req.cookies.get(SessionService.COOKIE_NAME)
-
-    const redirectToLogin = () => {
-        if (isAuthPage) return
-
+    
+    const handleRedirect = () => {
+        if (isPublicPage) {
+            return NextResponse.next()
+        }
         return NextResponse.redirect(new URL('/', req.url))
     }
 
     if (!sessionCookie) {
-        return redirectToLogin()
+        return handleRedirect()
     }
 
     try {
@@ -35,18 +42,18 @@ export const middleware = async (req: NextRequest) => {
                 Authorization: `Bearer ${sessionCookie.value}`,
                 "Content-Type": "application/json",
             }
-        });
+        })
 
         if (!sessionRequest.ok) {
-            return redirectToLogin()
+            return handleRedirect()
         }
     } catch (e) {
-        return redirectToLogin()
+        return handleRedirect()
     }
 
-    // Redirect to app if session is okay
+    // Redirect to home if session is valid and url is an auth page
     if (isAuthPage) {
-        return NextResponse.redirect(new URL('/games', req.url))
+        return NextResponse.redirect(new URL('/', req.url))
     }
 
     // Set a refreshed session cookie

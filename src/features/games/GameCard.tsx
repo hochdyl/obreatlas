@@ -21,8 +21,8 @@ const GameCard = ({game}: GameCardProps): ReactElement => {
                     <td>{game.slug}</td>
                 </tr>
                 <tr>
-                    <td>Owner:</td>
-                    <td>{game.owner.username}</td>
+                    <td>Game master:</td>
+                    <td>{game.gameMaster.username}</td>
                 </tr>
                 <tr>
                     <td>Started at:</td>

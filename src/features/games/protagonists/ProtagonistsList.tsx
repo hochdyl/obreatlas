@@ -9,13 +9,7 @@ type ProtagonistsListProps = {
 const ProtagonistsList = ({protagonists}: ProtagonistsListProps): ReactElement => {
     return (
         <>
-            <h1>Protagonists</h1>
-            {protagonists.map((protagonist, index) =>
-                <ProtagonistCard
-                    protagonist={protagonist}
-                    key={index}
-                />
-            )}
+
         </>
     )
 }

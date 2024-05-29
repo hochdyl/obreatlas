@@ -6,18 +6,14 @@ import Image from "next/image";
 import getImage from "@/utils/getImage";
 import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import PageLoading from "@/components/ui/PageLoading";
-import Link from "next/link";
-import useUser from "@/hooks/authentication/useUser";
-import PermissionService from "@/services/PermissionService";
 
 const Protagonist = (): ReactElement => {
     const params = useParams<{gameSlug: string, protagonistSlug: string}>()
     const {protagonist, isLoading, error, mutate} = useProtagonistDashboard(params.gameSlug, params.protagonistSlug)
-    const {user} = useUser()
     const [chooseLoading, setChooseLoading] = useState(false)
 
     if (error) throw new Error(error.message)
-    if (isLoading || !protagonist || !user) return <PageLoading/>
+    if (isLoading || !protagonist) return <PageLoading/>
 
     const handleChooseProtagonist = () => {
         setChooseLoading(true)
@@ -29,11 +25,7 @@ const Protagonist = (): ReactElement => {
     }
 
     return (
-        <main>
-            <Link href={`/${params.gameSlug}`}>Back to game</Link>
-            {PermissionService.isGameOwner(user, protagonist.game) &&
-                <Link href={`/${params.gameSlug}/${params.protagonistSlug}/edit`}>Edit {protagonist.name}</Link>
-            }
+        <>
             <table>
                 <tbody>
                 <tr>
@@ -74,7 +66,7 @@ const Protagonist = (): ReactElement => {
                 <button onClick={handleChooseProtagonist}>Choose this protagonist</button>
             }
             {chooseLoading && <p>loading choose...</p>}
-        </main>
+        </>
     )
 }
 export default Protagonist

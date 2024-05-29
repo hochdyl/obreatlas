@@ -3,19 +3,16 @@ import {useSWRConfig} from "swr";
 import Link from "next/link";
 
 type ErrorProps = {
-    error: Error & {digest?: string}
+    error: Error & { digest?: string }
     reset: () => void
 }
 
-const Error = ({error, reset}: ErrorProps) => {
+const ErrorPage = ({error, reset}: ErrorProps) => {
     const {mutate} = useSWRConfig()
 
     const handleReset = () => {
-        mutate(
-            () => true,
-            undefined,
-            {revalidate: true}
-        ).then(() => reset())
+        mutate(() => true)
+            .then(() => reset())
     }
 
     return (
@@ -28,4 +25,4 @@ const Error = ({error, reset}: ErrorProps) => {
         </div>
     )
 }
-export default Error
+export default ErrorPage

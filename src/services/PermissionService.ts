@@ -1,4 +1,4 @@
 abstract class PermissionService {
-    static isGameOwner = (user: User, game: Game) => user.id === game.owner.id
+    static isGameMaster = (user: AuthenticatedUser, game: Game) => user.id === game.gameMaster.id
 }
 export default PermissionService

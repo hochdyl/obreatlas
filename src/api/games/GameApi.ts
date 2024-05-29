@@ -4,7 +4,7 @@ const ROUTE_URL = '/games'
 
 export const createGame = (data: CreateGameFormData) => {
     return ApiService.fetch<Game>({
-        url: `${ROUTE_URL}`,
+        url: `${ROUTE_URL}/create`,
         method: "POST",
         data
     })
