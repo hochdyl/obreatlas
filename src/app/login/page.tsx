@@ -2,9 +2,9 @@
 import {ReactElement} from "react";
 import LoginUserForm from "@/features/authentication/login/LoginUserForm";
 
-const Login = (): ReactElement => {
+const LoginPage = (): ReactElement => {
     return (
         <LoginUserForm/>
     );
 }
-export default Login
+export default LoginPage

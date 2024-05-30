@@ -5,7 +5,7 @@ import {useCallback} from "react";
 import SessionService from "@/services/SessionService";
 import {useRouter} from "next/navigation";
 
-const useUser = () => {
+const useAuthenticatedUser = () => {
     const router = useRouter()
     const {mutate: configMutate} = useSWRConfig()
     const {data: user, isLoading, error, mutate} = useSWRImmutable<AuthenticatedUser>('/users/self')
@@ -21,4 +21,4 @@ const useUser = () => {
 
     return {user, isLoading, error, mutate, logout}
 }
-export default useUser
+export default useAuthenticatedUser

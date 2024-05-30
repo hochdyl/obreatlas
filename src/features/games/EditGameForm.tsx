@@ -54,8 +54,7 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
-                }
-                else if (ApiService.isFail<BaseFormFail<EditGameFormData>>(e)) {
+                } else if (ApiService.isFail<BaseFormFail<EditGameFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof BaseFormFail<EditGameFormData>, {type: 'server', message: value})
                     })

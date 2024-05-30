@@ -11,7 +11,7 @@ import {useSWRConfig} from "swr";
 const CreateProtagonistForm = (): ReactElement => {
     const router = useRouter()
     const {mutate} = useSWRConfig()
-    const params = useParams<{gameSlug: string}>()
+    const params = useParams<{ gameSlug: string }>()
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<CreateProtagonistFormData>({
         defaultValues: {
@@ -48,9 +48,7 @@ const CreateProtagonistForm = (): ReactElement => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
-                }
-
-                else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e)) {
+                } else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
                     })

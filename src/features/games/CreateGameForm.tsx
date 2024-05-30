@@ -43,8 +43,7 @@ const CreateGameForm = (): ReactElement => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
-                }
-                else if (ApiService.isFail<BaseFormFail<CreateGameFormData>>(e)) {
+                } else if (ApiService.isFail<BaseFormFail<CreateGameFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof BaseFormFail<CreateGameFormData>, {type: 'server', message: value})
                     })

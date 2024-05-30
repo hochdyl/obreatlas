@@ -1,15 +1,15 @@
 'use client'
 import {ReactElement, useState} from "react";
 import {useParams} from "next/navigation";
-import useProtagonistDashboard from "@/hooks/games/protagonists/useProtagonistDashboard";
+import usePlayProtagonist from "@/hooks/games/protagonists/usePlayProtagonist";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
 import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import PageLoading from "@/components/ui/PageLoading";
 
-const Protagonist = (): ReactElement => {
-    const params = useParams<{gameSlug: string, protagonistSlug: string}>()
-    const {protagonist, isLoading, error, mutate} = useProtagonistDashboard(params.gameSlug, params.protagonistSlug)
+const PlayProtagonistPage = (): ReactElement => {
+    const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
+    const {protagonist, isLoading, error, mutate} = usePlayProtagonist(params.gameSlug, params.protagonistSlug)
     const [chooseLoading, setChooseLoading] = useState(false)
 
     if (error) throw new Error(error.message)
@@ -69,4 +69,4 @@ const Protagonist = (): ReactElement => {
         </>
     )
 }
-export default Protagonist
+export default PlayProtagonistPage

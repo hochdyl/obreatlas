@@ -1,4 +1,4 @@
-type ProtagonistDashboard = Protagonist & {
+type PlayProtagonist = Protagonist & {
     creator: AuthenticatedUser
     game: Game
 }

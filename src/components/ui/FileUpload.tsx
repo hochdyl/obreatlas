@@ -18,7 +18,7 @@ const FileUpload = ({inputName, preview = undefined}: FileUploadProps): ReactEle
         if (file) {
             setValue(inputName, file)
 
-            if(file.type.includes('image')) {
+            if (file.type.includes('image')) {
                 const urlImage = URL.createObjectURL(file)
                 return setFilePreview(urlImage)
             }

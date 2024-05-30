@@ -5,7 +5,7 @@ import Image from "next/image";
 import {useParams} from "next/navigation";
 import getImage from "@/utils/getImage";
 import PermissionService from "@/services/PermissionService";
-import useUser from "@/hooks/authentication/useUser";
+import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import PageLoading from "@/components/ui/PageLoading";
 
 type ProtagonistCardProps = {
@@ -14,8 +14,8 @@ type ProtagonistCardProps = {
 }
 
 const ProtagonistCard = ({game, protagonist}: ProtagonistCardProps): ReactElement => {
-    const params = useParams<{gameSlug: string}>()
-    const {user} = useUser()
+    const params = useParams<{ gameSlug: string }>()
+    const {user} = useAuthenticatedUser()
 
     if (!user) return <PageLoading/>
 
@@ -59,7 +59,7 @@ const ProtagonistCard = ({game, protagonist}: ProtagonistCardProps): ReactElemen
             </table>
             <Link href={`/${params.gameSlug}/play/${protagonist.slug}`}>View</Link>
             {PermissionService.isGameMaster(user, game) &&
-                <Link href={`/${params.gameSlug}/play/${protagonist.slug}/edit`}>Edit {protagonist.name}</Link>
+                <Link href={`/${params.gameSlug}/protagonists/${protagonist.slug}/edit`}>Edit {protagonist.name}</Link>
             }
             <br/>
             <br/>

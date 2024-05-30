@@ -14,7 +14,7 @@ type EditProtagonistFormProps = {
 
 const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElement => {
     const router = useRouter()
-    const params = useParams<{gameSlug: string, protagonistSlug: string}>()
+    const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<EditProtagonistFormData>()
     const {
@@ -53,8 +53,7 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
                     setError('root', {type: 'server', message: e.message})
-                }
-                else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e)) {
+                } else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
                         setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
                     })

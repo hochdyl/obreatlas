@@ -2,9 +2,9 @@
 import {ReactElement} from "react";
 import RegisterUserForm from "@/features/authentication/register/RegisterUserForm";
 
-const Register = (): ReactElement => {
+const RegisterPage = (): ReactElement => {
     return (
         <RegisterUserForm/>
     );
 }
-export default Register
+export default RegisterPage

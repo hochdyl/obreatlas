@@ -1,9 +1,9 @@
 'use client'
 import React, {ReactElement} from "react";
-import useUser from "@/hooks/authentication/useUser";
+import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 
 const Header = (): ReactElement => {
-    const {user, isLoading, logout} = useUser()
+    const {user, isLoading, logout} = useAuthenticatedUser()
 
     return (
         <header>
