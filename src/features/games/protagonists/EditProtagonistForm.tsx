@@ -7,6 +7,7 @@ import {useParams, useRouter} from "next/navigation";
 import {editProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import FileUpload from "@/components/ui/FileUpload";
 import getImage from "@/utils/getImage";
+import {useSWRConfig} from "swr";
 
 type EditProtagonistFormProps = {
     protagonist: Protagonist
@@ -14,6 +15,7 @@ type EditProtagonistFormProps = {
 
 const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElement => {
     const router = useRouter()
+    const {mutate} = useSWRConfig()
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<EditProtagonistFormData>()
@@ -46,7 +48,8 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
 
         editProtagonist(protagonist.id, protagonistFormData)
             .then(() => {
-                router.push(`/${params.gameSlug}/${getValues('slug')}/edit`)
+                mutate(() => true)
+                    .then(() => router.push(`/${params.gameSlug}/protagonists/${getValues('slug')}/edit`))
                 console.log('TODO: PTIT TOAST LA')
             })
             .catch(e => {

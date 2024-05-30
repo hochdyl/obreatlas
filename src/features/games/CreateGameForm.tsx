@@ -6,9 +6,11 @@ import moment from "moment";
 import slugify from "@/utils/slugify";
 import {createGame} from "@/api/games/GameApi";
 import {useRouter} from "next/navigation";
+import {useSWRConfig} from "swr";
 
 const CreateGameForm = (): ReactElement => {
     const router = useRouter()
+    const {mutate} = useSWRConfig()
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const {
         register,
@@ -36,7 +38,8 @@ const CreateGameForm = (): ReactElement => {
 
         createGame(newGameFormData)
             .then(() => {
-                router.push(`/${getValues('slug')}`)
+                mutate(() => true)
+                    .then(() => router.push(`/${getValues('slug')}`))
                 console.log('TODO: PTIT TOAST LA')
             })
             .catch(e => {

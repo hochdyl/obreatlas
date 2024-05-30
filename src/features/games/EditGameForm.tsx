@@ -6,6 +6,7 @@ import slugify from "@/utils/slugify";
 import {editGame} from "@/api/games/GameApi";
 import {useRouter} from "next/navigation";
 import moment from "moment";
+import {useSWRConfig} from "swr";
 
 type EditGameFormProps = {
     game: Game
@@ -13,6 +14,7 @@ type EditGameFormProps = {
 
 const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
     const router = useRouter()
+    const {mutate} = useSWRConfig()
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const {
         register,
@@ -47,8 +49,8 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
 
         editGame(game.id, gameFormData)
             .then(() => {
-                router.push(`/${getValues('slug')}/edit`)
-                console.log('TODO: PTIT TOAST LA')
+                mutate(() => true)
+                    .then(() => router.push(`/${getValues('slug')}/edit`))
             })
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
