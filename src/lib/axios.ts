@@ -20,7 +20,11 @@ axiosInstance.interceptors.response.use(
     err => {
         if (err.isAxiosError) {
             if (err.request.status === HttpStatusCode.Unauthorized) {
-                SessionService.closeSession()
+                const sessionToken = SessionService.getSession()
+                if (sessionToken) {
+                    SessionService.closeSession()
+                    window.location.reload()
+                }
             }
 
             if (err.code === AxiosError.ECONNABORTED) {
