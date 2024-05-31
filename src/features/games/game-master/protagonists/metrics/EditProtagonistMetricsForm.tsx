@@ -13,7 +13,7 @@ type EditProtagonistFormProps = {
     protagonist: Protagonist
 }
 
-const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElement => {
+const EditProtagonistMetricsForm = ({protagonist}: EditProtagonistFormProps): ReactElement => {
     const router = useRouter()
     const {mutate} = useSWRConfig()
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
@@ -133,4 +133,4 @@ const EditProtagonistForm = ({protagonist}: EditProtagonistFormProps): ReactElem
         </FormProvider>
     )
 }
-export default EditProtagonistForm
+export default EditProtagonistMetricsForm

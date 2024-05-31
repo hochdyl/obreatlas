@@ -59,7 +59,10 @@ const ProtagonistCard = ({game, protagonist}: ProtagonistCardProps): ReactElemen
             </table>
             <Link href={`/${params.gameSlug}/play/${protagonist.slug}`}>View</Link>
             {PermissionService.isGameMaster(user, game) &&
-                <Link href={`/${params.gameSlug}/protagonists/${protagonist.slug}/edit`}>Edit {protagonist.name}</Link>
+                <>
+                    <Link href={`/${params.gameSlug}/protagonists/${protagonist.slug}/edit`}>Edit {protagonist.name}</Link>
+                    <Link href={`/${params.gameSlug}/protagonists/${protagonist.slug}/edit/metrics`}>Metrics</Link>
+                </>
             }
             <br/>
             <br/>

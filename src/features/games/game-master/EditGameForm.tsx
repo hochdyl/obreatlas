@@ -1,5 +1,5 @@
 'use client'
-import {ChangeEvent, ReactElement, useEffect, useState} from "react";
+import {ChangeEvent, ReactElement, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import slugify from "@/utils/slugify";
@@ -22,20 +22,11 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
         setValue,
         setError,
         trigger,
-        reset,
         getValues,
         formState: {errors}
-    } = useForm<EditGameFormData>()
-
-    useEffect(() => {
-        if (game) {
-            const formattedGame: Game = {
-                ...game,
-                startedAt: moment(game.startedAt).format('YYYY-MM-DD HH:MM:SS')
-            }
-            reset(formattedGame)
-        }
-    }, [game])
+    } = useForm<EditGameFormData>({
+        defaultValues: {...game, startedAt: moment(game.startedAt).format('YYYY-MM-DD HH:MM:SS')}
+    })
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('title').then(() => {
