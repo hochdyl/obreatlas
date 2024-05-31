@@ -5,12 +5,12 @@ import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
 import EditProtagonistForm from "@/features/games/protagonists/EditProtagonistForm";
-import usePlayProtagonist from "@/hooks/games/protagonists/usePlayProtagonist";
+import useProtagonistData from "@/hooks/games/protagonists/useProtagonistData";
 import PermissionService from "@/services/PermissionService";
 
 const EditProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
-    const {protagonist, isLoading, error} = usePlayProtagonist(params.gameSlug, params.protagonistSlug)
+    const {protagonist, isLoading, error} = useProtagonistData(params.gameSlug, params.protagonistSlug)
     const {user} = useAuthenticatedUser()
 
     useEffect(() => {

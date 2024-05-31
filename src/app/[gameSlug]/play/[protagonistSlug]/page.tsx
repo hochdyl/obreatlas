@@ -1,7 +1,7 @@
 'use client'
 import {ReactElement, useState} from "react";
 import {useParams} from "next/navigation";
-import usePlayProtagonist from "@/hooks/games/protagonists/usePlayProtagonist";
+import useProtagonistData from "@/hooks/games/protagonists/useProtagonistData";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
 import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
@@ -9,7 +9,7 @@ import PageLoading from "@/components/ui/PageLoading";
 
 const PlayProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
-    const {protagonist, isLoading, error, mutate} = usePlayProtagonist(params.gameSlug, params.protagonistSlug)
+    const {protagonist, isLoading, error, mutate} = useProtagonistData(params.gameSlug, params.protagonistSlug)
     const [chooseLoading, setChooseLoading] = useState(false)
 
     if (error) throw new Error(error.message)
