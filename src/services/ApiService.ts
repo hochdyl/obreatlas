@@ -1,8 +1,15 @@
 import {AxiosError, AxiosRequestConfig} from "axios";
 import axiosInstance from "@/lib/axios";
+import getFormData from "@/utils/getFormData";
+import sanitize from "@/utils/sanitize";
 
 abstract class ApiService {
     static fetch = <T = any>(config: AxiosRequestConfig) => {
+        if (config.data && typeof config.data === "object") {
+            const sanitizedData = sanitize(config.data)
+            config.data = getFormData(sanitizedData)
+        }
+
         return new Promise<T>((resolve, reject) => {
             axiosInstance<SuccessResponse<T>>({...config})
                 .then(({data: res}) => resolve(res.data))

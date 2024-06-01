@@ -1,5 +1,5 @@
 type Metric = {
-    icon?: string
+    emoji?: string
     name: string
     value: number
     max?: number

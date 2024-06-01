@@ -1,5 +1,4 @@
 import ApiService from "@/services/ApiService";
-import getFormData from "@/utils/getFormData";
 
 const ROUTE_URL = 'protagonists'
 
@@ -7,7 +6,7 @@ export const createProtagonist = (gameSlug: string, data: CreateProtagonistFormD
     return ApiService.fetch<Protagonist>({
         url: `${ROUTE_URL}/${gameSlug}/create`,
         method: "POST",
-        data: getFormData(data)
+        data
     })
 }
 
@@ -21,6 +20,6 @@ export const editProtagonist = (protagonistId: number, data: EditProtagonistForm
     return ApiService.fetch<Protagonist>({
         url: `${ROUTE_URL}/${protagonistId}/edit`,
         method: "POST",
-        data: getFormData(data)
+        data
     })
 }
