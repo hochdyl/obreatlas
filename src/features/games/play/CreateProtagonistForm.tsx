@@ -18,20 +18,11 @@ const CreateProtagonistForm = (): ReactElement => {
             story: undefined
         }
     })
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        setError,
-        trigger,
-        getValues,
-        formState: {errors}
-    } = methods
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-        trigger('name').then(() => {
+        methods.trigger('name').then(() => {
             const slug = slugify(e.target.value)
-            setValue('slug', slug)
+            methods.setValue('slug', slug)
         })
     }
 
@@ -42,15 +33,15 @@ const CreateProtagonistForm = (): ReactElement => {
             .then(() => {
                 console.log('TODO: PTIT TOAST LA')
                 mutate(() => true)
-                    .then(() => router.push(`/${params.gameSlug}/play/${getValues('slug')}`))
+                    .then(() => router.push(`/${params.gameSlug}/play/${methods.getValues('slug')}`))
             })
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
-                    setError('root', {type: 'server', message: e.message})
+                    methods.setError('root', {type: 'server', message: e.message})
                 } else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
-                        setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
+                        methods.setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
                     })
                 }
                 setFormLoading(false)
@@ -59,11 +50,11 @@ const CreateProtagonistForm = (): ReactElement => {
 
     return (
         <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
                 <h1>Create protagonist</h1>
                 <input
                     placeholder="name"
-                    {...register("name", {
+                    {...methods.register("name", {
                         required: {
                             value: true,
                             message: "Name is required"
@@ -71,31 +62,31 @@ const CreateProtagonistForm = (): ReactElement => {
                         onChange: e => handleNameChange(e)
                     })}
                 />
-                {errors.name && <span>{errors.name.message}</span>}
+                {methods.formState.errors.name && <span>{methods.formState.errors.name.message}</span>}
 
                 <input
                     placeholder="slug"
                     disabled
-                    {...register("slug", {
+                    {...methods.register("slug", {
                         required: {
                             value: true,
                             message: "Slug is required"
                         }
                     })}
                 />
-                {errors.slug && <span>{errors.slug.message}</span>}
+                {methods.formState.errors.slug && <span>{methods.formState.errors.slug.message}</span>}
 
                 <input
                     placeholder="story"
-                    {...register("story")}
+                    {...methods.register("story")}
                 />
-                {errors.slug && <span>{errors.story?.message}</span>}
+                {methods.formState.errors.slug && <span>{methods.formState.errors.story?.message}</span>}
 
                 <FileUpload inputName="portrait" preview="/images/default.jpg"/>
-                {errors.slug && <span>{errors.portrait?.message}</span>}
+                {methods.formState.errors.slug && <span>{methods.formState.errors.portrait?.message}</span>}
 
                 <input type="submit"/>
-                {errors.root && <span>{errors.root.message}</span>}
+                {methods.formState.errors.root && <span>{methods.formState.errors.root.message}</span>}
                 {formLoading && <span>Loading form...</span>}
             </form>
         </FormProvider>

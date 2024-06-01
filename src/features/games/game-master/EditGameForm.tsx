@@ -94,6 +94,7 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
             <input
                 type="datetime-local"
                 {...register("startedAt", {
+                    valueAsDate: true,
                     required: {
                         value: true,
                         message: "Start date is required"

@@ -4,9 +4,9 @@ import {useParams} from "next/navigation";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
 import useProtagonistData from "@/hooks/games/protagonists/useProtagonistData";
-import EditProtagonistMetricsForm from "@/features/games/game-master/protagonists/metrics/EditProtagonistMetricsForm";
+import EditMetricsForm from "@/features/games/game-master/protagonists/metrics/EditMetricsForm";
 
-const EditProtagonistMetricsPage = (): ReactElement => {
+const EditMetricsPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
     const {protagonist, isLoading, error} = useProtagonistData(params.gameSlug, params.protagonistSlug)
 
@@ -17,8 +17,8 @@ const EditProtagonistMetricsPage = (): ReactElement => {
         <>
             <Link href={`/${protagonist.game.slug}/game-master`}>Back to game master dashboard</Link>
 
-            <EditProtagonistMetricsForm protagonist={protagonist}/>
+            <EditMetricsForm protagonist={protagonist}/>
         </>
     )
 }
-export default EditProtagonistMetricsPage
+export default EditMetricsPage

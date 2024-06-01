@@ -93,6 +93,7 @@ const CreateGameForm = (): ReactElement => {
             <input
                 type="date"
                 {...register("startedAt", {
+                    valueAsDate: true,
                     required: {
                         value: true,
                         message: "Start date is required"
