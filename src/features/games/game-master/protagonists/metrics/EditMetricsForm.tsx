@@ -7,7 +7,7 @@ import {editMetrics} from "@/api/games/protagonists/metrics/MetricsApi";
 import ApiService from "@/services/ApiService";
 
 type EditMetricsFormProps = {
-    protagonist: Protagonist
+    protagonist: ProtagonistData
 }
 
 const EditMetricsForm = ({protagonist}: EditMetricsFormProps): ReactElement => {
@@ -15,7 +15,7 @@ const EditMetricsForm = ({protagonist}: EditMetricsFormProps): ReactElement => {
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<EditMetricsFormData>({
         defaultValues: {
-            metric: [{name: "OUH OUHH", value: 1}]
+            metrics: protagonist.metrics
         }
     })
     const {
@@ -23,14 +23,16 @@ const EditMetricsForm = ({protagonist}: EditMetricsFormProps): ReactElement => {
         append,
         remove
     } = useFieldArray({
-        name: "metric",
+        name: "metrics",
         control: methods.control
     });
 
     const handleAddRow = () => {
         append({
+            emoji: "",
             name: "",
-            value: 0
+            value: 0,
+            max: 0
         })
     }
 

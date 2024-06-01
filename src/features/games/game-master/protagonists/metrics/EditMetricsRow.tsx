@@ -22,22 +22,22 @@ const EditMetricsRow = ({index}: EditMetricsRowProps): ReactElement => {
             <input
                 type="hidden"
                 placeholder="icon"
-                {...register(`metric.${index}.emoji`, {
+                {...register(`metrics.${index}.emoji`, {
                     required: true,
-                    value: watch(`metric.${index}.emoji`)
+                    value: watch(`metrics.${index}.emoji`)
                 })}
             />
             <EmojiPicker
                 open={open}
                 emojiStyle={EmojiStyle.TWITTER}
-                onEmojiClick={emoji => setValue(`metric.${index}.emoji`, emoji.unified)}
+                onEmojiClick={emoji => setValue(`metrics.${index}.emoji`, emoji.unified)}
                 previewConfig={{showPreview: false}}
                 lazyLoadEmojis={true}
             />
-            <Emoji unified={getValues(`metric.${index}.emoji`)} emojiStyle={EmojiStyle.TWITTER}/>
+            <Emoji unified={getValues(`metrics.${index}.emoji`)} emojiStyle={EmojiStyle.TWITTER}/>
             <input
                 placeholder="name"
-                {...register(`metric.${index}.name`, {
+                {...register(`metrics.${index}.name`, {
                     required: {
                         value: true,
                         message: "Name is required"
@@ -47,7 +47,7 @@ const EditMetricsRow = ({index}: EditMetricsRowProps): ReactElement => {
             <input
                 type="number"
                 placeholder="value"
-                {...register(`metric.${index}.value`, {
+                {...register(`metrics.${index}.value`, {
                     valueAsNumber: true,
                     required: {
                         value: true,
@@ -58,7 +58,7 @@ const EditMetricsRow = ({index}: EditMetricsRowProps): ReactElement => {
             <input
                 type="number"
                 placeholder="max"
-                {...register(`metric.${index}.max`, {
+                {...register(`metrics.${index}.max`, {
                     valueAsNumber: true,
                 })}
             />
