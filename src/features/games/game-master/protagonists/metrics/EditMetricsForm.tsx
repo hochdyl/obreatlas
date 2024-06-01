@@ -15,7 +15,7 @@ const EditMetricsForm = ({protagonist}: EditMetricsFormProps): ReactElement => {
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<EditMetricsFormData>({
         defaultValues: {
-            metrics: protagonist.metrics
+            metrics: protagonist.metrics // TODO: map pour formatter les données comme il faut
         }
     })
     const {
