@@ -8,7 +8,7 @@ import {createGame} from "@/api/games/GameApi";
 import {useRouter} from "next/navigation";
 import {useSWRConfig} from "swr";
 
-const CreateGameForm = (): ReactElement => {
+const   CreateGameForm = (): ReactElement => {
     const router = useRouter()
     const {mutate} = useSWRConfig()
     const [formLoading, setFormLoading] = useState<boolean>(false)
@@ -22,7 +22,7 @@ const CreateGameForm = (): ReactElement => {
         formState: {errors}
     } = useForm<CreateGameFormData>({
         defaultValues: {
-            startedAt: moment().format('YYYY-MM-DD')
+            startedAt: moment().format('YYYY-MM-DD HH:MM:SS')
         }
     })
 
@@ -35,6 +35,8 @@ const CreateGameForm = (): ReactElement => {
 
     const onSubmit: SubmitHandler<CreateGameFormData> = newGameFormData => {
         setFormLoading(true)
+
+        console.log(newGameFormData)
 
         createGame(newGameFormData)
             .then(() => {
@@ -91,7 +93,7 @@ const CreateGameForm = (): ReactElement => {
             {errors.slug && <span>{errors.slug.message}</span>}
 
             <input
-                type="date"
+                type="datetime-local"
                 {...register("startedAt", {
                     valueAsDate: true,
                     required: {

@@ -2,8 +2,8 @@ type Protagonist = {
     id: number
     name: string
     slug: string
-    story?: string
+    story: string | null
     level: number
-    owner?: User
-    portrait?: Upload
+    owner: User | null
+    portrait: Upload | null
 }

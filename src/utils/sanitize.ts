@@ -1,16 +1,24 @@
 const sanitize = (data: any) => {
     Object.keys(data).forEach(key => {
-        if (data[key] && typeof data[key] === 'object' && !Array.isArray(data[key])) {
-            sanitize(data[key]);
-            if (Object.keys(data[key]).length === 0) {
-                delete data[key];
-            }
-        } else if (data[key] === '' || data[key] == null) {
-            delete data[key];
-        }
-    });
+        const value = data[key]
 
-    return data;
+        if (value instanceof File) return
+
+        if (value instanceof Date) {
+            data[key] = value.toISOString()
+        }
+
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            sanitize(value)
+            if (Object.keys(value).length === 0) {
+                delete data[key]
+            }
+        } else if (value === '' || value == null) {
+            delete data[key]
+        }
+    })
+
+    return data
 }
 
-export default sanitize;
+export default sanitize
