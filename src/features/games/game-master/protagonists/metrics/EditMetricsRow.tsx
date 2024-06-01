@@ -2,6 +2,7 @@
 import {ReactElement, useState} from "react";
 import {useFormContext} from "react-hook-form";
 import EmojiPicker, {Emoji, EmojiStyle} from "emoji-picker-react";
+import Autocomplete from "@/components/Autocomplete";
 
 type EditMetricsRowProps = {
     index: number,
@@ -18,10 +19,13 @@ const EditMetricsRow = ({index}: EditMetricsRowProps): ReactElement => {
 
     return (
         <>
+            <input
+                type="hidden"
+                {...register(`metrics.${index}.id`)}
+            />
             <button value="emoji" onClick={() => setOpen(!open)}>Open emoji</button>
             <input
                 type="hidden"
-                placeholder="icon"
                 {...register(`metrics.${index}.emoji`, {
                     required: true,
                     value: watch(`metrics.${index}.emoji`)

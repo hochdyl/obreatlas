@@ -27,13 +27,20 @@ const EditMetricsForm = ({protagonist}: EditMetricsFormProps): ReactElement => {
         control: methods.control
     });
 
-    const handleAddRow = () => {
-        append({
+    const handleAddRow = (metricId: number | null) => {
+        let metric: PartialMetric = {
+            id: null,
             emoji: "",
             name: "",
             value: 0,
-            max: 0
-        })
+            max: null
+        }
+
+        if (metricId) {
+            // Api call pour recupéré la metric
+        }
+
+        append(metric)
     }
 
     const onSubmit: SubmitHandler<EditMetricsFormData> = metricsFormData => {
@@ -61,6 +68,9 @@ const EditMetricsForm = ({protagonist}: EditMetricsFormProps): ReactElement => {
         <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
                 <h1>Edit metrics</h1>
+                <input type="text" placeholder="search"/>
+                <button onClick={() => handleAddRow(null)}>Simuler la selection</button>
+
                 {fields.map((field, index) =>
                     <div key={field.id}>
                         <EditMetricsRow index={index}/>
@@ -69,9 +79,6 @@ const EditMetricsForm = ({protagonist}: EditMetricsFormProps): ReactElement => {
                         </button>
                     </div>
                 )}
-                <button type="button" onClick={() => handleAddRow()}>
-                    APPEND
-                </button>
 
                 <input type="submit"/>
                 {methods.formState.errors.root && <span>{methods.formState.errors.root.message}</span>}

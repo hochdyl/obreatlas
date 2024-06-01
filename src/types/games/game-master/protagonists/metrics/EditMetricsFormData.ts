@@ -1,3 +1,3 @@
 type EditMetricsFormData = {
-    metrics: Metric[]
+    metrics: PartialMetric[]
 }
