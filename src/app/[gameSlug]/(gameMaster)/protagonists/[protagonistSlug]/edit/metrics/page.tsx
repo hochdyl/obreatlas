@@ -3,8 +3,8 @@ import {ReactElement} from "react";
 import {useParams} from "next/navigation";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
-import useProtagonistData from "@/hooks/games/protagonists/useProtagonistData";
-import EditMetricsForm from "@/features/games/game-master/protagonists/metrics/EditMetricsForm";
+import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
+import EditMetricsForm from "@/features/metrics/EditMetricsForm";
 
 const EditMetricsPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()

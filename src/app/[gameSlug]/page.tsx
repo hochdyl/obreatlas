@@ -5,7 +5,7 @@ import Link from "next/link";
 import PageLoading from "@/components/ui/PageLoading";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import useGameLobby from "@/hooks/games/useGameLobby";
-import CreateProtagonistForm from "@/features/games/play/CreateProtagonistForm";
+import CreateProtagonistForm from "@/features/protagonists/CreateProtagonistForm";
 
 const GameLobbyPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string }>()

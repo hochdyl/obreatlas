@@ -1,11 +1,11 @@
 'use client'
 import {ReactElement, useState} from "react";
 import {useParams} from "next/navigation";
-import useProtagonistData from "@/hooks/games/protagonists/useProtagonistData";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
-import {chooseProtagonist} from "@/api/games/protagonists/ProtagonistApi";
 import PageLoading from "@/components/ui/PageLoading";
+import {chooseProtagonist} from "@/api/protagonists/ProtagonistApi";
+import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
 
 const PlayProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()

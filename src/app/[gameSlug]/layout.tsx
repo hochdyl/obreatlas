@@ -6,7 +6,7 @@ import {useParams} from "next/navigation";
 import useGameLobby from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import PageLoading from "@/components/ui/PageLoading";
-import ProtagonistCard from "@/features/games/play/ProtagonistCard";
+import ProtagonistCard from "@/features/protagonists/ProtagonistCard";
 
 const GameLobbyLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     const params = useParams<{ gameSlug: string }>()

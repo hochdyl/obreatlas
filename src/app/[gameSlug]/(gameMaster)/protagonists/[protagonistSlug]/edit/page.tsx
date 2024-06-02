@@ -3,8 +3,8 @@ import {ReactElement} from "react";
 import {useParams} from "next/navigation";
 import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
-import useProtagonistData from "@/hooks/games/protagonists/useProtagonistData";
-import EditProtagonistForm from "@/features/games/game-master/protagonists/EditProtagonistForm";
+import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
+import EditProtagonistForm from "@/features/protagonists/EditProtagonistForm";
 
 const EditProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
