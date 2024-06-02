@@ -1,6 +1,6 @@
 'use client'
 import {ReactElement} from "react";
-import LoginUserForm from "@/features/authentication/login/LoginUserForm";
+import LoginUserForm from "@/features/authentication/LoginUserForm";
 
 const LoginPage = (): ReactElement => {
     return (

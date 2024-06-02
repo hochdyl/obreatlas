@@ -1,6 +1,6 @@
 'use client'
 import {ReactElement} from "react";
-import RegisterUserForm from "@/features/authentication/register/RegisterUserForm";
+import RegisterUserForm from "@/features/authentication/RegisterUserForm";
 
 const RegisterPage = (): ReactElement => {
     return (

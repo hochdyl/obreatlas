@@ -28,7 +28,7 @@ const RegisterUserForm = (): ReactElement => {
             .then(user => {
                 SessionService.startSession(user.sessionToken)
                 mutate(() => true)
-                    .then(() => router.push('/'))
+                    .then(() => router.replace('/'))
             })
             .catch(e => {
                 setFormLoading(false)
