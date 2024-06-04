@@ -6,15 +6,29 @@ const sanitize = (data: any) => {
 
         if (value instanceof Date) {
             data[key] = value.toISOString()
+            return
         }
 
-        if (value && typeof value === 'object' && !Array.isArray(value)) {
-            sanitize(value)
-            if (Object.keys(value).length === 0) {
-                delete data[key]
-            }
-        } else if (value === '' || value == null) {
-            delete data[key]
+        switch (true) {
+            case Array.isArray(value):
+                data[key] = value.map(item => {
+                    if (item && typeof item === 'object' && !(item instanceof File) && !(item instanceof Date)) {
+                        return sanitize(item)
+                    }
+                    return item !== '' && item != null ? item : null
+                })
+                break
+
+            case value && typeof value === 'object':
+                sanitize(value)
+                if (Object.keys(value).length === 0) {
+                    data[key] = null
+                }
+                break
+
+            case value === '' || value == null:
+                data[key] = null
+                break
         }
     })
 

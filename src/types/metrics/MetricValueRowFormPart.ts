@@ -1,5 +1,5 @@
-type EditMetricFormRow = {
-    id: number
+type MetricValueRowFormPart = {
+    id: number | undefined
     emoji: string | null
     name: string
     value: number

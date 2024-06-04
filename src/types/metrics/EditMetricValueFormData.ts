@@ -1,0 +1,3 @@
+type EditMetricValueFormData = {
+    metricsValues: MetricValueRowFormPart[]
+}

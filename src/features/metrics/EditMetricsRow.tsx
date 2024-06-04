@@ -13,7 +13,8 @@ const EditMetricsRow = ({index}: EditMetricsRowProps): ReactElement => {
         register,
         setValue,
         getValues,
-        watch
+        watch,
+        formState: {errors}
     } = useFormContext()
     const [open, setOpen] = useState<boolean>(false)
 

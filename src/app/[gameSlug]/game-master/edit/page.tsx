@@ -1,21 +1,27 @@
 'use client'
 import {ChangeEvent, ReactElement, useState} from "react";
+import {useParams, useRouter} from "next/navigation";
+import useGame from "@/hooks/games/useGameLobby";
+import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
+import PageLoading from "@/components/ui/PageLoading";
+import {useSWRConfig} from "swr";
 import {SubmitHandler, useForm} from "react-hook-form";
-import ApiService from "@/services/ApiService";
+import moment from "moment/moment";
 import slugify from "@/utils/slugify";
 import {editGame} from "@/api/games/GameApi";
-import {useRouter} from "next/navigation";
-import moment from "moment";
-import {useSWRConfig} from "swr";
+import ApiService from "@/services/ApiService";
 
-type EditGameFormProps = {
-    game: Game
-}
-
-const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
+const EditGamePage = (): ReactElement => {
     const router = useRouter()
     const {mutate} = useSWRConfig()
+    const params = useParams<{ gameSlug: string }>()
+    const {game, isLoading, error} = useGame(params.gameSlug)
+    const {user} = useAuthenticatedUser()
     const [formLoading, setFormLoading] = useState<boolean>(false)
+
+    if (error) throw new Error(error.message)
+    if (isLoading || !game || !user) return <PageLoading/>
+
     const {
         register,
         handleSubmit,
@@ -25,7 +31,12 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
         getValues,
         formState: {errors}
     } = useForm<EditGameFormData>({
-        defaultValues: {...game, startedAt: moment(game.startedAt).format('YYYY-MM-DD')}
+        defaultValues: {
+            title: game.title,
+            slug: game.slug,
+            closed: game.closed,
+            startedAt: moment(game.startedAt).format('YYYY-MM-DD')
+        }
     })
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +52,7 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
         editGame(game.id, gameFormData)
             .then(() => {
                 mutate(() => true)
-                    .then(() => router.push(`/${getValues('slug')}/edit`))
+                    .then(() => router.push(`/${getValues('slug')}/game-master/edit`))
             })
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
@@ -114,4 +125,4 @@ const EditGameForm = ({game}: EditGameFormProps): ReactElement => {
         </form>
     )
 }
-export default EditGameForm
+export default EditGamePage

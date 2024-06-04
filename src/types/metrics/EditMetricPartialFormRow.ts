@@ -1,1 +1,0 @@
-type EditMetricPartialFormRow = Omit<EditMetricFormRow, 'id'> & { id: number | null }

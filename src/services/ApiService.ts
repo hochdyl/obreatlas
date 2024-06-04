@@ -14,7 +14,6 @@ abstract class ApiService {
             axiosInstance<SuccessResponse<T>>({...config})
                 .then(({data: res}) => resolve(res.data))
                 .catch((err: AxiosError<ErrorResponse>) => {
-                    console.log(err)
                     reject(err)
                 })
         })

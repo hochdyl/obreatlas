@@ -1,32 +1,40 @@
 'use client'
-import React, {ChangeEvent, ReactElement, useState} from "react";
+import {ChangeEvent, ReactElement, useEffect, useMemo, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
-import Link from "next/link";
 import PageLoading from "@/components/ui/PageLoading";
-import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
-import useGameLobby from "@/hooks/games/useGameLobby";
-import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
-import FileUpload from "@/components/ui/FileUpload";
-import slugify from "@/utils/slugify";
-import {createProtagonist} from "@/api/protagonists/ProtagonistApi";
-import ApiService from "@/services/ApiService";
+import Link from "next/link";
+import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
 import {useSWRConfig} from "swr";
+import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
+import slugify from "@/utils/slugify";
+import {editProtagonist} from "@/api/protagonists/ProtagonistApi";
+import ApiService from "@/services/ApiService";
+import FileUpload from "@/components/ui/FileUpload";
+import getImage from "@/utils/getImage";
+import {Simulate} from "react-dom/test-utils";
 
-const GameLobbyPage = (): ReactElement => {
+const EditProtagonistPage = (): ReactElement => {
     const router = useRouter()
     const {mutate} = useSWRConfig()
-    const params = useParams<{ gameSlug: string }>()
-    const {game, error, isLoading} = useGameLobby(params.gameSlug)
-    const {user} = useAuthenticatedUser()
+    const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
+    const {protagonist, isLoading, error} = useProtagonistData(params.gameSlug, params.protagonistSlug)
     const [formLoading, setFormLoading] = useState<boolean>(false)
-    const methods = useForm<CreateProtagonistFormData>({
-        defaultValues: {
-            story: undefined
+    const methods = useForm<EditProtagonistFormData>()
+
+    useEffect(() => {
+        if (protagonist) {
+            methods.reset({
+                name: protagonist.name,
+                slug: protagonist.slug,
+                story: protagonist.story,
+                level: protagonist.level,
+                portrait: protagonist.portrait
+            });
         }
-    })
+    }, [protagonist]);
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <PageLoading/>
+    if (isLoading || !protagonist) return <PageLoading/>
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         methods.trigger('name').then(() => {
@@ -35,14 +43,14 @@ const GameLobbyPage = (): ReactElement => {
         })
     }
 
-    const onSubmit: SubmitHandler<CreateProtagonistFormData> = newProtagonistFormData => {
+    const onSubmit: SubmitHandler<EditProtagonistFormData> = protagonistFormData => {
         setFormLoading(true)
 
-        createProtagonist(params.gameSlug, newProtagonistFormData)
+        editProtagonist(protagonist.id, protagonistFormData)
             .then(() => {
-                console.log('TODO: PTIT TOAST LA')
                 mutate(() => true)
-                    .then(() => router.push(`/${params.gameSlug}/play/${methods.getValues('slug')}`))
+                    .then(() => router.push(`/${params.gameSlug}/game-master/protagonists/${methods.getValues('slug')}`))
+                console.log('TODO: PTIT TOAST LA')
             })
             .catch(e => {
                 console.log('TODO: PTIT TOAST LA')
@@ -53,25 +61,27 @@ const GameLobbyPage = (): ReactElement => {
                         methods.setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
                     })
                 }
-                setFormLoading(false)
             })
+            .finally(() => setFormLoading(false))
     }
 
     return (
         <>
-            <Link href={'/'}>Back to games</Link>
-
-            <p>Welcome to {game.title}</p>
+            <Link href={`/${protagonist.game.slug}/game-master`}>Back to game master dashboard</Link>
 
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <h1>Create protagonist</h1>
+                    <h1>Edit protagonist</h1>
                     <input
                         placeholder="name"
                         {...methods.register("name", {
                             required: {
                                 value: true,
                                 message: "Name is required"
+                            },
+                            pattern: {
+                                value: /^(?!edit$)[a-zA-Z0-9\- ]+$/,
+                                message: "Name is invalid"
                             },
                             onChange: e => handleNameChange(e)
                         })}
@@ -85,6 +95,10 @@ const GameLobbyPage = (): ReactElement => {
                             required: {
                                 value: true,
                                 message: "Slug is required"
+                            },
+                            pattern: {
+                                value: /^(?!edit$)[a-zA-Z0-9\- ]+$/,
+                                message: "Slug is invalid"
                             }
                         })}
                     />
@@ -96,7 +110,24 @@ const GameLobbyPage = (): ReactElement => {
                     />
                     {methods.formState.errors.slug && <span>{methods.formState.errors.story?.message}</span>}
 
-                    <FileUpload inputName="portrait" preview="/images/default.jpg"/>
+                    <input
+                        type="number"
+                        placeholder="level"
+                        {...methods.register("level", {
+                            valueAsNumber: true,
+                            required: {
+                                value: true,
+                                message: "Level is required"
+                            },
+                            min: {
+                                value: 1,
+                                message: "Minimum level is 1"
+                            }
+                        })}
+                    />
+                    {methods.formState.errors.level && <span>{methods.formState.errors.level?.message}</span>}
+
+                    <FileUpload inputName="portrait" preview={getImage(protagonist.portrait, '/images/default.jpg')}/>
                     {methods.formState.errors.slug && <span>{methods.formState.errors.portrait?.message}</span>}
 
                     <input type="submit"/>
@@ -107,4 +138,4 @@ const GameLobbyPage = (): ReactElement => {
         </>
     )
 }
-export default GameLobbyPage
+export default EditProtagonistPage
