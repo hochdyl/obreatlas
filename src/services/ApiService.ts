@@ -7,7 +7,9 @@ abstract class ApiService {
     static fetch = <T = any>(config: AxiosRequestConfig) => {
         if (config.data && typeof config.data === "object") {
             const sanitizedData = sanitize(config.data)
-            config.data = getFormData(sanitizedData)
+            if (sanitizedData.containFile) {
+                config.data = getFormData(sanitizedData)
+            }
         }
 
         return new Promise<T>((resolve, reject) => {

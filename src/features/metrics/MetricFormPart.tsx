@@ -41,7 +41,7 @@ const MetricFormPart = ({index}: MetricFormPartProps): ReactElement => {
                 emojiStyle={EmojiStyle.TWITTER}
                 onEmojiClick={emoji => setValue(`${fieldPrefix}emoji`, emoji.unified)}
                 previewConfig={{showPreview: false}}
-                lazyLoadEmojis={true}
+                lazyLoadEmojis={false}
             />
             <Emoji unified={getValues(`${fieldPrefix}emoji`)} emojiStyle={EmojiStyle.TWITTER}/>
             <input

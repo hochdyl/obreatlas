@@ -58,7 +58,6 @@ const EditMetricsValuesPage = (): ReactElement => {
     }
 
     const onSubmit: SubmitHandler<EditMetricValueFormData> = metricsFormData => {
-        console.log('Metrics values:', methods.getValues('metricsValues'))
         setFormLoading(true)
 
         editAllMetricsValues(protagonist.id, metricsFormData)
@@ -94,6 +93,7 @@ const EditMetricsValuesPage = (): ReactElement => {
                             <MetricFormPart index={index}/>
                             <input
                                 placeholder="value"
+                                type="number"
                                 {...methods.register(`metricsValues.${index}.value`, {
                                     valueAsNumber: true,
                                     required: {

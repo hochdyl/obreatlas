@@ -1,8 +1,12 @@
 const sanitize = (data: any) => {
+    let containFile = false
     Object.keys(data).forEach(key => {
         const value = data[key]
 
-        if (value instanceof File) return
+        if (value instanceof File) {
+            containFile = true
+            return
+        }
 
         if (value instanceof Date) {
             data[key] = value.toISOString()
@@ -32,7 +36,7 @@ const sanitize = (data: any) => {
         }
     })
 
-    return data
+    return {data, containFile}
 }
 
 export default sanitize
