@@ -2,7 +2,6 @@
 import {ChangeEvent, ReactElement, useState} from "react";
 import GameCard from "@/features/games/GameCard";
 import useGames from "@/hooks/games/useGames";
-import PageLoading from "@/components/ui/PageLoading";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {createGame} from "@/api/games/GameApi";
 import ApiService from "@/services/ApiService";
@@ -10,6 +9,7 @@ import slugify from "@/utils/slugify";
 import {useRouter} from "next/navigation";
 import {useSWRConfig} from "swr";
 import moment from "moment/moment";
+import Loader from "@/components/ui/Loader";
 
 const GamesList = (): ReactElement => {
     const router = useRouter()
@@ -31,7 +31,7 @@ const GamesList = (): ReactElement => {
     })
 
     if (error) throw new Error(error.message)
-    if (isLoading || !games) return <PageLoading/>
+    if (isLoading || !games) return <Loader/>
 
     const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         trigger('title').then(() => {

@@ -1,15 +1,15 @@
 'use client'
 import React, {PropsWithChildren, ReactElement} from "react"
 import {useParams} from "next/navigation";
-import PageLoading from "@/components/ui/PageLoading";
 import useMetrics from "@/hooks/metrics/useMetrics";
+import Loader from "@/components/ui/Loader";
 
 const MetricsLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
     const {metrics, error, isLoading} = useMetrics(params.gameSlug)
 
     if (error) throw new Error(error.message)
-    if (isLoading || !metrics) return <PageLoading/>
+    if (isLoading || !metrics) return <Loader/>
 
     return (
         <>

@@ -3,8 +3,8 @@ import {ReactElement} from "react";
 import {useParams} from "next/navigation";
 import useGame from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
-import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
+import Loader from "@/components/ui/Loader";
 
 const GameMasterPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
@@ -12,7 +12,7 @@ const GameMasterPage = (): ReactElement => {
     const {user} = useAuthenticatedUser()
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <PageLoading/>
+    if (isLoading || !game || !user) return <Loader/>
 
     return (
         <>

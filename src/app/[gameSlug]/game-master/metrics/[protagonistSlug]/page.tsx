@@ -1,7 +1,6 @@
 'use client'
 import {ReactElement, useEffect, useState} from "react";
 import {useParams} from "next/navigation";
-import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
 import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
 import {useSWRConfig} from "swr";
@@ -10,6 +9,7 @@ import {FormProvider, SubmitHandler, useFieldArray, useForm} from "react-hook-fo
 import ApiService from "@/services/ApiService";
 import {editAllMetricsValues} from "@/api/metrics/MetricsApi";
 import MetricFormPart from "@/features/metrics/MetricFormPart";
+import Loader from "@/components/ui/Loader";
 
 const EditMetricsValuesPage = (): ReactElement => {
     const {mutate} = useSWRConfig()
@@ -43,7 +43,7 @@ const EditMetricsValuesPage = (): ReactElement => {
     }, [protagonist]);
 
     if (error) throw new Error(error.message)
-    if (isLoading || !protagonist || !metrics) return <PageLoading/>
+    if (isLoading || !protagonist || !metrics) return <Loader/>
 
     const handleAddRow = (metricId: number | undefined) => {
         let metric: MetricValueRowFormPart = {

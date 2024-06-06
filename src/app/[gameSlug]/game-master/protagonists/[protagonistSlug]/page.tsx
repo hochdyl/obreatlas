@@ -1,7 +1,6 @@
 'use client'
 import {ChangeEvent, ReactElement, useEffect, useMemo, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
-import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
 import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
 import {useSWRConfig} from "swr";
@@ -12,6 +11,7 @@ import ApiService from "@/services/ApiService";
 import FileUpload from "@/components/ui/FileUpload";
 import getImage from "@/utils/getImage";
 import {Simulate} from "react-dom/test-utils";
+import Loader from "@/components/ui/Loader";
 
 const EditProtagonistPage = (): ReactElement => {
     const router = useRouter()
@@ -34,7 +34,7 @@ const EditProtagonistPage = (): ReactElement => {
     }, [protagonist]);
 
     if (error) throw new Error(error.message)
-    if (isLoading || !protagonist) return <PageLoading/>
+    if (isLoading || !protagonist) return <Loader/>
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         methods.trigger('name').then(() => {

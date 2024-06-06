@@ -3,9 +3,9 @@ import {ReactElement, useState} from "react";
 import {useParams} from "next/navigation";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
-import PageLoading from "@/components/ui/PageLoading";
 import {chooseProtagonist} from "@/api/protagonists/ProtagonistApi";
 import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
+import Loader from "@/components/ui/Loader";
 
 const PlayProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
@@ -13,7 +13,7 @@ const PlayProtagonistPage = (): ReactElement => {
     const [chooseLoading, setChooseLoading] = useState(false)
 
     if (error) throw new Error(error.message)
-    if (isLoading || !protagonist) return <PageLoading/>
+    if (isLoading || !protagonist) return <Loader/>
 
     const handleChooseProtagonist = () => {
         setChooseLoading(true)

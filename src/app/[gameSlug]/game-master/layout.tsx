@@ -4,7 +4,7 @@ import PermissionService from "@/services/PermissionService";
 import {useParams} from "next/navigation";
 import useGameLobby from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
-import PageLoading from "@/components/ui/PageLoading";
+import Loader from "@/components/ui/Loader";
 
 const GameMasterLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
@@ -18,7 +18,7 @@ const GameMasterLayout = ({children}: Readonly<PropsWithChildren>): ReactElement
     }, [game, user])
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <PageLoading/>
+    if (isLoading || !game || !user) return <Loader/>
 
     return (
         <>

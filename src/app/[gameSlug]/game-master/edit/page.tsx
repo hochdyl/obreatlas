@@ -3,13 +3,13 @@ import {ChangeEvent, ReactElement, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
 import useGame from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
-import PageLoading from "@/components/ui/PageLoading";
 import {useSWRConfig} from "swr";
 import {SubmitHandler, useForm} from "react-hook-form";
 import moment from "moment/moment";
 import slugify from "@/utils/slugify";
 import {editGame} from "@/api/games/GameApi";
 import ApiService from "@/services/ApiService";
+import Loader from "@/components/ui/Loader";
 
 const EditGamePage = (): ReactElement => {
     const router = useRouter()
@@ -20,7 +20,7 @@ const EditGamePage = (): ReactElement => {
     const [formLoading, setFormLoading] = useState<boolean>(false)
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <PageLoading/>
+    if (isLoading || !game || !user) return <Loader/>
 
     const {
         register,

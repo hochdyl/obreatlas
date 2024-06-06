@@ -4,7 +4,7 @@ import SessionService from "@/services/SessionService";
 const axiosInstance = axios.create({
     baseURL: process.env.API_URL,
     headers: {
-        Accept: "application/json",
+        Accept: 'application/json',
     },
     timeout: 3000,
     timeoutErrorMessage: "Server took too long to respond"

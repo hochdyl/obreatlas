@@ -5,9 +5,9 @@ import Link from "next/link";
 import {useParams} from "next/navigation";
 import useGameLobby from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
-import PageLoading from "@/components/ui/PageLoading";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
+import Loader from "@/components/ui/Loader";
 
 const GameLobbyLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
@@ -15,7 +15,7 @@ const GameLobbyLayout = ({children}: Readonly<PropsWithChildren>): ReactElement 
     const {user} = useAuthenticatedUser()
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <PageLoading/>
+    if (isLoading || !game || !user) return <Loader/>
 
     return (
         <>

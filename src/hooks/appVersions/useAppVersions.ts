@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from "react";
 const useAppVersions = () => {
     const {data: versions} = useSWR<AppVersion[]>('/app-versions')
     const [currentVersion, setCurrentVersion] = useState<AppVersion | undefined>(undefined)
-    const [isUpdateAvailable, setUpdateAvailable] = useState<boolean>(false)
+    const [updateAvailable, setUpdateAvailable] = useState<boolean>(false)
     const oldVersionsData = useRef(versions)
 
     useEffect(() => {
@@ -20,6 +20,6 @@ const useAppVersions = () => {
         oldVersionsData.current = versions
     }, [versions])
 
-    return {versions, currentVersion, isUpdateAvailable}
+    return {versions, currentVersion, updateAvailable}
 }
 export default useAppVersions

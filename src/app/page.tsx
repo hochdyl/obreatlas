@@ -2,22 +2,26 @@
 import {ReactElement} from "react";
 import Link from "next/link";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
-import PageLoading from "@/components/ui/PageLoading";
 import GamesList from "@/features/games/GamesList";
-import styles from './HomePage.module.scss'
+import {Typography} from "@mui/material";
+import Loader from "@/components/ui/Loader";
 
 const HomePage = (): ReactElement => {
     const {user, isLoading} = useAuthenticatedUser()
 
-    if (isLoading) return <PageLoading/>
+    if (isLoading) return <Loader/>
 
     return (
         <>
-            <p className={styles.module}>Obreatlas homepage</p>
+            <Typography>Obreatlas homepage</Typography>
             {!user ?
                 <>
-                    <Link href={'/login'}>Login</Link>
-                    <Link href={'/register'}>Register</Link>
+                    <Link href={'/login'}>
+                        <Typography>Login</Typography>
+                    </Link>
+                    <Link href={'/register'}>
+                        <Typography>Register</Typography>
+                    </Link>
                 </> :
                 <GamesList/>
             }

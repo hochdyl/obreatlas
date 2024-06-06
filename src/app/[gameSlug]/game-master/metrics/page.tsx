@@ -1,7 +1,6 @@
 'use client'
 import {ReactElement, useState} from "react";
 import {useParams} from "next/navigation";
-import PageLoading from "@/components/ui/PageLoading";
 import Link from "next/link";
 import useMetrics from "@/hooks/metrics/useMetrics";
 import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
@@ -9,6 +8,7 @@ import MetricFormPart from "@/features/metrics/MetricFormPart";
 import MetricCard from "@/features/metrics/MetricCard";
 import {createMetric} from "@/api/metrics/MetricsApi";
 import ApiService from "@/services/ApiService";
+import Loader from "@/components/ui/Loader";
 
 const EditProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
@@ -17,7 +17,7 @@ const EditProtagonistPage = (): ReactElement => {
     const methods = useForm<CreateMetricFormData>()
 
     if (error) throw new Error(error.message)
-    if (isLoading || !metrics) return <PageLoading/>
+    if (isLoading || !metrics) return <Loader/>
 
     const onSubmit: SubmitHandler<CreateMetricFormData> = metricFormData => {
         setFormLoading(true)

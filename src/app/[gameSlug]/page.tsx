@@ -2,7 +2,6 @@
 import React, {ChangeEvent, ReactElement, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
 import Link from "next/link";
-import PageLoading from "@/components/ui/PageLoading";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import useGameLobby from "@/hooks/games/useGameLobby";
 import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
@@ -11,6 +10,7 @@ import slugify from "@/utils/slugify";
 import {createProtagonist} from "@/api/protagonists/ProtagonistApi";
 import ApiService from "@/services/ApiService";
 import {useSWRConfig} from "swr";
+import Loader from "@/components/ui/Loader";
 
 const GameLobbyPage = (): ReactElement => {
     const router = useRouter()
@@ -26,7 +26,7 @@ const GameLobbyPage = (): ReactElement => {
     })
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <PageLoading/>
+    if (isLoading || !game || !user) return <Loader/>
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         methods.trigger('name').then(() => {
