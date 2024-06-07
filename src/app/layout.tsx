@@ -1,12 +1,14 @@
 import type {Metadata} from "next"
-import "../styles/globals.scss"
+import "./globals.scss"
 import React, {PropsWithChildren, ReactElement} from "react"
 import {SwrProvider} from "@/providers/SwrProvider";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import {Container, ThemeProvider} from "@mui/material";
+import {Container, CssBaseline, ThemeProvider} from "@mui/material";
 import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
 import theme from "@/theme";
+import {Bounce, ToastContainer} from "react-toastify";
+import Header from "@/components/Header/Header";
+import {Box} from "@mui/system";
 
 export const metadata: Metadata = {
     title: "Atlas",
@@ -16,24 +18,40 @@ export const metadata: Metadata = {
 const RootLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <html lang="fr">
-            <Container component="body" maxWidth="xl" sx={{display: "flex"}}>
-                <AppRouterCacheProvider>
-                    <SwrProvider>
+            <body>
+            <AppRouterCacheProvider>
+                <SwrProvider>
+                    <Container maxWidth="xl" sx={{
+                        display: "flex",
+                        flexFlow: "column nowrap",
+                        minHeight: "100vh"
+                    }}>
                         <Header/>
-                        <Container
-                            component="main"
-                            maxWidth={false}
-                            sx={{flex: 1}}>
+                        <Box maxWidth="xl" component="main" sx={{display: "flex", flex: 1}}>
                             {children}
-                        </Container>
+                        </Box>
                         <Footer/>
-                    </SwrProvider>
-                </AppRouterCacheProvider>
-            </Container>
+                        <ToastContainer
+                            position="bottom-left"
+                            autoClose={3000}
+                            hideProgressBar={false}
+                            newestOnTop
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable={false}
+                            pauseOnHover={false}
+                            theme="light"
+                            transition={Bounce}
+                        />
+                    </Container>
+                </SwrProvider>
+            </AppRouterCacheProvider>
+            </body>
             </html>
         </ThemeProvider>
-
     );
 }
 export default RootLayout

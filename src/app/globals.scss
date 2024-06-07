@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+}
+
+body {
+  display: flex;
+  flex-flow: column nowrap;
+  background: rgb(192,72,72);
+  background: linear-gradient(340deg, rgba(192,72,72,1) 0%, rgba(72,0,72,1) 100%);
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

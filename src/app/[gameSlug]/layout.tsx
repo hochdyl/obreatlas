@@ -7,7 +7,7 @@ import useGameLobby from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const GameLobbyLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     const params = useParams<{ gameSlug: string }>()

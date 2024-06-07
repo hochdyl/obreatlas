@@ -9,7 +9,7 @@ import slugify from "@/utils/slugify";
 import {useRouter} from "next/navigation";
 import {useSWRConfig} from "swr";
 import moment from "moment/moment";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const GamesList = (): ReactElement => {
     const router = useRouter()

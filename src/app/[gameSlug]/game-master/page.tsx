@@ -4,7 +4,7 @@ import {useParams} from "next/navigation";
 import useGame from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import Link from "next/link";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const GameMasterPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string }>()

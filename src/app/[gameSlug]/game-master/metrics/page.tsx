@@ -8,7 +8,7 @@ import MetricFormPart from "@/features/metrics/MetricFormPart";
 import MetricCard from "@/features/metrics/MetricCard";
 import {createMetric} from "@/api/metrics/MetricsApi";
 import ApiService from "@/services/ApiService";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const EditProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string }>()

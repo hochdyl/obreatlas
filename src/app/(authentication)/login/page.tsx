@@ -6,6 +6,8 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {loginUser} from "@/api/authentication/AuthenticationApi";
 import SessionService from "@/services/SessionService";
 import ApiService from "@/services/ApiService";
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.min.css'
 
 const LoginPage = (): ReactElement => {
     const router = useRouter()
@@ -28,6 +30,7 @@ const LoginPage = (): ReactElement => {
 
         loginUser(loginFormData)
             .then(user => {
+                toast('test')
                 SessionService.startSession(user.sessionToken)
                 mutate(() => true)
                     .then(() => router.replace('/'))

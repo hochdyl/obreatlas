@@ -11,7 +11,7 @@ import ApiService from "@/services/ApiService";
 import FileUpload from "@/components/ui/FileUpload";
 import getImage from "@/utils/getImage";
 import {Simulate} from "react-dom/test-utils";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const EditProtagonistPage = (): ReactElement => {
     const router = useRouter()

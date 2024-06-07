@@ -1,38 +1,33 @@
 'use client'
 import React, {ReactElement} from "react";
-import {Container, Toolbar, Tooltip, Typography} from "@mui/material";
+import {Tooltip, Typography} from "@mui/material";
 import useAppVersions from "@/hooks/appVersions/useAppVersions";
 import moment from "moment";
-import {Box} from "@mui/system";
 import Updater from "@/components/Updater";
+import {Box} from "@mui/system";
 
 const Footer = (): ReactElement => {
     const {currentVersion, updateAvailable} = useAppVersions()
     const currentYear = moment().year()
 
     return (
-        <Container
-            component="footer"
-            maxWidth="xl"
-            sx={{
-                display: "flex",
-                justifyContent: "center",
-                userSelect: "none"
-            }}>
-            <Toolbar>
-                {currentVersion &&
-                    <Box sx={{display: "flex", gap: 1}}>
-                        <Tooltip
-                            title={`Version ${currentVersion.name} ${currentVersion.number}`}
-                            disableInteractive>
-                            <Typography>{currentVersion.number}</Typography>
-                        </Tooltip>
-                        <Typography>© Atlas {currentYear}</Typography>
-                    </Box>
-                }
-                <Updater show={updateAvailable}/>
-            </Toolbar>
-        </Container>
+        <Box component="footer" sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 1,
+            height: 40
+        }}>
+            {currentVersion &&
+                <>
+                    <Tooltip title={`Version ${currentVersion.name} ${currentVersion.number}`} disableInteractive>
+                        <Typography>{currentVersion.number}</Typography>
+                    </Tooltip>
+                    <Typography sx={{whiteSpace: "nowrap"}}>© Atlas {currentYear}</Typography>
+                </>
+            }
+            <Updater show={updateAvailable}/>
+        </Box>
     )
 }
 export default Footer

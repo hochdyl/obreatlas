@@ -9,7 +9,7 @@ import moment from "moment/moment";
 import slugify from "@/utils/slugify";
 import {editGame} from "@/api/games/GameApi";
 import ApiService from "@/services/ApiService";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const EditGamePage = (): ReactElement => {
     const router = useRouter()

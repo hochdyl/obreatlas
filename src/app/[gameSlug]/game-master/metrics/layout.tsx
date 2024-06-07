@@ -2,7 +2,7 @@
 import React, {PropsWithChildren, ReactElement} from "react"
 import {useParams} from "next/navigation";
 import useMetrics from "@/hooks/metrics/useMetrics";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const MetricsLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     const params = useParams<{ gameSlug: string }>()

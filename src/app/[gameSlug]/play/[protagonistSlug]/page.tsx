@@ -5,7 +5,7 @@ import Image from "next/image";
 import getImage from "@/utils/getImage";
 import {chooseProtagonist} from "@/api/protagonists/ProtagonistApi";
 import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const PlayProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()

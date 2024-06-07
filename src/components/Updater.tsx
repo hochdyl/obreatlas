@@ -24,7 +24,7 @@ const Updater = ({show}: UpdaterProps): ReactElement => {
             sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
             <Card variant="outlined">
                 <CardContent>
-                    <Typography >Update available</Typography>
+                    <Typography>Update available</Typography>
                 </CardContent>
                 <CardActions>
                     <Button onClick={handleUpdate}>Update</Button>

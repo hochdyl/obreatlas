@@ -10,7 +10,7 @@ import slugify from "@/utils/slugify";
 import {createProtagonist} from "@/api/protagonists/ProtagonistApi";
 import ApiService from "@/services/ApiService";
 import {useSWRConfig} from "swr";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const GameLobbyPage = (): ReactElement => {
     const router = useRouter()

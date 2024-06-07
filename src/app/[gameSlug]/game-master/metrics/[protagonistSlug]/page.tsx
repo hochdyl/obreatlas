@@ -9,7 +9,7 @@ import {FormProvider, SubmitHandler, useFieldArray, useForm} from "react-hook-fo
 import ApiService from "@/services/ApiService";
 import {editAllMetricsValues} from "@/api/metrics/MetricsApi";
 import MetricFormPart from "@/features/metrics/MetricFormPart";
-import Loader from "@/components/ui/Loader";
+import Loader from "@/components/Loader";
 
 const EditMetricsValuesPage = (): ReactElement => {
     const {mutate} = useSWRConfig()
