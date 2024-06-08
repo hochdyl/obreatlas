@@ -1,9 +1,8 @@
 'use client'
-import {useSWRConfig} from "swr";
-import Link from "next/link";
-import {Button, Card, Container, Paper, Typography} from "@mui/material";
-import GamesList from "@/features/games/GamesList";
-import React from "react";
+import {useSWRConfig} from "swr"
+import Link from "next/link"
+import {Button, Container, Typography} from "@mui/material"
+import React from "react"
 
 type ErrorProps = {
     error: Error & { digest?: string }
@@ -18,15 +17,17 @@ const ErrorPage = ({error, reset}: ErrorProps) => {
     }
 
     return (
-        <Container maxWidth="lg" sx={{
+        <Container sx={{
             display: "flex",
-            flexFlow: "column nowrap"
+            flexFlow: "column nowrap",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 3,
+            textAlign: "center"
         }}>
             <Typography variant="h1">Oh no!</Typography>
             <Typography variant="h2">Something went wrong</Typography>
-            <Card>
-                <Typography>{error.message}</Typography>
-            </Card>
+            <Typography sx={{fontSize: 30}}>{error.message}</Typography>
             <Link href={'/'}>
                 <Button variant="contained">Back to home</Button>
             </Link>

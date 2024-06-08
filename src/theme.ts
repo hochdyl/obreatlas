@@ -1,5 +1,5 @@
 'use client'
-import {Archivo, Red_Hat_Display, Days_One} from 'next/font/google'
+import {Archivo, Days_One, Red_Hat_Display} from 'next/font/google'
 import {createTheme} from '@mui/material/styles'
 import React from "react";
 
@@ -7,6 +7,7 @@ declare module '@mui/material/styles' {
     interface TypographyVariants {
         standout: React.CSSProperties;
     }
+
     interface TypographyVariantsOptions {
         standout?: React.CSSProperties;
     }
@@ -25,25 +26,29 @@ const daysOne = Days_One({weight: "400", subsets: ["latin"]})
 const theme = createTheme({
     palette: {
         mode: 'dark',
+        background: {
+            default: '#121212',
+            paper: '#202020',
+        },
         primary: {
-            main: '#FFF8F0',
+            main: '#fddf97',
         },
         secondary: {
-            main: '#00A6ED',
+            main: '#e09664',
         },
         error: {
-            main: '#ff3737',
+            main: '#C91D1D',
         },
         warning: {
-            main: '#ffba37',
+            main: '#E8A530',
         },
         info: {
-            main: '#37a5ff',
+            main: '#30BCED',
         },
         success: {
-            main: '#37ff9f',
+            main: '#5EB234',
         },
-        divider: '#FFF8F0',
+        divider: '#fddf97',
     },
     typography: {
         fontFamily: redHatDisplay.style.fontFamily,

@@ -1,6 +1,6 @@
 'use client'
-import useSWR from "swr";
-import {useEffect, useRef, useState} from "react";
+import useSWR from "swr"
+import {useEffect, useRef, useState} from "react"
 
 const useAppVersions = () => {
     const {data: versions} = useSWR<AppVersion[]>('/app-versions')

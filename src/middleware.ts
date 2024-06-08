@@ -16,15 +16,12 @@ export const config = {
 export const middleware = async (req: NextRequest) => {
     const url = req.nextUrl
     const pathname = new URL(url).pathname
-
-    const isAuthPage = pathname === '/login' || pathname === '/register'
     const isHomePage = pathname === '/'
-    const isPublicPage = isHomePage || isAuthPage
 
     const sessionCookie = req.cookies.get(SessionService.COOKIE_NAME)
     
     const handleRedirect = () => {
-        if (isPublicPage) {
+        if (isHomePage) {
             return NextResponse.next()
         }
         return NextResponse.redirect(new URL('/', req.url))
@@ -49,11 +46,6 @@ export const middleware = async (req: NextRequest) => {
         }
     } catch (e) {
         return handleRedirect()
-    }
-
-    // Redirect to home if session is valid and url is an auth page
-    if (isAuthPage) {
-        return NextResponse.redirect(new URL('/', req.url))
     }
 
     // Set a refreshed session cookie

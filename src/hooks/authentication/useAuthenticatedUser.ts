@@ -1,8 +1,8 @@
 'use client'
-import {useSWRConfig} from "swr";
-import useSWRImmutable from "swr/immutable";
-import {useCallback} from "react";
-import SessionService from "@/services/SessionService";
+import {useSWRConfig} from "swr"
+import useSWRImmutable from "swr/immutable"
+import {useCallback} from "react"
+import SessionService from "@/services/SessionService"
 
 const useAuthenticatedUser = () => {
     const {mutate: configMutate} = useSWRConfig()
@@ -15,7 +15,7 @@ const useAuthenticatedUser = () => {
             undefined,
             {revalidate: false}
         ).then(() => window.location.reload())
-    }, []);
+    }, [])
 
     return {user, isLoading, error, mutate, logout}
 }

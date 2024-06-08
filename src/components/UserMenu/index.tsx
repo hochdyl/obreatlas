@@ -1,12 +1,12 @@
 'use client'
-import React, {ReactElement, useState} from "react";
-import {Button} from "@mui/material";
-import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Menu from '@mui/material/Menu';
-import {Logout} from "@mui/icons-material";
-import {Box} from "@mui/system";
+import React, {ReactElement, useState} from "react"
+import {Button} from "@mui/material"
+import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser"
+import MenuItem from '@mui/material/MenuItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import Menu from '@mui/material/Menu'
+import {Logout} from "@mui/icons-material"
+import {Box} from "@mui/system"
 
 type UserMenuProps = {
     user: User
@@ -21,12 +21,7 @@ const UserMenu = ({user}: UserMenuProps): ReactElement => {
     const handleClose = () => setAnchorEl(null)
 
     return (
-        <Box sx={{
-            display: "flex",
-            flex: 1,
-            justifyContent: "flex-end",
-            gap: 2
-        }}>
+        <Box sx={{display: "flex", flex: 1, justifyContent: "flex-end", gap: 2}}>
             <Button
                 id="account-button"
                 aria-controls={open ? 'account-menu' : undefined}
