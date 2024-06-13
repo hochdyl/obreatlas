@@ -3,7 +3,7 @@ import theme from "@/theme"
 import React, {ReactElement} from "react"
 import {Bounce, ToastContainer} from "react-toastify"
 import {styled} from "@mui/system"
-import glassStyleProps from "@/utils/glassStyleProps";
+import {glassStyleProps} from "@/theme";
 
 const StyledContainer = styled(ToastContainer)`
     .Toastify__toast {

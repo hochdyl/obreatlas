@@ -5,12 +5,12 @@ import Link from "next/link";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import useGameLobby from "@/hooks/games/useGameLobby";
 import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
-import FileUpload from "@/components/ui/FileUpload";
 import slugify from "@/utils/slugify";
 import {createProtagonist} from "@/api/protagonists/ProtagonistApi";
 import ApiService from "@/services/ApiService";
 import {useSWRConfig} from "swr";
-import Loader from "@/components/Loader";
+import FileUpload from "@/components/FileUpload";
+import LoadingPage from "@/components/layout/LoadingPage";
 
 const GameLobbyPage = (): ReactElement => {
     const router = useRouter()
@@ -26,7 +26,7 @@ const GameLobbyPage = (): ReactElement => {
     })
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <Loader/>
+    if (isLoading || !game || !user) return <LoadingPage/>
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         methods.trigger('name').then(() => {
@@ -65,7 +65,7 @@ const GameLobbyPage = (): ReactElement => {
 
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <h1>Create protagonist</h1>
+                    <p>Create protagonist</p>
                     <input
                         placeholder="name"
                         {...methods.register("name", {

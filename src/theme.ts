@@ -1,15 +1,15 @@
 'use client'
-import {Archivo, Days_One, Red_Hat_Display} from 'next/font/google'
+import {Days_One, Red_Hat_Display} from 'next/font/google'
 import {createTheme} from '@mui/material/styles'
-import React from "react";
+import {CSSProperties} from "react";
 
 declare module '@mui/material/styles' {
     interface TypographyVariants {
-        standout: React.CSSProperties;
+        standout: CSSProperties;
     }
 
     interface TypographyVariantsOptions {
-        standout?: React.CSSProperties;
+        standout?: CSSProperties;
     }
 }
 
@@ -19,9 +19,14 @@ declare module '@mui/material/Typography' {
     }
 }
 
-const archivo = Archivo({subsets: ["latin"]})
 const redHatDisplay = Red_Hat_Display({subsets: ["latin"]})
 const daysOne = Days_One({weight: "400", subsets: ["latin"]})
+
+export const glassStyleProps = {
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    backgroundColor: `#fddf9720`,
+    backdropFilter: "blur(10px)"
+}
 
 const theme = createTheme({
     palette: {
@@ -48,7 +53,7 @@ const theme = createTheme({
         success: {
             main: '#5EB234',
         },
-        divider: '#fddf97',
+        divider: '#FDDF9720',
     },
     typography: {
         fontFamily: redHatDisplay.style.fontFamily,
@@ -63,20 +68,22 @@ const theme = createTheme({
             fontFamily: daysOne.style.fontFamily,
         },
         h4: {
-            fontFamily: daysOne.style.fontFamily,
+            fontFamily: redHatDisplay.style.fontFamily,
+            fontWeight: 800,
         },
         h5: {
-            fontFamily: daysOne.style.fontFamily,
+            fontFamily: redHatDisplay.style.fontFamily,
+            fontWeight: 600,
         },
         h6: {
-            fontFamily: daysOne.style.fontFamily,
+            fontFamily: redHatDisplay.style.fontFamily,
             fontWeight: 400,
         },
         subtitle1: {
             fontFamily: redHatDisplay.style.fontFamily,
         },
         subtitle2: {
-            fontFamily: archivo.style.fontFamily,
+            fontFamily: redHatDisplay.style.fontFamily,
             fontWeight: 600,
         },
         body1: {
@@ -111,6 +118,23 @@ const theme = createTheme({
                     standout: 'span',
                 },
             },
+        },
+        MuiMenu: {
+            styleOverrides: {
+                paper: {
+                    border: glassStyleProps.border,
+                    backgroundColor: glassStyleProps.backgroundColor,
+                    backdropFilter: glassStyleProps.backdropFilter,
+                }
+            }
+        },
+        MuiAppBar: {
+            styleOverrides: {
+                root: {
+                    background: "transparent",
+                    boxShadow: "none"
+                }
+            }
         }
     },
 })

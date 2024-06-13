@@ -7,7 +7,7 @@ import useGameLobby from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import Image from "next/image";
 import getImage from "@/utils/getImage";
-import Loader from "@/components/Loader";
+import Loader from "../../components/Loading";
 
 const GameLobbyLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
@@ -15,12 +15,12 @@ const GameLobbyLayout = ({children}: Readonly<PropsWithChildren>): ReactElement 
     const {user} = useAuthenticatedUser()
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <Loader/>
+    if (isLoading || !game || !user) return <LoadingPage/>
 
     return (
         <>
             <nav>
-                <h1>{game.title}</h1>
+                <p>{game.title}</p>
                 {PermissionService.isGameMaster(user, game) &&
                     <>
                         <Link href={`/${game.slug}/game-master`}>Admin dashboard</Link>

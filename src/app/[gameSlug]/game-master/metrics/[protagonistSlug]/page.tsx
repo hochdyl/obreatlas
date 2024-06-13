@@ -9,7 +9,7 @@ import {FormProvider, SubmitHandler, useFieldArray, useForm} from "react-hook-fo
 import ApiService from "@/services/ApiService";
 import {editAllMetricsValues} from "@/api/metrics/MetricsApi";
 import MetricFormPart from "@/features/metrics/MetricFormPart";
-import Loader from "@/components/Loader";
+import Loader from "../../../../../components/Loading";
 
 const EditMetricsValuesPage = (): ReactElement => {
     const {mutate} = useSWRConfig()
@@ -43,7 +43,7 @@ const EditMetricsValuesPage = (): ReactElement => {
     }, [protagonist]);
 
     if (error) throw new Error(error.message)
-    if (isLoading || !protagonist || !metrics) return <Loader/>
+    if (isLoading || !protagonist || !metrics) return <LoadingPage/>
 
     const handleAddRow = (metricId: number | undefined) => {
         let metric: MetricValueRowFormPart = {
@@ -84,7 +84,7 @@ const EditMetricsValuesPage = (): ReactElement => {
 
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <h1>Edit metrics</h1>
+                    <p>Edit metrics</p>
                     <input placeholder="search"/>
                     <button onClick={() => handleAddRow(undefined)}>Simuler la selection</button>
 

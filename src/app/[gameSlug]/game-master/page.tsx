@@ -4,7 +4,7 @@ import {useParams} from "next/navigation";
 import useGame from "@/hooks/games/useGameLobby";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import Link from "next/link";
-import Loader from "@/components/Loader";
+import Loader from "../../../components/Loading";
 
 const GameMasterPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
@@ -12,7 +12,7 @@ const GameMasterPage = (): ReactElement => {
     const {user} = useAuthenticatedUser()
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <Loader/>
+    if (isLoading || !game || !user) return <LoadingPage/>
 
     return (
         <>

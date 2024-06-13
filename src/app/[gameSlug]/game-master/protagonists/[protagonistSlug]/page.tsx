@@ -8,10 +8,9 @@ import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import slugify from "@/utils/slugify";
 import {editProtagonist} from "@/api/protagonists/ProtagonistApi";
 import ApiService from "@/services/ApiService";
-import FileUpload from "@/components/ui/FileUpload";
 import getImage from "@/utils/getImage";
-import {Simulate} from "react-dom/test-utils";
-import Loader from "@/components/Loader";
+import LoadingPage from "@/components/layout/LoadingPage";
+import FileUpload from "@/components/FileUpload";
 
 const EditProtagonistPage = (): ReactElement => {
     const router = useRouter()
@@ -34,7 +33,7 @@ const EditProtagonistPage = (): ReactElement => {
     }, [protagonist]);
 
     if (error) throw new Error(error.message)
-    if (isLoading || !protagonist) return <Loader/>
+    if (isLoading || !protagonist) return <LoadingPage/>
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         methods.trigger('name').then(() => {
@@ -71,7 +70,7 @@ const EditProtagonistPage = (): ReactElement => {
 
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <h1>Edit protagonist</h1>
+                    <p>Edit protagonist</p>
                     <input
                         placeholder="name"
                         {...methods.register("name", {

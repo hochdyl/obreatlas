@@ -2,11 +2,8 @@
 import {SWRConfig} from 'swr'
 import {PropsWithChildren, ReactElement} from "react"
 import ApiService from "@/services/ApiService";
-import {useRouter} from "next/navigation";
 
-export const SwrProvider = ({children}: Readonly<PropsWithChildren>): ReactElement => {
-    const router = useRouter()
-
+const SwrProvider = ({children}: PropsWithChildren): ReactElement => {
     return (
         <SWRConfig
             value={{
@@ -21,8 +18,10 @@ export const SwrProvider = ({children}: Readonly<PropsWithChildren>): ReactEleme
                     // Retry after 5 seconds
                     setTimeout(() => revalidate({retryCount}), 5000)
                 }
-            }}>
+            }}
+        >
             {children}
         </SWRConfig>
     )
 }
+export default SwrProvider

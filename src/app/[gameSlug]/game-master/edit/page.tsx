@@ -9,7 +9,7 @@ import moment from "moment/moment";
 import slugify from "@/utils/slugify";
 import {editGame} from "@/api/games/GameApi";
 import ApiService from "@/services/ApiService";
-import Loader from "@/components/Loader";
+import Loader from "../../../../components/Loading";
 
 const EditGamePage = (): ReactElement => {
     const router = useRouter()
@@ -20,7 +20,7 @@ const EditGamePage = (): ReactElement => {
     const [formLoading, setFormLoading] = useState<boolean>(false)
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <Loader/>
+    if (isLoading || !game || !user) return <LoadingPage/>
 
     const {
         register,
@@ -69,7 +69,7 @@ const EditGamePage = (): ReactElement => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <h1>Edit game</h1>
+            <p>Edit game</p>
             <input
                 placeholder="title"
                 {...register("title", {

@@ -1,4 +1,5 @@
 import ApiService from "@/services/ApiService";
+import {CreateGameFormData} from "@/types/games/CreateGameFormData";
 
 const ROUTE_URL = '/games'
 

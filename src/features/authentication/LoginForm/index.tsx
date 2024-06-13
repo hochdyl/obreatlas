@@ -1,21 +1,18 @@
 'use client'
 import React, {ReactElement, useState} from "react"
-import {InputLabel, Typography} from "@mui/material";
-import {useRouter} from "next/navigation";
+import {InputLabel, Stack} from "@mui/material";
 import {useSWRConfig} from "swr";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {loginUser} from "@/api/authentication/AuthenticationApi";
 import {toast} from "react-toastify";
 import SessionService from "@/services/SessionService";
 import ApiService from "@/services/ApiService";
-import {Box} from "@mui/system";
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import {LoadingButton} from "@mui/lab";
 
 const LoginForm = (): ReactElement => {
-    const router = useRouter()
     const {mutate} = useSWRConfig()
     const [formLoading, setFormLoading] = useState(false)
     const {
@@ -37,7 +34,7 @@ const LoginForm = (): ReactElement => {
             .then(user => {
                 SessionService.startSession(user.sessionToken)
                 toast.success('Successfully logged in')
-                mutate(() => true).then(() => router.replace('/'))
+                void mutate(() => true)
             })
             .catch(e => {
                 setFormLoading(false)
@@ -53,13 +50,7 @@ const LoginForm = (): ReactElement => {
     }
 
     return (
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{
-            display: "flex",
-            flexFlow: "column nowrap",
-            gap: 1
-        }}>
-            <Typography sx={{textAlign: "center", fontWeight: "bold", fontSize: 30}}>Login</Typography>
-
+        <Stack component="form" onSubmit={handleSubmit(onSubmit)} sx={{gap: 1, width: 1}}>
             <FormControl error={!!errors.username} variant="standard" disabled={formLoading}>
                 <InputLabel htmlFor="username">Username</InputLabel>
                 <Input
@@ -102,13 +93,13 @@ const LoginForm = (): ReactElement => {
                 }
             </FormControl>
 
-            <FormControl error={!!errors.root} disabled={formLoading} sx={{mt: 2}}>
-                <LoadingButton type="submit" loading={formLoading} variant="outlined">
+            <FormControl error={!!errors.root} sx={{mt: 1}}>
+                <LoadingButton type="submit" loading={formLoading} variant="contained">
                     Submit
                 </LoadingButton>
                 {errors.root && <FormHelperText>{errors.root.message}</FormHelperText>}
             </FormControl>
-        </Box>
+        </Stack>
     )
 }
 export default LoginForm

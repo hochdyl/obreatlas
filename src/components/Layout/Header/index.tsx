@@ -6,8 +6,8 @@ import Link from "next/link"
 import {styled} from "@mui/system"
 import theme from "@/theme"
 import {usePathname} from "next/navigation"
-import Authentication from "../AuthenticationSlider"
-import UserMenu from "@/components/UserMenu";
+import UserMenu from "@/components/layout/Header/UserMenu";
+import AuthenticateButton from "@/components/layout/Header/AuthenticateButton";
 
 const Offset = styled('div')(() => theme.mixins.toolbar)
 
@@ -17,15 +17,15 @@ const Header = (): ReactElement => {
 
     return (
         <>
-            <AppBar component="header" position="fixed" sx={{background: "transparent", boxShadow: 0}}>
+            <AppBar component="header" position="fixed">
                 <Toolbar sx={{justifyContent: "space-between", gap: 5}}>
                     <Container maxWidth="xl" sx={{display: "flex", justifyContent: "space-between"}}>
                         {pathname !== '/' &&
                             <Link href={'/'}>
-                                <Typography sx={{flex: 1, fontSize: 24}}>Atlas</Typography>
+                                <Typography variant="standout" sx={{flex: 1, fontSize: 24}}>Atlas</Typography>
                             </Link>
                         }
-                        {user ? <UserMenu user={user}/> : <Authentication/>}
+                        {user ? <UserMenu user={user}/> : <AuthenticateButton/>}
                     </Container>
                 </Toolbar>
             </AppBar>

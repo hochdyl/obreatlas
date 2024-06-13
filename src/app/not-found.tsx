@@ -1,23 +1,16 @@
 'use client'
 import React, {ReactElement} from "react"
 import Link from "next/link"
-import {Button, Container, Typography} from "@mui/material"
+import {Button, Stack, Typography} from "@mui/material"
 
 const NotFoundPage = (): ReactElement => {
     return (
-        <Container sx={{
-            display: "flex",
-            flexFlow: "column nowrap",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 3,
-            textAlign: "center"
-        }}>
+        <Stack sx={{alignItems: "center", justifyContent: "center", gap: 3, width: 1}}>
             <Typography variant="h1">404 Not found!</Typography>
             <Link href={'/'}>
                 <Button variant="contained">Back to home</Button>
             </Link>
-        </Container>
+        </Stack>
     )
 }
 export default NotFoundPage

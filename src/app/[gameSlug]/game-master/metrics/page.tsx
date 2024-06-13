@@ -8,7 +8,7 @@ import MetricFormPart from "@/features/metrics/MetricFormPart";
 import MetricCard from "@/features/metrics/MetricCard";
 import {createMetric} from "@/api/metrics/MetricsApi";
 import ApiService from "@/services/ApiService";
-import Loader from "@/components/Loader";
+import Loader from "../../../../components/Loading";
 
 const EditProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
@@ -17,7 +17,7 @@ const EditProtagonistPage = (): ReactElement => {
     const methods = useForm<CreateMetricFormData>()
 
     if (error) throw new Error(error.message)
-    if (isLoading || !metrics) return <Loader/>
+    if (isLoading || !metrics) return <LoadingPage/>
 
     const onSubmit: SubmitHandler<CreateMetricFormData> = metricFormData => {
         setFormLoading(true)
@@ -46,7 +46,7 @@ const EditProtagonistPage = (): ReactElement => {
 
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <h1>Create metrics</h1>
+                    <p>Create metrics</p>
                     <MetricFormPart/>
 
                     <input type="submit"/>

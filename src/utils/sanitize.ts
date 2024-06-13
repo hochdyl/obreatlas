@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const sanitize = (data: any) => {
     let containFile = false
     Object.keys(data).forEach(key => {
@@ -8,7 +10,8 @@ const sanitize = (data: any) => {
             return
         }
 
-        if (value instanceof Date) {
+        if (value instanceof moment && moment.isMoment(value)) {
+            const moment = value as moment.Moment
             data[key] = value.toISOString()
             return
         }
