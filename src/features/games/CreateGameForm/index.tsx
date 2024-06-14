@@ -8,9 +8,8 @@ import {useRouter} from "next/navigation";
 import {useSWRConfig} from "swr";
 import moment from "moment/moment";
 import {Box} from "@mui/system";
-import {Divider, InputLabel, Stack, TextField, Typography} from "@mui/material";
+import {Stack, TextField} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
-import Input from "@mui/material/Input";
 import FormHelperText from "@mui/material/FormHelperText";
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {CreateGameFormData} from "@/types/games/CreateGameFormData";
@@ -65,7 +64,7 @@ const CreateGameForm = (): ReactElement => {
     }
 
     return (
-        <Stack component="form" onSubmit={handleSubmit(onSubmit)} sx={{gap: 1, px: 4, py: 2}}>
+        <Stack component="form" onSubmit={handleSubmit(onSubmit)} sx={{gap: 1}}>
             <FormControl error={!!errors.slug} disabled={formLoading}>
                 <TextField
                     id="title"

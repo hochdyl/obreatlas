@@ -1,14 +1,8 @@
 'use client'
 import React, {ReactElement} from "react"
-import {Button, CardActions, CardContent, Dialog, Stack, Typography} from "@mui/material"
+import {Button, Typography} from "@mui/material"
 import {useSWRConfig} from "swr"
-import {GlassCard} from "@/components/ui/Glass";
-import {
-    GlassDialog,
-    GlassDialogHeader,
-    GlassDialogInnerContent,
-    GlassDialogOuterContent
-} from "@/components/ui/Glass/GlassDialog";
+import {GlassDialog, GlassDialogHeader} from "@/components/ui/Glass/GlassDialog";
 
 type UpdaterProps = {
     show: boolean,
@@ -28,16 +22,11 @@ const UpdateDialog = ({show, newVersion}: UpdaterProps): ReactElement => {
 
     return (
         <GlassDialog open={show} closeBtn={false} maxWidth="xs">
-            <GlassDialogInnerContent>
-                <GlassDialogHeader divider={false}>
-                    <Typography variant="h4">Update available</Typography>
-                    <Typography>Version {newVersion.number}</Typography>
-                </GlassDialogHeader>
-                <Button onClick={handleUpdate} variant="contained">Update</Button>
-            </GlassDialogInnerContent>
-            <GlassDialogOuterContent>
-
-            </GlassDialogOuterContent>
+            <GlassDialogHeader divider={false}>
+                <Typography variant="h4">Update available</Typography>
+                <Typography>Version {newVersion.number}</Typography>
+            </GlassDialogHeader>
+            <Button onClick={handleUpdate} variant="contained">Update</Button>
         </GlassDialog>
     )
 }
