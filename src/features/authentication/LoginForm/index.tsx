@@ -1,6 +1,6 @@
 'use client'
 import React, {ReactElement, useState} from "react"
-import {InputLabel, Stack} from "@mui/material";
+import {InputLabel, Stack, SxProps} from "@mui/material";
 import {useSWRConfig} from "swr";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {loginUser} from "@/api/authentication/AuthenticationApi";
@@ -12,7 +12,11 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import {LoadingButton} from "@mui/lab";
 
-const LoginForm = (): ReactElement => {
+type LoginFormProps = {
+    sx?: SxProps
+}
+
+const LoginForm = ({sx}: LoginFormProps): ReactElement => {
     const {mutate} = useSWRConfig()
     const [formLoading, setFormLoading] = useState(false)
     const {
@@ -50,7 +54,7 @@ const LoginForm = (): ReactElement => {
     }
 
     return (
-        <Stack component="form" onSubmit={handleSubmit(onSubmit)} sx={{gap: 1, width: 1}}>
+        <Stack component="form" onSubmit={handleSubmit(onSubmit)} sx={{gap: 1, width: 1, ...sx}}>
             <FormControl error={!!errors.username} variant="standard" disabled={formLoading}>
                 <InputLabel htmlFor="username">Username</InputLabel>
                 <Input
@@ -95,7 +99,7 @@ const LoginForm = (): ReactElement => {
 
             <FormControl error={!!errors.root} sx={{mt: 1}}>
                 <LoadingButton type="submit" loading={formLoading} variant="contained">
-                    Submit
+                    Login
                 </LoadingButton>
                 {errors.root && <FormHelperText>{errors.root.message}</FormHelperText>}
             </FormControl>

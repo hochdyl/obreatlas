@@ -1,41 +1,31 @@
 'use client'
-import React, {ReactElement, useState} from "react";
-import {Box, Button, Paper, Stack, Typography} from "@mui/material";
-import CreateGameForm from "@/features/games/CreateGameForm";
-import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
+import React, {ReactElement} from "react";
+import {Paper, Stack, Typography} from "@mui/material";
 import useGames from "@/hooks/games/useGames";
-import {
-    GlassDialog,
-    GlassDialogHeader,
-    GlassDialogOuterContent,
-    GlassDialogInnerContent
-} from "@/components/ui/Glass/GlassDialog";
+import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
+import GameCardSkeleton from "@/components/layout/HomePage/GamesList/GameCard/GameCardSkeleton";
+import GameCard from "@/components/layout/HomePage/GamesList/GameCard";
+import LoginForm from "@/features/authentication/LoginForm";
 
 const GamesList = (): ReactElement => {
     const {user} = useAuthenticatedUser()
-    const {games, isLoading, error} = useGames()
-    const [open, setOpen] = useState(false)
+    const {games, isLoading} = useGames()
 
     return (
-        <Stack sx={{gap: 1, minWidth: 350}}>
-            <Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1}}>
-                <Typography variant="h4">Game list</Typography>
-                <Button onClick={() => setOpen(true)} disabled={!user}>New game</Button>
-            </Box>
-            <GlassDialog open={open} onClose={() => setOpen(false)} maxWidth="lg">
-                <GlassDialogInnerContent>
-                    <GlassDialogHeader>
-                        <Typography variant="h4">Create a game</Typography>
-                    </GlassDialogHeader>
-                    <CreateGameForm/>
-                </GlassDialogInnerContent>
-                <GlassDialogOuterContent/>
-            </GlassDialog>
-            <Paper sx={{flex: 1, overflowY: "auto"}}>
-                <Typography marginY={30} textAlign="center">Test Test Test Test Test Test Test Test </Typography>
-                <Typography marginY={30} textAlign="center">Test</Typography>
-                <Typography marginY={30} textAlign="center">Test</Typography>
-            </Paper>
+        <Stack component={Paper} sx={{flex: 1, overflowX: "hidden", overflowY: "auto"}}>
+            {!user ? <LoginForm sx={{p: 4}}/> :
+                !games ?
+                    [...Array(3)].map((_, index) => (
+                        <GameCardSkeleton key={index} divider={index !== 3 - 1}/>
+                    ))
+                    :
+                    games.length ?
+                        games.map((game, index) => (
+                            <GameCard key={game.id} game={game} divider={index !== games.length - 1}/>
+                        ))
+                        :
+                        <Typography variant="h5" sx={{p: 4, textAlign: "center"}}>No games found</Typography>
+            }
         </Stack>
     )
 }

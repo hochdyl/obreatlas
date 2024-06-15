@@ -113,7 +113,7 @@ const RegisterForm = (): ReactElement => {
 
             <FormControl error={!!errors.root} sx={{mt: 1}}>
                 <LoadingButton type="submit" loading={formLoading} variant="contained">
-                    Submit
+                    Register
                 </LoadingButton>
                 {errors.root && <FormHelperText>{errors.root.message}</FormHelperText>}
             </FormControl>

@@ -1,14 +1,17 @@
 'use client'
-import React, {Children, isValidElement, PropsWithChildren, ReactElement} from "react";
-import {Breakpoint, Dialog, Divider, IconButton, Paper, Stack, SxProps, Typography} from "@mui/material";
+import React, {Children, cloneElement, isValidElement, PropsWithChildren, ReactElement} from "react";
+import {Breakpoint, Dialog, Divider, IconButton, Paper, Stack, SxProps} from "@mui/material";
 import {GlassPaper} from "@/components/ui/Glass";
 import CloseIcon from "@mui/icons-material/Close";
+import {glassStyleProps} from "@/theme";
 
 type GlassDialogProps = {
     open: boolean
     onClose?: () => void
     closeBtn?: boolean
-    sx?: SxProps
+    containerSx?: SxProps
+    innerSx?: SxProps
+    outerSx?: SxProps
     maxWidth?: Breakpoint
     fullWidth?: boolean
 }
@@ -19,23 +22,35 @@ export const GlassDialog = (props: PropsWithChildren<GlassDialogProps>): ReactEl
         open,
         onClose,
         closeBtn = true,
-        sx,
-        maxWidth = "md",
-        fullWidth = false
+        containerSx,
+        innerSx,
+        outerSx,
+        maxWidth = "sm",
+        fullWidth = true
     } = props
 
     const childrenArray = Children.toArray(children)
 
-    const innerContent = childrenArray.find((child): child is ReactElement => {
-        return isValidElement(child) && child.type === GlassDialogInnerContent
+    const header = childrenArray.find((child): child is ReactElement => {
+        return isValidElement(child) && child.type === GlassDialogHeader
     })
-    const outerContent = childrenArray.find((child): child is ReactElement => {
+
+    let outerContent = childrenArray.find((child): child is ReactElement => {
         return isValidElement(child) && child.type === GlassDialogOuterContent
+    })
+    if (!outerContent) {
+        outerContent = <GlassDialogOuterContent/>
+    }
+    outerContent = cloneElement(outerContent as ReactElement<GlassDialogOuterContentProps>, {sx: outerSx})
+
+    const innerContent = childrenArray.filter(child => {
+        return !(isValidElement(child) && (child === outerContent || child === header))
     })
 
     const indexOfPaperContent = innerContent ? childrenArray.indexOf(innerContent) : -1
     const indexOfOuterContent = outerContent ? childrenArray.indexOf(outerContent) : -1
     const outerPosition = indexOfPaperContent > indexOfOuterContent ? "left" : "right"
+
 
     return (
         <Dialog
@@ -45,9 +60,7 @@ export const GlassDialog = (props: PropsWithChildren<GlassDialogProps>): ReactEl
                 sx: {
                     flexFlow: "row nowrap",
                     border: "none",
-                    overflowX: "hidden",
                     position: "relative",
-                    ...sx
                 }
             }}
             PaperComponent={GlassPaper}
@@ -56,7 +69,12 @@ export const GlassDialog = (props: PropsWithChildren<GlassDialogProps>): ReactEl
             sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}
         >
             {outerPosition === "left" && outerContent}
-            {innerContent}
+            <Paper sx={{flex: 1, minWidth: 60, overflowY: "auto", borderRadius: 0, ...containerSx}}>
+                {header}
+                <Stack sx={{p: 4, ...innerSx}}>
+                    {innerContent}
+                </Stack>
+            </Paper>
             {outerPosition === "right" && outerContent}
             {closeBtn &&
                 <IconButton onClick={onClose} aria-label="close dialog" sx={{position: "absolute", top: 10, right: 10}}>
@@ -74,28 +92,30 @@ type GlassDialogHeaderProps = {
 
 export const GlassDialogHeader = (props: PropsWithChildren<GlassDialogHeaderProps>): ReactElement => {
     const {sx, divider = true, children} = props
+
     return (
-        <>
+        <Paper variant="outlined" sx={{
+            position: "sticky",
+            top: 0,
+            backgroundColor: "#00000020",
+            border: "none",
+            backdropFilter: glassStyleProps.backdropFilter,
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}>
             <Stack sx={{px: 4, py: 2, ...sx}}>
                 {children}
             </Stack>
             {divider && <Divider/>}
-        </>
+        </Paper>
     )
 }
 
-type GlassDialogContentProps = {
+type GlassDialogOuterContentProps = {
     sx?: SxProps
 }
+export const GlassDialogOuterContent = (props: PropsWithChildren<GlassDialogOuterContentProps>): ReactElement => {
+    const {sx, children} = props
 
-export const GlassDialogInnerContent = ({sx, children}: PropsWithChildren<GlassDialogContentProps>): ReactElement => {
-    return (
-        <Stack component={Paper} sx={{flex: 1, minWidth: 60, ...sx}}>
-            {children}
-        </Stack>
-    )
-}
-export const GlassDialogOuterContent = ({sx, children}: PropsWithChildren<GlassDialogContentProps>): ReactElement => {
     return (
         <Stack sx={{minWidth: 60, ...sx}}>
             {children}

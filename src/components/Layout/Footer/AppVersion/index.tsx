@@ -1,8 +1,7 @@
 'use client'
 import React, {ReactElement} from "react";
-import {Tooltip, Typography} from "@mui/material";
+import {Skeleton, Tooltip, Typography} from "@mui/material";
 import useAppVersions from "@/hooks/appVersions/useAppVersions";
-import { Skeleton } from '@mui/material';
 import UpdateDialog from "@/components/dialogs/UpdateDialog";
 
 const AppVersion = (): ReactElement => {

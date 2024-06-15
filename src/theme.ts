@@ -135,7 +135,21 @@ const theme = createTheme({
                     boxShadow: "none"
                 }
             }
-        }
+        },
+        MuiCssBaseline: {
+            styleOverrides: theme => ({
+                '&::-webkit-scrollbar': {
+                    width: 8
+                },
+                '&::-webkit-scrollbar-track': {
+                    backgroundColor: theme.palette.background.paper,
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: theme.palette.primary.main,
+                    border: "none"
+                }
+            }),
+        },
     },
 })
 
