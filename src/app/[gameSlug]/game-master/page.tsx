@@ -1,7 +1,7 @@
 'use client'
 import {ReactElement} from "react";
 import {useParams} from "next/navigation";
-import useGame from "@/hooks/games/useGameLobby";
+import useGame from "@/hooks/games/useGame";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
 import Link from "next/link";
 import Loader from "../../../components/Loading";

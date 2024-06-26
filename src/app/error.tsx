@@ -1,7 +1,9 @@
 'use client'
-import Link from "next/link"
 import {Button, Stack, Typography} from "@mui/material"
 import React from "react"
+import {useSWRConfig} from "swr";
+import {useRouter} from "next/navigation";
+import theme from "@/theme";
 
 type ErrorProps = {
     error: Error & { digest?: string }
@@ -9,14 +11,19 @@ type ErrorProps = {
 }
 
 const ErrorPage = ({error}: ErrorProps) => {
+    const router = useRouter()
+    const {mutate} = useSWRConfig()
+
+    const handleBackHome = () => {
+        mutate(() => true).then(() => router.push('/'))
+    }
+
     return (
-        <Stack sx={{alignItems: "center", justifyContent: "center", gap: 3, width: 1}}>
+        <Stack sx={{alignItems: "center", justifyContent: "center", gap: theme.spacing(3), flex: 1}}>
             <Typography variant="h1">Oh no!</Typography>
             <Typography variant="h2">Something went wrong</Typography>
             <Typography sx={{fontSize: 30}}>{error.message}</Typography>
-            <Link href={'/'}>
-                <Button variant="contained">Back to home</Button>
-            </Link>
+            <Button onClick={handleBackHome} variant="contained">Back to home</Button>
         </Stack>
     )
 }

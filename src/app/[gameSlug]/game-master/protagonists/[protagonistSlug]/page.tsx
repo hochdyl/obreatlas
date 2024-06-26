@@ -2,21 +2,17 @@
 import {ChangeEvent, ReactElement, useEffect, useMemo, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
 import Link from "next/link";
-import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
 import {useSWRConfig} from "swr";
 import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import slugify from "@/utils/slugify";
 import {editProtagonist} from "@/api/protagonists/ProtagonistApi";
 import ApiService from "@/services/ApiService";
 import getImage from "@/utils/getImage";
-import LoadingPage from "@/components/layout/LoadingPage";
-import FileUpload from "@/components/FileUpload";
 
 const EditProtagonistPage = (): ReactElement => {
     const router = useRouter()
     const {mutate} = useSWRConfig()
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
-    const {protagonist, isLoading, error} = useProtagonistData(params.gameSlug, params.protagonistSlug)
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<EditProtagonistFormData>()
 
@@ -55,9 +51,9 @@ const EditProtagonistPage = (): ReactElement => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
                     methods.setError('root', {type: 'server', message: e.message})
-                } else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e)) {
+                } else if (ApiService.isFail<BaseFormFail<ProtagonistFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
-                        methods.setError(key as keyof BaseFormFail<CreateProtagonistFormData>, {type: 'server', message: value})
+                        methods.setError(key as keyof BaseFormFail<ProtagonistFormData>, {type: 'server', message: value})
                     })
                 }
             })

@@ -1,12 +1,11 @@
 'use client'
 import React, {ReactElement, useRef, useState} from "react"
-import {Button, Slide, Stack, Typography} from "@mui/material"
-import LoginForm from "@/features/authentication/LoginForm";
-import RegisterForm from "@/features/authentication/RegisterForm";
+import {Button, Slide, Stack} from "@mui/material"
 import {Box} from "@mui/system";
 import {GlassCard} from "@/components/ui/Glass";
 import {ClickAwayListener} from "@mui/base";
-
+import RegisterForm from "@/components/forms/RegisterForm";
+import LoginForm from "@/components/forms/LoginForm";
 const AuthenticateButton = (): ReactElement => {
     const [open, setOpen] = useState<boolean>(false)
     const [loginTab, setRegisterTab] = useState<boolean>(true)
@@ -36,7 +35,15 @@ const AuthenticateButton = (): ReactElement => {
                     onEntered={() => setContainerVisible(true)}
                     onExited={() => setContainerVisible(false)}
                 >
-                    <GlassCard sx={{position: "absolute", display: "flex", top: offsetHeight, width: 250, py: 2, px: 4}}>
+                    <GlassCard sx={{
+                        position: "absolute",
+                        display: "flex",
+                        top: offsetHeight,
+                        width: 250,
+                        pt: 2,
+                        pb: 1,
+                        px: 2
+                    }}>
                         <Slide
                             mountOnEnter
                             unmountOnExit
@@ -44,8 +51,7 @@ const AuthenticateButton = (): ReactElement => {
                             in={loginTab}
                             style={{display: loginTab ? 'flex' : 'none'}}
                         >
-                            <Stack sx={{alignItems: "center", width: 1}}>
-                                <Typography variant="h4" sx={{mb: 2}}>Login</Typography>
+                            <Stack sx={{flex: 1, alignItems: "center"}}>
                                 <LoginForm/>
                                 <Button variant="text" onClick={switchTab} sx={{fontSize: 10}}>
                                     Register an account
@@ -59,8 +65,7 @@ const AuthenticateButton = (): ReactElement => {
                             in={!loginTab}
                             style={{display: !loginTab ? 'flex' : 'none'}}
                         >
-                            <Stack sx={{alignItems: "center", width: 1}}>
-                                <Typography variant="h4" sx={{mb: 2}}>Register</Typography>
+                            <Stack sx={{flex: 1, alignItems: "center"}}>
                                 <RegisterForm/>
                                 <Button variant="text" onClick={switchTab} sx={{fontSize: 10}}>
                                     I have an account

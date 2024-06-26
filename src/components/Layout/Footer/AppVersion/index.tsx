@@ -1,21 +1,46 @@
 'use client'
 import React, {ReactElement} from "react";
-import {Skeleton, Tooltip, Typography} from "@mui/material";
+import {Button, Skeleton, Tooltip, Typography} from "@mui/material";
 import useAppVersions from "@/hooks/appVersions/useAppVersions";
-import UpdateDialog from "@/components/dialogs/UpdateDialog";
+import {GlassDialog, GlassDialogHeader} from "@/components/ui/Glass/GlassDialog";
+import {useSWRConfig} from "swr";
 
 const AppVersion = (): ReactElement => {
+    const {mutate} = useSWRConfig()
     const {versions, currentVersion, updateAvailable} = useAppVersions()
 
-    return (versions && currentVersion ?
-            <>
+    const handleUpdate = () => {
+        mutate(
+            () => true,
+            undefined,
+            {revalidate: false}
+        ).then(() => location.reload())
+    }
+
+    return (
+        <>
+            {versions && currentVersion ?
                 <Tooltip title={`Version ${currentVersion.name} ${currentVersion.number}`} disableInteractive>
                     <Typography>{currentVersion.number}</Typography>
                 </Tooltip>
-                <UpdateDialog show={updateAvailable} newVersion={versions[0]}/>
-            </>
-            :
-            <Skeleton variant="text" sx={{fontSize: '1rem', width: 40, height: 30}}/>
+                :
+                <Skeleton animation="wave" width={40}/>
+            }
+
+            <GlassDialog open={updateAvailable} closeBtn={false} maxWidth="xs">
+                <GlassDialogHeader divider={false}>
+                    <Typography variant="h4">Update available</Typography>
+                    <Typography>
+                        {versions ?
+                            `Version ${versions[0].number}`
+                            :
+                            <Skeleton animation="wave" width={80}/>
+                        }
+                    </Typography>
+                </GlassDialogHeader>
+                <Button onClick={handleUpdate} variant="contained">Update</Button>
+            </GlassDialog>
+        </>
     )
 }
 export default AppVersion

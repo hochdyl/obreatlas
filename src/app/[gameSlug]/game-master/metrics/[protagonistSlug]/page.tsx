@@ -2,19 +2,17 @@
 import {ReactElement, useEffect, useState} from "react";
 import {useParams} from "next/navigation";
 import Link from "next/link";
-import useProtagonistData from "@/hooks/protagonists/useProtagonistData";
 import {useSWRConfig} from "swr";
 import useMetrics from "@/hooks/metrics/useMetrics";
 import {FormProvider, SubmitHandler, useFieldArray, useForm} from "react-hook-form";
 import ApiService from "@/services/ApiService";
 import {editAllMetricsValues} from "@/api/metrics/MetricsApi";
-import MetricFormPart from "@/features/metrics/MetricFormPart";
-import Loader from "../../../../../components/Loading";
+import MetricFormPart from "@/components/forms/metrics/MetricFormPart";
+import Loader from "@/components/common/Loader";
 
 const EditMetricsValuesPage = (): ReactElement => {
     const {mutate} = useSWRConfig()
     const params = useParams<{ gameSlug: string, protagonistSlug: string }>()
-    const {protagonist, isLoading, error} = useProtagonistData(params.gameSlug, params.protagonistSlug)
     const {metrics} = useMetrics(params.gameSlug)
     const [formLoading, setFormLoading] = useState<boolean>(false)
     const methods = useForm<EditMetricValueFormData>()
@@ -43,7 +41,7 @@ const EditMetricsValuesPage = (): ReactElement => {
     }, [protagonist]);
 
     if (error) throw new Error(error.message)
-    if (isLoading || !protagonist || !metrics) return <LoadingPage/>
+    if (isLoading || !protagonist || !metrics) return <Loader/>
 
     const handleAddRow = (metricId: number | undefined) => {
         let metric: MetricValueRowFormPart = {
@@ -69,7 +67,7 @@ const EditMetricsValuesPage = (): ReactElement => {
                 console.log('TODO: PTIT TOAST LA')
                 if (ApiService.isError(e)) {
                     methods.setError('root', {type: 'server', message: e.message})
-                } else if (ApiService.isFail<BaseFormFail<CreateProtagonistFormData>>(e)) {
+                } else if (ApiService.isFail<BaseFormFail<ProtagonistFormData>>(e)) {
                     Object.entries(e.data).forEach(([key, value]) => {
                         methods.setError(key as keyof BaseFormFail<EditMetricValueFormData>, {type: 'server', message: value})
                     })

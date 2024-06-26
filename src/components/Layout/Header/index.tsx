@@ -18,7 +18,7 @@ const Header = (): ReactElement => {
     return (
         <>
             <AppBar component="header" position="fixed">
-                <Toolbar sx={{justifyContent: "space-between", gap: 5}}>
+                <Toolbar sx={{justifyContent: "space-between"}}>
                     <Container maxWidth="xl" sx={{display: "flex", justifyContent: "space-between"}}>
                         {pathname !== '/' &&
                             <Link href={'/'}>

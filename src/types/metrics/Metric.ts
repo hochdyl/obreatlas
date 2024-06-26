@@ -1,5 +1,6 @@
 type Metric = {
     id: number
-    name: string
-    emoji: string | null
+    value: number
+    max: number
+    metricDetails: MetricDetails
 }

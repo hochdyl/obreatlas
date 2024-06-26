@@ -14,6 +14,7 @@ type GlassDialogProps = {
     outerSx?: SxProps
     maxWidth?: Breakpoint
     fullWidth?: boolean
+    keepMounted?: boolean
 }
 
 export const GlassDialog = (props: PropsWithChildren<GlassDialogProps>): ReactElement => {
@@ -26,7 +27,8 @@ export const GlassDialog = (props: PropsWithChildren<GlassDialogProps>): ReactEl
         innerSx,
         outerSx,
         maxWidth = "sm",
-        fullWidth = true
+        fullWidth = true,
+        keepMounted = false
     } = props
 
     const childrenArray = Children.toArray(children)
@@ -63,6 +65,7 @@ export const GlassDialog = (props: PropsWithChildren<GlassDialogProps>): ReactEl
                     position: "relative",
                 }
             }}
+            keepMounted={keepMounted}
             PaperComponent={GlassPaper}
             maxWidth={maxWidth}
             fullWidth={fullWidth}
@@ -102,7 +105,7 @@ export const GlassDialogHeader = (props: PropsWithChildren<GlassDialogHeaderProp
             backdropFilter: glassStyleProps.backdropFilter,
             zIndex: (theme) => theme.zIndex.drawer + 1,
         }}>
-            <Stack sx={{px: 4, py: 2, ...sx}}>
+            <Stack sx={{px: 4, py: 2, alignItems: "flex-start", ...sx}}>
                 {children}
             </Stack>
             {divider && <Divider/>}

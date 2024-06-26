@@ -6,4 +6,5 @@ type Protagonist = {
     level: number
     owner: User | null
     portrait: Upload | null
+    metrics: Metric[]
 }

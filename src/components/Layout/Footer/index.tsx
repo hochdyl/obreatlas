@@ -1,24 +1,23 @@
 'use client'
 import React, {ReactElement} from "react"
-import {Typography} from "@mui/material"
+import {Stack, Typography} from "@mui/material"
 import moment from "moment"
-import {Box} from "@mui/system";
 import AppVersion from "@/components/layout/Footer/AppVersion";
+import theme from "@/theme";
 
 const Footer = (): ReactElement => {
     const currentYear = moment().year()
 
     return (
-        <Box component="footer" sx={{
-            display: "flex",
-            gap: 1,
+        <Stack direction="row" component="footer" sx={{
+            gap: theme.spacing(1),
             alignItems: "center",
             justifyContent: "center",
             height: 40
         }}>
             <AppVersion/>
             <Typography sx={{whiteSpace: "nowrap"}}>© Atlas {currentYear}</Typography>
-        </Box>
+        </Stack>
     )
 }
 export default Footer

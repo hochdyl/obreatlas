@@ -4,11 +4,11 @@ import {useParams} from "next/navigation";
 import Link from "next/link";
 import useMetrics from "@/hooks/metrics/useMetrics";
 import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
-import MetricFormPart from "@/features/metrics/MetricFormPart";
-import MetricCard from "@/features/metrics/MetricCard";
 import {createMetric} from "@/api/metrics/MetricsApi";
 import ApiService from "@/services/ApiService";
-import Loader from "../../../../components/Loading";
+import Loader from "@/components/common/Loader";
+import MetricFormPart from "@/components/forms/metrics/MetricFormPart";
+import MetricCard from "@/components/forms/metrics/MetricCard";
 
 const EditProtagonistPage = (): ReactElement => {
     const params = useParams<{ gameSlug: string }>()
@@ -17,7 +17,7 @@ const EditProtagonistPage = (): ReactElement => {
     const methods = useForm<CreateMetricFormData>()
 
     if (error) throw new Error(error.message)
-    if (isLoading || !metrics) return <LoadingPage/>
+    if (isLoading || !metrics) return <Loader/>
 
     const onSubmit: SubmitHandler<CreateMetricFormData> = metricFormData => {
         setFormLoading(true)

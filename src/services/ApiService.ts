@@ -1,23 +1,17 @@
 import {AxiosError, AxiosRequestConfig} from "axios";
 import axiosInstance from "@/lib/axios";
-import getFormData from "@/utils/getFormData";
 import sanitize from "@/utils/sanitize";
 
 abstract class ApiService {
     static fetch = <T = any>(config: AxiosRequestConfig) => {
         if (config.data && typeof config.data === "object") {
-            const sanitizedData = sanitize(config.data)
-            if (sanitizedData.containFile) {
-                config.data = getFormData(sanitizedData)
-            }
+            config.data = sanitize(config.data)
         }
 
         return new Promise<T>((resolve, reject) => {
             axiosInstance<SuccessResponse<T>>({...config})
                 .then(({data: res}) => resolve(res.data))
-                .catch((err: AxiosError<ErrorResponse>) => {
-                    reject(err)
-                })
+                .catch((err: AxiosError<ErrorResponse>) => reject(err))
         })
     }
 
@@ -42,4 +36,5 @@ abstract class ApiService {
         res.message !== undefined
     )
 }
+
 export default ApiService

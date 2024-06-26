@@ -37,9 +37,11 @@ const theme = createTheme({
         },
         primary: {
             main: '#fddf97',
+            contrastText: '#000',
         },
         secondary: {
             main: '#e09664',
+            contrastText: '#000',
         },
         error: {
             main: '#C91D1D',
@@ -100,6 +102,7 @@ const theme = createTheme({
         },
         standout: {
             fontFamily: daysOne.style.fontFamily,
+            letterSpacing: .5
         },
     },
     breakpoints: {
@@ -139,7 +142,7 @@ const theme = createTheme({
         MuiCssBaseline: {
             styleOverrides: theme => ({
                 '&::-webkit-scrollbar': {
-                    width: 8
+                    width: 4
                 },
                 '&::-webkit-scrollbar-track': {
                     backgroundColor: theme.palette.background.paper,

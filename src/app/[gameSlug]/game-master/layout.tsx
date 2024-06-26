@@ -2,13 +2,12 @@
 import React, {PropsWithChildren, ReactElement, useEffect} from "react"
 import PermissionService from "@/services/PermissionService";
 import {useParams} from "next/navigation";
-import useGameLobby from "@/hooks/games/useGameLobby";
+import useGame from "@/hooks/games/useGame";
 import useAuthenticatedUser from "@/hooks/authentication/useAuthenticatedUser";
-import Loader from "../../../components/Loading";
+import Loader from "@/components/common/Loader";
 
 const GameMasterLayout = ({children}: Readonly<PropsWithChildren>): ReactElement => {
-    const params = useParams<{ gameSlug: string }>()
-    const {game, error, isLoading} = useGameLobby(params.gameSlug)
+    const {game, error, isLoading} = useGame()
     const {user} = useAuthenticatedUser()
 
     useEffect(() => {
@@ -18,7 +17,7 @@ const GameMasterLayout = ({children}: Readonly<PropsWithChildren>): ReactElement
     }, [game, user])
 
     if (error) throw new Error(error.message)
-    if (isLoading || !game || !user) return <LoadingPage/>
+    if (isLoading || !game || !user) return <Loader/>
 
     return (
         <>

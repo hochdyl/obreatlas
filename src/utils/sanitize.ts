@@ -1,14 +1,8 @@
 import moment from 'moment';
 
 const sanitize = (data: any) => {
-    let containFile = false
     Object.keys(data).forEach(key => {
         const value = data[key]
-
-        if (value instanceof File) {
-            containFile = true
-            return
-        }
 
         if (value instanceof moment && moment.isMoment(value)) {
             const moment = value as moment.Moment
@@ -39,7 +33,7 @@ const sanitize = (data: any) => {
         }
     })
 
-    return {data, containFile}
+    return data
 }
 
 export default sanitize

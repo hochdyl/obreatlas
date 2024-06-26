@@ -2,7 +2,7 @@ import ApiService from "@/services/ApiService";
 
 const ROUTE_URL = 'protagonists'
 
-export const createProtagonist = (gameSlug: string, data: CreateProtagonistFormData) => {
+export const createProtagonist = (gameSlug: string, data: ProtagonistFormData) => {
     return ApiService.fetch<Protagonist>({
         url: `${ROUTE_URL}/${gameSlug}/create`,
         method: "POST",

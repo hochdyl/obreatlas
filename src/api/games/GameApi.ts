@@ -1,9 +1,9 @@
 import ApiService from "@/services/ApiService";
-import {CreateGameFormData} from "@/types/games/CreateGameFormData";
+import {GameFormData} from "@/types/games/GameFormData";
 
 const ROUTE_URL = '/games'
 
-export const createGame = (data: CreateGameFormData) => {
+export const createGame = (data: GameFormData) => {
     return ApiService.fetch<Game>({
         url: `${ROUTE_URL}/create`,
         method: "POST",
